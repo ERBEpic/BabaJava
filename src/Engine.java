@@ -34,7 +34,7 @@ public class Engine {
         return Level;
     }
     public int[][] findTiles(int x){
-       gameStuff j
+       gameStuff
     }
     public void moveLeft(){}
     public void moveRight(){}
