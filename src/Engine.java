@@ -1,3 +1,5 @@
+import jdk.nashorn.internal.runtime.JSONFunctions;
+
 import java.util.Arrays;
 
 public class Engine {
@@ -7,10 +9,8 @@ public class Engine {
     private boolean isYou = true;
     private int Level;
     public Engine(){
-        int[][][] gameStuff = new int[40][40][5];
         xTiles = 20;
         yTiles = 15;
-
     }
     public int getxTiles(){
         return xTiles;
@@ -33,8 +33,11 @@ public class Engine {
     public int getLevel(){
         return Level;
     }
-    public int[][] findTiles(int x){
-       gameStuff
+    public int[][] findTiles(int x) {
+
+
+        int[][] b = new int[0][0];
+        return b;
     }
     public void moveLeft(){}
     public void moveRight(){}
