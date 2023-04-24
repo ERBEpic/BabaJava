@@ -18,7 +18,7 @@ public class JsonFake {
         FileWriter filew = new FileWriter("PageFile.txt");
         BufferedWriter bw = new BufferedWriter(filew);
         RandomAccessFile RandomWriter = new RandomAccessFile(FILEPATH, "rw");
-        RandomWriter.write(4294967294);
+        //RandomWriter.write(4294967294);
         RandomWriter.close();
         /*bw.write("foobar");
         bw.flush();

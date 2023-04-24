@@ -12,19 +12,49 @@ public class JPanelFrame implements KeyListener {
         switch(keyCode) {
             case KeyEvent.VK_UP:
                 System.out.println("Up arrow key pressed");
-                Magenta();
+                Engine.BabaEngine.moveUp();
                 break;
             case KeyEvent.VK_DOWN:
                 System.out.println("Down arrow key pressed");
-                GREY();
+                Engine.BabaEngine.moveDown();
                 break;
             case KeyEvent.VK_LEFT:
                 System.out.println("Left arrow key pressed");
+                Engine.BabaEngine.moveLeft();
                 break;
             case KeyEvent.VK_RIGHT:
                 System.out.println("Right arrow key pressed");
+                Engine.BabaEngine.moveRight();
                 break;
-        }
+            case KeyEvent.VK_W:
+                System.out.println("W key pressed");
+                Engine.BabaEngine.moveUp();
+                break;
+            case KeyEvent.VK_S:
+                System.out.println("S key pressed");
+                Engine.BabaEngine.moveDown();
+                break;
+            case KeyEvent.VK_A:
+                System.out.println("A key pressed");
+                Engine.BabaEngine.moveLeft();
+                break;
+            case KeyEvent.VK_D:
+                System.out.println("D key pressed");
+                Engine.BabaEngine.moveRight();
+                break;
+            case KeyEvent.VK_SPACE:
+                System.out.println("Spacebar Pressed");
+                Engine.BabaEngine.moveWait();
+                break;
+            case KeyEvent.VK_R:
+                System.out.println("R Pressed");
+                Engine.BabaEngine.resetLevel();
+                break;
+            case KeyEvent.VK_Z:
+                System.out.println("Z Pressed");
+                Engine.BabaEngine.moveUndo();
+                break;
+        }//Isnt this a masterpiece of code right here. Truly a magnum opus of cleanliness
     }
 
 
