@@ -18,7 +18,6 @@ public class memoryController {
         array1[1][1].add(4);
         list.add(array1);
     }
-    @SuppressWarnings("rawtypes")
     static ArrayList<ArrayList<Integer>[][]> memoryEater = new ArrayList<>();
      static int pointer = 0;//Self evident what it does. Adds and removes always come paired with this.
     public memoryController(ArrayList<Integer>[][] x){//Start off the stack. NEEDS TO BE ONE. Will get angy if there isnt.

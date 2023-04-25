@@ -1,12 +1,17 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class JPanelFrame implements KeyListener {
     public static JPanelFrame PanelFrame = new JPanelFrame();
+    public static         JFrame frame = new JFrame("Help");
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         switch(keyCode) {
@@ -81,8 +86,8 @@ public class JPanelFrame implements KeyListener {
         mainFrame.setContentPane(contentPane);
     }
     public void setScreenSize(){
-        mainFrame.setSize(Engine.BabaEngine.getxTiles(), Engine.BabaEngine.getyTiles());
-        mainFrame.setLayout(new GridLayout(Engine.BabaEngine.getxTiles()*24, Engine.BabaEngine.getyTiles()*24));
+        mainFrame.setSize(Engine.BabaEngine.getxTiles()*24, Engine.BabaEngine.getyTiles()*24);
+        mainFrame.setLayout(new GridLayout(Engine.BabaEngine.getxTiles(), Engine.BabaEngine.getyTiles()));
     }
     public void setScreenSize(int x, int y){
         mainFrame.setSize(x, y);
@@ -101,6 +106,12 @@ public class JPanelFrame implements KeyListener {
 
     public void Magenta(){
         contentPane.setBackground(Color.MAGENTA);
+    }
+    public void displayImage(int x, int y, int id) throws IOException {
+        BufferedImage image = ImageIO.read(new File("./java.jpg"));
+        JLabel label = new JLabel(new ImageIcon(image));
+        frame.add(label);
+        mainFrame.add(frame);//TODO
     }
     public void GREY(){
         contentPane.setBackground(Color.LIGHT_GRAY);
