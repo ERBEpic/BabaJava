@@ -22,13 +22,12 @@ public class GraphicsController {
     public void ParserDisplay(){
         BabaFrame.babakey.repaint();
         ArrayList<Integer>[][] temp = Engine.memoryEater.pullLatestState();
-        //ArrayList<ArrayList<Integer>> tempe = language.collect(Arrays.stream(temp).filter(x->x!=null));//Figure out how to get this to work? Maybe not necesary. Why does it not consistently update? augh
 
         for (int i = 0; i < Engine.BabaEngine.getxTiles(); i++) {
             for (int j = 0; j < Engine.BabaEngine.getyTiles()-1; j++) {
                 if (temp[i][j]!=null){
-                    for (int k = 0; k < ((temp[i][j].size())/5); k++) {
-                    BabaFrame.babakey.setImage(FileFinder(temp[i][j].get(k*5+0),temp[i][j].get(k*5+1),temp[i][j].get(k*5+2)),temp[i][j].get(k*5+3),temp[i][j].get(k*5+4));
+                    for (int k = 0; k < ((temp[i][j].size())/3); k++) {
+                    BabaFrame.babakey.setImage(FileFinder(temp[i][j].get(k*3+0),temp[i][j].get(k*3+1),temp[i][j].get(k*3+2)),i,j);
                     }}
             }
         }
@@ -39,10 +38,13 @@ public class GraphicsController {
     private int third;
     public String FileFinder(int id, int rotation, int walking){//Four thigns matter. These 3, and counter.
         switch (id){
-            case 0: first = "algae";
-            case 1: first = "arm";
-            case 2: first = "arrow";
-            case 3: first = "baba";
+            case 0: first = "algae";break;
+            case 1: first = "arm";break;
+            case 2: first = "arrow";break;
+            case 3: first = "baba";break;
+            case 4: first = "text_you";break;
+            case 5: first = "wall";break;//This needs to be something special. Wall is WEIRD.
+
         }
         third = getCounter();
         if (rotation == 5){

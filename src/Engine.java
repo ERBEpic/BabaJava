@@ -22,7 +22,6 @@ public class Engine {
     private boolean isYou = true;
     private int Level;
     public Engine(){
-
         xTiles = 20;
         yTiles = 15;
     }
@@ -47,10 +46,7 @@ public class Engine {
     public int getLevel(){
         return Level;
     }
-    public int[][] findTiles(int x) {
-        int[][] b = new int[0][0];
-        return b;
-    }
+
     public void moveLeft(){
         System.out.println("hi");
     }

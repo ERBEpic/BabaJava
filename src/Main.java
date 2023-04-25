@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 //Display is multiples of 24
 //Each tile is 24 wide
@@ -18,8 +19,10 @@ public class Main {
         array1[0][0].add(3);
         array1[0][0].add(2);
         array1[0][0].add(3);
-        array1[0][0].add(4);
-        array1[0][0].add(4);
+        array1[3][3] = new ArrayList<Integer>();
+
+        Collections.addAll(array1[3][3],5,5,0);
+
 
         Engine.memoryEater.pushNewState(array1);
     GraphicsController temp = new GraphicsController();

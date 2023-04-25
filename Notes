@@ -16,3 +16,10 @@ Some objects walk but dont rotate. (Bat)
 Some objects have a walk cycle of 4 (Arrow)
 BABA IS NOT A CYCLE OF 5. BABA_7, 15, and 23 are FAKE.
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+
+
+To create stuff- ID, Rotation, Walking Cycle, X, Y.
+ID - Check Graphics controller, FileFinder
+Rotation - 0 = Right, 1=up?, 2=left?, 5=Unrotatable
+Walking Cycle - Not set yet. Leave as 0.
