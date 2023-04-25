@@ -13,12 +13,16 @@ import java.util.List;
 //Advantages of storing ints. - Less memory. Easier to code (hopefully)
 //Lets do ints.
 public class Engine {
+    private static ArrayList<Integer>[][] levelSelect = new ArrayList[20][15];
+    private int xTiles = 20;
+    private int yTiles = 15;
+    public static memoryController memoryEater = new memoryController();
     public static Engine BabaEngine = new Engine();
-    private int xTiles;
-    private int yTiles;
+
     private boolean isYou = true;
     private int Level;
     public Engine(){
+
         xTiles = 20;
         yTiles = 15;
     }

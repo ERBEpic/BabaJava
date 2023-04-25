@@ -1,0 +1,18 @@
+I need to write down documentation for GraphicsController because this is a mess
+
+FileFinder accepts 4 inputs. One it grabs on its own
+
+It combines everything into one final string, the path.
+It combines First, Second, And third. (first_second_third.png)
+One, id. Very simple. What the object is. No issues here.
+This is directly "First".
+Three, counter. *EVERYTHING* rotates on a 3 frame basis (Thank god.) Very simple.
+
+
+Second, is a mess. Its a combination of rotation and walking.
+
+Some objects rotate but dont walk. (Arrow).
+Some objects walk but dont rotate. (Bat)
+Some objects have a walk cycle of 4 (Arrow)
+BABA IS NOT A CYCLE OF 5. BABA_7, 15, and 23 are FAKE.
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA

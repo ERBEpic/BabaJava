@@ -9,9 +9,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class JPanelFrame implements KeyListener {
-    public static JPanelFrame PanelFrame = new JPanelFrame();
-    public static         JFrame frame = new JFrame("Help");
+public class JPanelFrame extends JFrame implements KeyListener {
+    private JFrame mainFrame;
+    private JPanel contentPane;
+    private JLabel imageLabel;
+    private ImageIcon imageIcon;
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         switch(keyCode) {
@@ -71,47 +73,53 @@ public class JPanelFrame implements KeyListener {
         // Do nothing
     }
     public JPanelFrame(){
-        mainFrame = new JFrame("Baba is Me");
-        mainFrame.addWindowListener(new WindowAdapter() {
+        super("Baba is Me");
+        addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent){
                 System.exit(0);
             }
         });
-        mainFrame.setSize(Engine.BabaEngine.getxTiles(), Engine.BabaEngine.getyTiles());
-        mainFrame.setLayout(new GridLayout(Engine.BabaEngine.getxTiles()*24, Engine.BabaEngine.getyTiles()*24));
-        mainFrame.addKeyListener(this);
-        mainFrame.setFocusable(true);
-        mainFrame.setFocusTraversalKeysEnabled(false);
+        setLocationRelativeTo(null);
+        setSize(Engine.BabaEngine.getxTiles(), Engine.BabaEngine.getyTiles());
+        //mainFrame.setLayout(new GridLayout(Engine.BabaEngine.getxTiles()*24, Engine.BabaEngine.getyTiles()*24));
+        addKeyListener(this);
+        setFocusable(true);
+        setFocusTraversalKeysEnabled(false);
+
         contentPane = new JPanel();
-        mainFrame.setContentPane(contentPane);
+        contentPane.setLayout(new BorderLayout());
+        setContentPane(contentPane);
+
+        imageIcon = new ImageIcon();
+        imageLabel = new JLabel();
+        contentPane.add(imageLabel, BorderLayout.CENTER);
     }
     public void setScreenSize(){
-        mainFrame.setSize(Engine.BabaEngine.getxTiles()*24, Engine.BabaEngine.getyTiles()*24);
-        mainFrame.setLayout(new GridLayout(Engine.BabaEngine.getxTiles(), Engine.BabaEngine.getyTiles()));
+        setSize(Engine.BabaEngine.getxTiles()*24, Engine.BabaEngine.getyTiles()*24);
+        setLayout(new GridLayout(Engine.BabaEngine.getxTiles(), Engine.BabaEngine.getyTiles()));
     }
     public void setScreenSize(int x, int y){
-        mainFrame.setSize(x, y);
-        mainFrame.setLayout(new GridLayout(x*24, y*24));
+        setSize(x, y);
+        setLayout(new GridLayout(x*24, y*24));
     }
-    private JFrame mainFrame;
-    private JLabel headerLabel;
-    private JLabel statusLabel;
-    private JPanel controlPanel;
-    private JPanel contentPane;
-    private JLabel msglabel;
+
+
 
     public void showFrame(){
-        mainFrame.setVisible(true);
+        setVisible(true);
     }
 
     public void Magenta(){
-        contentPane.setBackground(Color.MAGENTA);
+        setBackground(Color.MAGENTA);
     }
-    public void displayImage(int x, int y, int id) throws IOException {
-        BufferedImage image = ImageIO.read(new File("./java.jpg"));
-        JLabel label = new JLabel(new ImageIcon(image));
-        frame.add(label);
-        mainFrame.add(frame);//TODO
+    public void setImage(String imagePath) {
+        try {
+            Image image = ImageIO.read(new File(imagePath));
+            imageIcon.setImage(image);
+            imageLabel.setIcon(imageIcon);
+        } catch (IOException ex) {
+            System.out.println("Could not load image");
+        }
     }
     public void GREY(){
         contentPane.setBackground(Color.LIGHT_GRAY);

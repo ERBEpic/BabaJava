@@ -2,7 +2,11 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class memoryController {
+public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1. Keke = 2. ETc
+    //TWO. The rotation. 0=Unrotatable, 1=up,2=right
+    //THREE. Walking Animation. 4 = no animation. 0 = step 0. 1 = step 1.
+    //FOUR. X position
+    //FIVE. Y Position
     public static void main(String[] args) {
         ArrayList<ArrayList<Integer>[][]> list = new ArrayList<>();
 
@@ -18,14 +22,18 @@ public class memoryController {
         array1[1][1].add(4);
         list.add(array1);
     }
-    static ArrayList<ArrayList<Integer>[][]> memoryEater = new ArrayList<>();
-     static int pointer = 0;//Self evident what it does. Adds and removes always come paired with this.
+    static private ArrayList<ArrayList<Integer>[][]> memoryEater = new ArrayList<>();
+
+     static private int pointer = 0;//Self evident what it does. Adds and removes always come paired with this.
     public memoryController(ArrayList<Integer>[][] x){//Start off the stack. NEEDS TO BE ONE. Will get angy if there isnt.
         memoryEater.add(x);pointer++;
     }
+    public memoryController(){
 
-    public ArrayList<Integer>[][] pullEndState(){
-        return memoryEater.get(pointer);
+    }
+
+    public ArrayList<Integer>[][] pullLatestState(){
+        return memoryEater.get(pointer-1);
     }
     public ArrayList<Integer>[][] pullNState(int x){
         return memoryEater.get(x);

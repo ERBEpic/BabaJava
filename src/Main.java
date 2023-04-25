@@ -1,23 +1,30 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.IOException;
-import javax.swing.*;
-
-import static java.lang.Thread.sleep;
+import java.util.ArrayList;
 
 //Display is multiples of 24
 //Each tile is 24 wide
 public class Main {
     public int Level = 0;//0 = level seelct
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) throws InterruptedException {
 
         //JPanelFrame.showFrame();
         //Engine EngineG = new Engine();
-        JPanelFrame.PanelFrame.showFrame();
-        JPanelFrame.PanelFrame.setScreenSize(2000,2000);
-        JPanelFrame.PanelFrame.displayImage(1,1,1);
+        BabaFrame.babakey.showFrame();
+        //babakey.setScreenSize(2000,2000);
+        BabaFrame.babakey.setImage("C:/Users/Joespeh/IdeaProjects/Baba Is Me/Sprites/baba_0_1.png",2,4);
+        BabaFrame.babakey.setBackground(Color.black);
+        ArrayList<Integer>[][] array1 = new ArrayList[Engine.BabaEngine.getxTiles()][Engine.BabaEngine.getyTiles()];
+        array1[0][0] = new ArrayList<Integer>();
+        array1[0][0].add(3);
+        array1[0][0].add(2);
+        array1[0][0].add(3);
+        array1[0][0].add(4);
+        array1[0][0].add(4);
+
+        Engine.memoryEater.pushNewState(array1);
+    GraphicsController temp = new GraphicsController();
+
+        System.out.println(temp.FileFinder(3,2,2));
 
     }
 }
