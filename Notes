@@ -23,3 +23,5 @@ To create stuff- ID, Rotation, Walking Cycle, X, Y.
 ID - Check Graphics controller, FileFinder
 Rotation - 0 = Right, 1=up?, 2=left?, 5=Unrotatable
 Walking Cycle - Not set yet. Leave as 0.
+
+Im gonna move this all into "BabaObjects"

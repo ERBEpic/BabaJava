@@ -3,6 +3,7 @@ import jdk.nashorn.internal.runtime.JSONFunctions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 //FIXME STOP CARING ABOUT MEMORY THIS IS LITERALLY NEVER GOING TO USE OVER 2KB OF RAM
 //TODO Plan. NO ARRAY. Array will be annoying. 2D list? That would make life easier. 3D LIST! Then compress it back into a 1D list, of ordered things.
@@ -13,7 +14,7 @@ import java.util.List;
 //Advantages of storing ints. - Less memory. Easier to code (hopefully)
 //Lets do ints.
 public class Engine {
-    private static ArrayList<Integer>[][] levelSelect = new ArrayList[20][15];
+    private static ArrayList<BabaObjects>[][] levelSelect = new ArrayList[20][15];
     private int xTiles = 20;
     private int yTiles = 15;
     public static memoryController memoryEater = new memoryController();
@@ -48,15 +49,64 @@ public class Engine {
     }
 
     public void moveLeft(){
-        System.out.println("hi");
-    }
-    public void moveRight(){}
-    public void moveDown(){}
-    public void moveUp(){}
-    public void moveWait(){}
-    public void moveUndo(){}
+        ArrayList<BabaObjects>[][] maybe= memoryEater.pullLatestState();
+        for (int i = 0; i < maybe.length; i++) {
+            for (int j = 0; j < maybe[i].length; j++) {
+                if (maybe[i][j] != null) {
+                    maybe[i][j].forEach(obj -> obj.moveYouLeft());
+                }
+            }
+        }
+        playGame();
+        }
 
-    public void playGame(){}
+    public void moveRight(){
+        ArrayList<BabaObjects>[][] maybe= memoryEater.pullLatestState();
+        for (int i = 0; i < maybe.length; i++) {
+            for (int j = 0; j < maybe[i].length; j++) {
+                if (maybe[i][j] != null) {
+                    for (int k = 0; k < (maybe[i][j].size()) ; k++) {
+
+
+                        maybe[i][j].get(k).moveYouRight(i, j, k);
+                    }
+                }
+            }
+        }
+        playGame();
+    }
+    public void moveDown(){
+
+        ArrayList<BabaObjects>[][] maybe= memoryEater.pullLatestState();
+        for (int i = 0; i < maybe.length; i++) {
+            for (int j = 0; j < maybe[i].length; j++) {
+                if (maybe[i][j] != null) {
+                    maybe[i][j].forEach(obj -> obj.moveYouDown());
+                }
+            }
+        }
+        playGame();
+    }
+    public void moveUp(){
+        ArrayList<BabaObjects>[][] maybe= memoryEater.pullLatestState();
+        for (int i = 0; i < maybe.length; i++) {
+            for (int j = 0; j < maybe[i].length; j++) {
+                if (maybe[i][j] != null) {
+                    maybe[i][j].forEach(obj -> obj.moveYouUp());
+                }
+            }
+        }
+        playGame();
+    }
+    public void moveWait(){
+        playGame();
+        BabaFrame.babakey.repaint();
+    }
+    public void moveUndo(){memoryEater.removeLastState();}
+
+    public void playGame(){
+        memoryEater.pushNewState(memoryEater.pullLatestState());
+    }
     public void resetLevel(){}
 
 

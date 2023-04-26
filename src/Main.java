@@ -14,14 +14,19 @@ public class Main {
         //babakey.setScreenSize(2000,2000);
         BabaFrame.babakey.setImage("C:/Users/Joespeh/IdeaProjects/Baba Is Me/Sprites/baba_0_1.png",2,4);
         BabaFrame.babakey.setBackground(Color.black);
-        ArrayList<Integer>[][] array1 = new ArrayList[Engine.BabaEngine.getxTiles()][Engine.BabaEngine.getyTiles()];
-        array1[0][0] = new ArrayList<Integer>();
-        array1[0][0].add(3);
-        array1[0][0].add(2);
-        array1[0][0].add(3);
-        array1[3][3] = new ArrayList<Integer>();
+        ArrayList<BabaObjects>[][] array1 = new ArrayList[Engine.BabaEngine.getxTiles()][Engine.BabaEngine.getyTiles()];
+        array1[0][0] = new ArrayList<BabaObjects>();
+        BabaObjects baba = new BabaObjects(3,3,3);
+        array1[0][0].add(baba);
 
-        Collections.addAll(array1[3][3],5,5,0);
+        array1[3][3] = new ArrayList<BabaObjects>();
+        array1[3][3].add(baba);
+        for (int i = 0; i < 5; i++) {
+            BabaObjects newBabaObject = new BabaObjects(3,true,true);
+            array1[5][i] = new ArrayList<BabaObjects>();
+            if (i==3){newBabaObject.setYou(true);}
+            array1[5][i].add(newBabaObject);
+        }
 
 
         Engine.memoryEater.pushNewState(array1);
