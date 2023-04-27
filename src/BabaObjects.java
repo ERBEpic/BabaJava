@@ -54,13 +54,22 @@ public class BabaObjects {
         }
         return "C:/Users/Joespeh/IdeaProjects/Baba Is Me/Sprites/"+first+'_'+second+'_'+third+".png";
     }
-    public void moveYouLeft(){
+    public void moveYouLeft(int x, int y, int z){
+        this.x=x;
+        this.y=y;//These honestly might not be neccesary, but reliability is always good
+        this.z=z;
         if(this.amYou()==true){
-        System.out.println("Im moving left!");
-        this.walkingcycle++;
-        if (this.walkingcycle>3){this.walkingcycle=0;}
-        this.rotation=2;
-    }}
+            System.out.println("Im moving Right!");
+            this.walkingcycle++;
+            if (this.walkingcycle>3){this.walkingcycle=0;}
+            this.rotation = 2;
+            if (this.checkIfDead()==false){
+                this.y=this.y-1;
+                BabaObjects bba = new BabaObjects(this.id,this.rotation,this.walkingcycle);
+                bba.setYou(true);
+                Engine.levelStoragePush[this.x][this.y].add(bba);
+                this.deleteMe();
+            }}}
     public void moveYouRight(int x,int y,int z){
         this.x=x;
         this.y=y;//These honestly might not be neccesary, but reliability is always good

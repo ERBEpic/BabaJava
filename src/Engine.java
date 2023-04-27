@@ -29,6 +29,12 @@ public class Engine {
     public Engine(){
         xTiles = 20;
         yTiles = 15;
+        for (int i = 0; i < levelStoragePush.length; i++) {
+            for (int j = 0; j < levelStoragePush[i].length; j++) {
+                levelStoragePush[i][j]= new ArrayList<BabaObjects>();
+            }
+
+        }
     }
     public int getxTiles(){
         return xTiles;
@@ -57,12 +63,16 @@ public class Engine {
         for (int i = 0; i < maybe.length; i++) {
             for (int j = 0; j < maybe[i].length; j++) {
                 if (maybe[i][j] != null) {
-                    maybe[i][j].forEach(obj -> obj.moveYouLeft());
+                    for (int k = 0; k < (maybe[i][j].size()) ; k++) {
+                        if (maybe[i][j].get(k).checkIfDeleted()==false){
+                            maybe[i][j].get(k).moveYouLeft(i,j,k);
+                        }
+                    }
                 }
             }
         }
         playGame();
-        }
+    }
 
     public void moveRight(){
         ArrayList<BabaObjects>[][] maybe= memoryEater.pullLatestState();
