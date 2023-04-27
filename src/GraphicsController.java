@@ -27,9 +27,9 @@ public class GraphicsController {
             for (int j = 0; j < Engine.BabaEngine.getyTiles(); j++) {
                 if (temp[i][j]!=null){
                     for (int k = 0; k < ((temp[i][j].size())); k++) {
-           if (temp[i][j].get(k).checkIfDeleted()==false&&temp[i][j].get(k).checkIfDead()==false){
+
           temp[i][j].get(0).setImage(i,j);
-                    }}}
+                    }}
             }
         }
     }

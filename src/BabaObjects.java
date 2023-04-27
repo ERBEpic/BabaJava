@@ -121,12 +121,16 @@ public class BabaObjects {
         this.toBeDeleted=true;
     }
     public void setImage(int row, int col) {
+        if (this.checkIfDeleted()==false&&this.checkIfDead()==false){
         try {
             BabaFrame.babakey.imageIcons[row][col].setImage(ImageIO.read(new File(getPath())));
         } catch (IOException e) {
             System.out.println("uh oh");
         }
         BabaFrame.babakey.imageLabels[row][col].setIcon(BabaFrame.babakey.imageIcons[row][col]);
+    }else {
+            BabaFrame.babakey.imageLabels[row][col].setIcon(null);
+        }
     }
     public void hideImage(){
 
