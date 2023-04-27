@@ -33,6 +33,8 @@ public class Main {
     GraphicsController temp = new GraphicsController();
 
         System.out.println(temp.FileFinder(3,2,2));
+        Engine.levelStoragePush=Engine.memoryEater.pullLatestState().clone();
+        Engine.BabaEngine.playGame();
 
     }
 }

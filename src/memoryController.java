@@ -43,8 +43,12 @@ public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1
     }
     public void removeLastState(){
         System.out.println(pointer);
-        if (pointer>0){pointer--;
+        if (pointer>1){pointer--;
         memoryEater.remove(pointer);}else {};
+    }
+    public void resetState(){
+
+
     }
 
 }

@@ -25,3 +25,15 @@ Rotation - 0 = Right, 1=up?, 2=left?, 5=Unrotatable
 Walking Cycle - Not set yet. Leave as 0.
 
 Im gonna move this all into "BabaObjects"
+
+
+
+
+
+
+
+PropertiesStorage
+id 0= You
+id 1=push
+id 2=stop
+id 3 = defeat

@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -6,9 +7,8 @@ import java.util.stream.Stream;
 
 //Talks between Engine and JPanelFrame
 public class GraphicsController {
-    private static int counter = 1;
+    private static int counter = 9234521;
     public GraphicsController() throws InterruptedException {
-        ParserDisplay();
         while(true){
             counter++;
             if (counter>3){counter=1;}
@@ -19,7 +19,7 @@ public class GraphicsController {
     public static int getCounter(){
         return counter;
     }
-    public void ParserDisplay(){
+    public void ParserDisplay() {
         BabaFrame.babakey.repaint();
         ArrayList<BabaObjects>[][] temp = Engine.memoryEater.pullLatestState();
 
@@ -27,8 +27,9 @@ public class GraphicsController {
             for (int j = 0; j < Engine.BabaEngine.getyTiles(); j++) {
                 if (temp[i][j]!=null){
                     for (int k = 0; k < ((temp[i][j].size())); k++) {
-                    BabaFrame.babakey.setImage(temp[i][j].get(0).getPath(),i,j);
-                    }}
+           if (temp[i][j].get(k).checkIfDeleted()==false&&temp[i][j].get(k).checkIfDead()==false){
+          temp[i][j].get(0).setImage(i,j);
+                    }}}
             }
         }
     }

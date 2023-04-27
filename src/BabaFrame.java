@@ -16,9 +16,9 @@ public class BabaFrame extends JFrame implements KeyListener {
         }
     }
 
-    private JPanel[][] contentPanels;
-    private JLabel[][] imageLabels;
-    private ImageIcon[][] imageIcons;
+    public JPanel[][] contentPanels;
+    public JLabel[][] imageLabels;
+    public ImageIcon[][] imageIcons;
     private int cellSize = 24;
 
     public BabaFrame() throws IOException {
@@ -56,6 +56,7 @@ public class BabaFrame extends JFrame implements KeyListener {
 
         setVisible(true);
     }
+
 
     public void setImage(String imagePath, int row, int col) {
         try {

@@ -15,6 +15,10 @@ import java.util.stream.Stream;
 //Lets do ints.
 public class Engine {
     private static ArrayList<BabaObjects>[][] levelSelect = new ArrayList[20][15];
+    public static ArrayList<BabaObjects>[][] levelStoragePush = new ArrayList[20][15];
+    public static ArrayList<BabaObjects>[][] levelStorage = new ArrayList[20][15];
+
+
     private int xTiles = 20;
     private int yTiles = 15;
     public static memoryController memoryEater = new memoryController();
@@ -66,9 +70,9 @@ public class Engine {
             for (int j = 0; j < maybe[i].length; j++) {
                 if (maybe[i][j] != null) {
                     for (int k = 0; k < (maybe[i][j].size()) ; k++) {
-
-
-                        maybe[i][j].get(k).moveYouRight(i, j, k);
+                        if (maybe[i][j].get(k).checkIfDeleted()==false){
+                            maybe[i][j].get(k).moveYouRight(i,j,k);
+                        }
                     }
                 }
             }
@@ -102,12 +106,29 @@ public class Engine {
         playGame();
         BabaFrame.babakey.repaint();
     }
-    public void moveUndo(){memoryEater.removeLastState();}
+    public void moveUndo(){
+        memoryEater.removeLastState();
+        levelStoragePush= memoryEater.pullLatestState();}
 
     public void playGame(){
-        memoryEater.pushNewState(memoryEater.pullLatestState());
+        for (int i = 0; i < levelStoragePush.length; i++) {
+            for (int j = 0; j < levelStoragePush[i].length; j++) {
+                if (levelStoragePush[i][j] != null) {
+                    for (int k = 0; k < (levelStoragePush[i][j].size()) ; k++) {
+                        if (levelStoragePush[i][j].get(k).checkIfDeleted()==false&&levelStoragePush[i][j].get(k).checkIfDead()==false){
+                            if (levelStorage[i][j]==null){
+                                levelStorage[i][j] =new ArrayList<BabaObjects>();
+                            }
+                            levelStorage[i][j].add(levelStoragePush[i][j].get(k));
+                        }
+                    }
+                }
+            }
+        }
+        memoryEater.pushNewState(levelStorage);
     }
-    public void resetLevel(){}
+    public void resetLevel(){
+    }
 
 
 }
