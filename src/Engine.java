@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-//FIXME STOP CARING ABOUT MEMORY THIS IS LITERALLY NEVER GOING TO USE OVER 2KB OF RAM
-//TODO Plan. NO ARRAY. Array will be annoying. 2D list? That would make life easier. 3D LIST! Then compress it back into a 1D list, of ordered things.
 //Wait.. Does a 4D array with 5 1D elements take up much more space than a 1D array with 5 1D elements?
 //(EX.) Baba - keke- wall are stored in that order next to eachother. In the 4D array beacuse idk there is one will they take up that much more space?
 //An arraylist, of 2x2 arrays, of arraylists. Storing Baba objects? or integers?
@@ -60,9 +58,9 @@ public class Engine {
 
     public void moveLeft(){
         int[][][][] maybe= memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length; i++) {
-            for (int j = 0; j < maybe[i].length; j++) {
-                for (int k = 0; k < (memoryEater.getPointer()) ; k++) {
+        for (int i = 0; i < maybe.length-1; i++) {
+            for (int j = 0; j < maybe[i].length-1; j++) {
+                for (int k = 0; k < 3 ; k++) {
                     if (maybe[i][j][k][0]!=0) {
                         levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
                         levelStoragePush[i][j-1][k][1]=2;
@@ -78,43 +76,61 @@ public class Engine {
         playGame();
     }
 
-   /* public void moveRight(){
-        ArrayList<BabaObjects>[][] maybe= memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length; i++) {
-            for (int j = 0; j < maybe[i].length; j++) {
-                for (int k = 0; k < (maybe[i][j].size()) ; k++) {
-                    if (maybe[i][j].get(k).checkIfDeleted()==false){
-                            maybe[i][j].get(k).moveYouRight(i,j,k);
+    public void moveRight(){
+        int[][][][] maybe= memoryEater.pullLatestState();
+        for (int i = 0; i < maybe.length-1; i++) {
+            for (int j = 0; j < maybe[i].length-1; j++) {
+                for (int k = 0; k < 3 ; k++) {
+                    if (maybe[i][j][k][0]!=0) {
+                        levelStoragePush[i][j+1][k][0]=maybe[i][j][k][0];
+                        levelStoragePush[i][j+1][k][1]=0;
+                        levelStoragePush[i][j+1][k][2]=maybe[i][j][k][2]+1;
+                        if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
+                        levelStoragePush[i][j][k][0]=0;
+                        levelStoragePush[i][j][k][1]=0;
+                        levelStoragePush[i][k][k][2]=0;
                     }
-
                 }
             }
         }
         playGame();
     }
-    public void moveDown(){
-
-        ArrayList<BabaObjects>[][] maybe= memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length; i++) {
-            for (int j = 0; j < maybe[i].length; j++) {
-                if (maybe[i][j] != null) {
-                    maybe[i][j].forEach(obj -> obj.moveYouDown());
+    public void moveDown(){int[][][][] maybe= memoryEater.pullLatestState();
+        for (int i = 0; i < maybe.length-1; i++) {
+            for (int j = 0; j < maybe[i].length-1; j++) {
+                for (int k = 0; k < 3 ; k++) {
+                    if (maybe[i][j][k][0]!=0) {
+                        levelStoragePush[i-1][j][k][0]=maybe[i][j][k][0];
+                        levelStoragePush[i-1][j][k][1]=1;
+                        levelStoragePush[i-1][j][k][2]=maybe[i][j][k][2]+1;
+                        if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
+                        levelStoragePush[i][j][k][0]=0;
+                        levelStoragePush[i][j][k][1]=0;
+                        levelStoragePush[i][k][k][2]=0;
+                    }
                 }
             }
         }
         playGame();
     }
-    public void moveUp(){
-        ArrayList<BabaObjects>[][] maybe= memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length; i++) {
-            for (int j = 0; j < maybe[i].length; j++) {
-                if (maybe[i][j] != null) {
-                    maybe[i][j].forEach(obj -> obj.moveYouUp());
+    public void moveUp(){int[][][][] maybe= memoryEater.pullLatestState();
+        for (int i = 0; i < maybe.length-1; i++) {
+            for (int j = 0; j < maybe[i].length-1; j++) {
+                for (int k = 0; k < 3 ; k++) {
+                    if (maybe[i][j][k][0]!=0) {
+                        levelStoragePush[i+1][j][k][0]=maybe[i][j][k][0];
+                        levelStoragePush[i+1][j][k][1]=3;
+                        levelStoragePush[i+1][j][k][2]=maybe[i][j][k][2]+1;
+                        if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
+                        levelStoragePush[i][j][k][0]=0;
+                        levelStoragePush[i][j][k][1]=0;
+                        levelStoragePush[i][k][k][2]=0;
+                    }
                 }
             }
         }
         playGame();
-    }*/
+    }
     public void moveWait(){
         playGame();
         BabaFrame.babakey.repaint();

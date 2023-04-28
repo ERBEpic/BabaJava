@@ -25,10 +25,9 @@ public class GraphicsController {
 
         for (int i = 0; i < Engine.BabaEngine.getxTiles(); i++) {
             for (int j = 0; j < Engine.BabaEngine.getyTiles(); j++) {
-                for (int k = 0; k < (Engine.memoryEater.getPointer()); k++) {
+                for (int k = 0; k < (3); k++) {
                         if (temp[i][j][k][0]!=0){
-                    BabaFrame.babakey.setImage(FileFinder(temp[i][j][k]),i,j);
-
+                        BabaFrame.babakey.setImage(FileFinder(temp[i][j][k]),i,j);
                     }
                 }
             }
