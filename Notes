@@ -37,3 +37,12 @@ id 0= You
 id 1=push
 id 2=stop
 id 3 = defeat
+
+
+
+How im storing memory
+
+Regular memoryeater stuff.
+[blah][blah][][][cool stuff]
+cool stuff is ordered like this.
+Per baba object, [0]=id,[1]=rotation,[2]=walkingcycle

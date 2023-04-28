@@ -14,9 +14,9 @@ import java.util.stream.Stream;
 //Advantages of storing ints. - Less memory. Easier to code (hopefully)
 //Lets do ints.
 public class Engine {
-    private static ArrayList<BabaObjects>[][] levelSelect = new ArrayList[20][15];
-    public static ArrayList<BabaObjects>[][] levelStoragePush = new ArrayList[20][15];
-    public static ArrayList<BabaObjects>[][] levelStorage = new ArrayList[20][15];
+    private static int[][][][] levelSelect = new int[20][15][3][3];//the last one is basically the equivalent of BabaObject
+    public static int[][][][] levelStoragePush = new int[20][15][3][3];
+    public static int[][][][] levelStorage = new int[20][15][3][3];
 
 
     private int xTiles = 20;
@@ -29,12 +29,12 @@ public class Engine {
     public Engine(){
         xTiles = 20;
         yTiles = 15;
-        for (int i = 0; i < levelStoragePush.length; i++) {
+        /*for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 levelStoragePush[i][j]= new ArrayList<BabaObjects>();
             }
 
-        }
+        }*/
     }
     public int getxTiles(){
         return xTiles;
@@ -59,14 +59,18 @@ public class Engine {
     }
 
     public void moveLeft(){
-        ArrayList<BabaObjects>[][] maybe= memoryEater.pullLatestState();
+        int[][][][] maybe= memoryEater.pullLatestState();
         for (int i = 0; i < maybe.length; i++) {
             for (int j = 0; j < maybe[i].length; j++) {
-                if (maybe[i][j] != null) {
-                    for (int k = 0; k < (maybe[i][j].size()) ; k++) {
-                        if (maybe[i][j].get(k).checkIfDeleted()==false){
-                            maybe[i][j].get(k).moveYouLeft(i,j,k);
-                        }
+                for (int k = 0; k < (memoryEater.getPointer()) ; k++) {
+                    if (maybe[i][j][k][0]!=0) {
+                        levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
+                        levelStoragePush[i][j-1][k][1]=2;
+                        levelStoragePush[i][j-1][k][2]=maybe[i][j][k][2]+1;
+                        if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
+                        levelStoragePush[i][j][k][0]=0;
+                        levelStoragePush[i][j][k][1]=0;
+                        levelStoragePush[i][k][k][2]=0;
                     }
                 }
             }
@@ -74,16 +78,15 @@ public class Engine {
         playGame();
     }
 
-    public void moveRight(){
+   /* public void moveRight(){
         ArrayList<BabaObjects>[][] maybe= memoryEater.pullLatestState();
         for (int i = 0; i < maybe.length; i++) {
             for (int j = 0; j < maybe[i].length; j++) {
-                if (maybe[i][j] != null) {
-                    for (int k = 0; k < (maybe[i][j].size()) ; k++) {
-                        if (maybe[i][j].get(k).checkIfDeleted()==false){
+                for (int k = 0; k < (maybe[i][j].size()) ; k++) {
+                    if (maybe[i][j].get(k).checkIfDeleted()==false){
                             maybe[i][j].get(k).moveYouRight(i,j,k);
-                        }
                     }
+
                 }
             }
         }
@@ -111,7 +114,7 @@ public class Engine {
             }
         }
         playGame();
-    }
+    }*/
     public void moveWait(){
         playGame();
         BabaFrame.babakey.repaint();
@@ -121,21 +124,21 @@ public class Engine {
         levelStoragePush= memoryEater.pullLatestState();}
 
     public void playGame(){
-        for (int i = 0; i < levelStoragePush.length; i++) {
+       /* for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
-                if (levelStoragePush[i][j] != null) {
-                    for (int k = 0; k < (levelStoragePush[i][j].size()) ; k++) {
-                        if (levelStoragePush[i][j].get(k).checkIfDeleted()==false&&levelStoragePush[i][j].get(k).checkIfDead()==false){
-                            if (levelStorage[i][j]==null){
-                                levelStorage[i][j] =new ArrayList<BabaObjects>();
-                            }
-                            levelStorage[i][j].add(levelStoragePush[i][j].get(k));
+                for (int k = 0; k < (levelStoragePush[i][j].size()) ; k++) {
+                    if (levelStoragePush[i][j].get(k).checkIfDeleted()==false&&levelStoragePush[i][j].get(k).checkIfDead()==false){
+                        if (levelStorage[i][j]==null){
+                            levelStorage[i][j] =new ArrayList<BabaObjects>();
                         }
+                        levelStorage[i][j].add(levelStoragePush[i][j].get(k));
                     }
                 }
             }
-        }
-        memoryEater.pushNewState(levelStorage);
+        }*/
+        memoryEater.pushNewState(levelStoragePush);
+
+
     }
     public void resetLevel(){
     }
