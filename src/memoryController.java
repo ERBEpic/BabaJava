@@ -22,11 +22,20 @@ public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1
         array1[1][1].add(4);
         list.add(array1);*/
     }
-    static private ArrayList<ArrayList<BabaObjects>[][]> memoryEater = new ArrayList<>();
+    private int[][][][][] memoryEater = new int[40][40][3][][];
+    //x,y,a,z,i
+    //x,y simple
+    //z is the point at which the thing is in (if [1][40][40] there is Baba[],Keke[], baba is at z=0 keke is at z=1
+    //a is the things inside the array
+    //i is for undos and stuff.
+    //Why is it ordered like this? Because i want it to be 40,40,3 guaranteed, and z and i can change
 
-     static private int pointer = 0;//Self evident what it does. Adds and removes always come paired with this.
-    public memoryController(ArrayList<BabaObjects>[][] x){//Start off the stack. NEEDS TO BE ONE. Will get angy if there isnt.
-        memoryEater.add(x);pointer++;
+    //Pointer is THE NEXT PLACE TO BE WRITTEN IN.
+    private int pointer = 1;//Self evident what it does. Adds and removes always come paired with this.
+    public memoryController(int[][][][] x){//Start off the stack. NEEDS TO BE ONE. Will get angy if there isnt.
+        int [][][][][] temp = new int[40][40][3][pointer][];
+        temp
+        pointer++;
     }
     public memoryController(){
 
@@ -44,7 +53,7 @@ public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1
     public void removeLastState(){
         System.out.println(pointer);
         if (pointer>1){pointer--;
-        memoryEater.remove(pointer);}else {};
+            memoryEater.remove(pointer);}else {};
     }
     public void resetState(){
 
