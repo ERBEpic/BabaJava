@@ -22,7 +22,7 @@ public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1
         array1[1][1].add(4);
         list.add(array1);*/
     }
-    static private int[][][][][] memoryEater = new int[1][40][40][3][3];
+    static private int[][][][][] memoryEater = new int[21][40][40][1][4];
     //i,x,y,z,a
     //x,y simple
     //z is the point at which the thing is in (if [1][40][40] there is Baba[],Keke[], baba is at z=0 keke is at z=1
@@ -38,17 +38,18 @@ public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1
 
     }
     public static void expandTheEater(){
-        int [][][][][] temp = new int[pointer+1][][][][];
+        int [][][][][] temp = new int[pointer+6][][][][];
         for (int i = 0; i < pointer; i++) {
             temp[i]=memoryEater[i];
         }
         pointer++;
-        memoryEater = new int[pointer+1][40][40][3][];
+        memoryEater = new int[pointer+1][40][40][4][];
         memoryEater = temp;
     }
     public int getPointer(){return pointer;}
 
     public int[][][][] pullLatestState(){
+        System.out.println(pointer+" "+memoryEater.length);
         return memoryEater[pointer-1];
     }
     public int[][][][] pullNState(int x){

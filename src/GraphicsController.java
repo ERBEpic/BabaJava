@@ -22,17 +22,17 @@ public class GraphicsController {
     public void ParserDisplay() {
         BabaFrame.babakey.repaint();
         int[][][][] temp = Engine.memoryEater.pullLatestState();
-
-        for (int i = 0; i < Engine.BabaEngine.getxTiles(); i++) {
-            for (int j = 0; j < Engine.BabaEngine.getyTiles(); j++) {
-                for (int k = 0; k < (3); k++) {
+        if (temp!=null){//To solve NullPointerExceptions. Cheaper(runtime wise) try/catch
+        for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < temp[i].length; j++) {
+                for (int k = 0; k < temp[i][j].length; k++) {
                         if (temp[i][j][k][0]!=0){
                         BabaFrame.babakey.setImage(FileFinder(temp[i][j][k]),i,j);
                     }
                 }
             }
         }
-    }
+    }}
 
     public String FileFinder(int id, int rotation, int walking){//Four thigns matter. These 3, and counter.
         String first = null;
@@ -51,7 +51,7 @@ public class GraphicsController {
             second = walking;
         }else {second = rotation*8+walking;
         }
-        return "C:/Users/Joespeh/IdeaProjects/Baba Is Me/Sprites/"+first+'_'+second+'_'+third+".png";
+        return "Sprites/"+first+'_'+second+'_'+third+".png";
     }
     public String FileFinder(int[] x){//Four thigns matter. These 3, and counter.
         int id = x[0];
@@ -74,7 +74,7 @@ public class GraphicsController {
             second = walkingcycle;
         }else {second = rotation*8+walkingcycle;
         }
-        return "C:/Users/Joespeh/IdeaProjects/Baba Is Me/Sprites/"+first+'_'+second+'_'+third+".png";
+        return "Sprites/"+first+'_'+second+'_'+third+".png";
     }
     }
 

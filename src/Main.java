@@ -12,20 +12,19 @@ public class Main {
         //Engine EngineG = new Engine();
         BabaFrame.babakey.showFrame();
         //babakey.setScreenSize(2000,2000);
-        BabaFrame.babakey.setImage("C:/Users/Joespeh/IdeaProjects/Baba Is Me/Sprites/baba_0_1.png",2,4);
+        BabaFrame.babakey.setImage("/Sprites/baba_0_1.png",2,4);
         BabaFrame.babakey.setBackground(Color.black);
 
 
-        int[][][][] arraynew = new int[40][40][3][3];
+        int[][][][] arraynew = new int[40][40][4][4];
 
         for (int i = 0; i < 2; i++) {
-            arraynew[3][4][1][i] = 3;
+            arraynew[5][4][1][i] = 3;
         }
 
         Engine.memoryEater.pushNewState(arraynew);
-    GraphicsController temp = new GraphicsController();
+        GraphicsController temp = new GraphicsController();
 
-        System.out.println(temp.FileFinder(3,2,2));
         Engine.levelStoragePush=Engine.memoryEater.pullLatestState().clone();
         Engine.BabaEngine.playGame();
 

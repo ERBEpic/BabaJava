@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 //Lets do ints.
 public class Engine {
     private static int[][][][] levelSelect = new int[20][15][3][3];//the last one is basically the equivalent of BabaObject
-    public static int[][][][] levelStoragePush = new int[20][15][3][3];
+    public static int[][][][] levelStoragePush = new int[39][39][4][4];
     public static int[][][][] levelStorage = new int[20][15][3][3];
 
 
@@ -25,8 +25,8 @@ public class Engine {
     private boolean isYou = true;
     private int Level;
     public Engine(){
-        xTiles = 20;
-        yTiles = 15;
+        xTiles = 39;
+        yTiles = 39;
         /*for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 levelStoragePush[i][j]= new ArrayList<BabaObjects>();
@@ -58,9 +58,9 @@ public class Engine {
 
     public void moveLeft(){
         int[][][][] maybe= memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length-1; i++) {
-            for (int j = 0; j < maybe[i].length-1; j++) {
-                for (int k = 0; k < 3 ; k++) {
+        for (int i = 1; i < maybe.length-1; i++) {
+            for (int j = 1; j < maybe[i].length-1; j++) {
+                for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0) {
                         levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
                         levelStoragePush[i][j-1][k][1]=2;
@@ -69,6 +69,7 @@ public class Engine {
                         levelStoragePush[i][j][k][0]=0;
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
+                        System.out.println(i+" "+j+" "+k);
                     }
                 }
             }
@@ -78,35 +79,19 @@ public class Engine {
 
     public void moveRight(){
         int[][][][] maybe= memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length-1; i++) {
-            for (int j = 0; j < maybe[i].length-1; j++) {
-                for (int k = 0; k < 3 ; k++) {
-                    if (maybe[i][j][k][0]!=0) {
+        for (int i = 1; i < maybe.length-1; i++) {
+            for (int j = 1; j < maybe[i].length-1; j++) {
+                for (int k = 0; k < maybe[i][j].length ; k++) {
+                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
                         levelStoragePush[i][j+1][k][0]=maybe[i][j][k][0];
                         levelStoragePush[i][j+1][k][1]=0;
                         levelStoragePush[i][j+1][k][2]=maybe[i][j][k][2]+1;
-                        if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
+                        levelStoragePush[i][j+1][k][3]++;
+                        if (levelStoragePush[i][j+1][k][2]>3){levelStoragePush[i][j+1][k][2]=0;}
                         levelStoragePush[i][j][k][0]=0;
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
-                    }
-                }
-            }
-        }
-        playGame();
-    }
-    public void moveDown(){int[][][][] maybe= memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length-1; i++) {
-            for (int j = 0; j < maybe[i].length-1; j++) {
-                for (int k = 0; k < 3 ; k++) {
-                    if (maybe[i][j][k][0]!=0) {
-                        levelStoragePush[i-1][j][k][0]=maybe[i][j][k][0];
-                        levelStoragePush[i-1][j][k][1]=1;
-                        levelStoragePush[i-1][j][k][2]=maybe[i][j][k][2]+1;
-                        if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
-                        levelStoragePush[i][j][k][0]=0;
-                        levelStoragePush[i][j][k][1]=0;
-                        levelStoragePush[i][k][k][2]=0;
+                        System.out.println(i+" "+j+" "+k);
                     }
                 }
             }
@@ -114,17 +99,39 @@ public class Engine {
         playGame();
     }
     public void moveUp(){int[][][][] maybe= memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length-1; i++) {
-            for (int j = 0; j < maybe[i].length-1; j++) {
-                for (int k = 0; k < 3 ; k++) {
+        for (int i = 1; i < maybe.length-1; i++) {
+            for (int j = 1; j < maybe[i].length-1; j++) {
+                for (int k = 0; k < maybe[i][j].length; k++) {
                     if (maybe[i][j][k][0]!=0) {
-                        levelStoragePush[i+1][j][k][0]=maybe[i][j][k][0];
-                        levelStoragePush[i+1][j][k][1]=3;
-                        levelStoragePush[i+1][j][k][2]=maybe[i][j][k][2]+1;
-                        if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
+                        levelStoragePush[i-1][j][k][0]=maybe[i][j][k][0];
+                        levelStoragePush[i-1][j][k][1]=1;
+                        levelStoragePush[i-1][j][k][2]=maybe[i][j][k][2]+1;
+                        if (levelStoragePush[i-1][j][k][2]>3){levelStoragePush[i-1][j][k][2]=0;}
                         levelStoragePush[i][j][k][0]=0;
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
+                        System.out.println(i+" "+j+" "+k);
+                    }
+                }
+            }
+        }
+        playGame();
+    }
+    public void moveDown(){
+        int[][][][] maybe= memoryEater.pullLatestState();
+        for (int i = 1; i < maybe.length-1; i++) {
+            for (int j = 1; j < maybe[i].length-1; j++) {
+                for (int k = 0; k < maybe[i][j].length ; k++) {
+                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+                        levelStoragePush[i+1][j][k][0]=maybe[i][j][k][0];
+                        levelStoragePush[i+1][j][k][1]=3;
+                        levelStoragePush[i+1][j][k][2]=maybe[i][j][k][2]+1;
+                        levelStoragePush[i+1][j][k][3]++;
+                        if (levelStoragePush[i+1][j][k][2]>3){levelStoragePush[i+1][j][k][2]=0;}
+                        levelStoragePush[i][j][k][0]=0;
+                        levelStoragePush[i][j][k][1]=0;
+                        levelStoragePush[i][k][k][2]=0;
+                        System.out.println(i+" "+j+" "+k);
                     }
                 }
             }
@@ -152,10 +159,15 @@ public class Engine {
                 }
             }
         }*/
+        for (int i = 0; i < levelStoragePush.length-1; i++) {
+            for (int j = 0; j < levelStoragePush[i].length-1; j++) {
+                for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
+                    if (levelStoragePush[i][j][k][0]!=0||levelStoragePush[i][j][k]!=null){
+                        levelStoragePush[i][j][k][3]=0;
+                    }}}}
         memoryEater.pushNewState(levelStoragePush);
-
-
     }
+
     public void resetLevel(){
     }
 

@@ -23,7 +23,7 @@ public class BabaFrame extends JFrame implements KeyListener {
 
     public BabaFrame() throws IOException {
         super("Baba is Me!");
-        Image image = ImageIO.read(new File("C:/Users/Joespeh/IdeaProjects/Baba Is Me/Sprites/baba_0_1.png"));
+        Image image = ImageIO.read(new File("Sprites/baba_0_1.png"));
         setIconImage(image);
         setSize(Engine.BabaEngine.getxTiles()* cellSize, Engine.BabaEngine.getyTiles() * cellSize);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,7 +58,7 @@ public class BabaFrame extends JFrame implements KeyListener {
     }
 
 
-    public void setImage(String imagePath, int row, int col) {
+    public void setImage(String imagePath, int row, int col) {//TODO What does setImage ACTUALLY do?
         try {
             Image image = ImageIO.read(new File(imagePath));
             imageIcons[row][col].setImage(image);
