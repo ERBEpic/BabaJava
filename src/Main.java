@@ -20,12 +20,15 @@ public class Main {
         for (int i = 0; i < 2; i++) {
             arraynew[5][4][1][i] = 3;
         }
+        arraynew[10][11][1][0]=6;
 
         Engine.memoryEater.pushNewState(arraynew);
         GraphicsController temp = new GraphicsController();
 
         Engine.levelStoragePush=Engine.memoryEater.pullLatestState().clone();
         Engine.BabaEngine.playGame();
+
+
 
     }
 }

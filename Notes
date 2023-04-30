@@ -28,8 +28,14 @@ Im gonna move this all into "BabaObjects"
 
 
 
-
-
+IDs
+case 0: first = "algae";break;
+            case 1: first = "arm";break;
+            case 2: first = "arrow";break;
+            case 3: first = "baba";break;
+            case 4: first = "text_you";break;
+            case 5: first = "wall";break;
+            case 6: first = "keke";break;
 
 
 PropertiesStorage
@@ -37,6 +43,7 @@ id 0= You
 id 1=push
 id 2=stop
 id 3 = defeat
+id 4 = move;
 
 
 

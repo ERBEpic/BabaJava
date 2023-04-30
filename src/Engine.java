@@ -12,10 +12,9 @@ import java.util.stream.Stream;
 //Advantages of storing ints. - Less memory. Easier to code (hopefully)
 //Lets do ints.
 public class Engine {
-    private static int[][][][] levelSelect = new int[20][15][3][3];//the last one is basically the equivalent of BabaObject
-    public static int[][][][] levelStoragePush = new int[39][39][4][4];
-    public static int[][][][] levelStorage = new int[20][15][3][3];
-
+    private static int[][][][] levelSelect = new int[20][15][3][5];//the last one is basically the equivalent of BabaObject
+    public static int[][][][] levelStoragePush = new int[39][39][4][5];
+    public static BabaObjects properties = new BabaObjects();
 
     private int xTiles = 20;
     private int yTiles = 15;
@@ -56,49 +55,43 @@ public class Engine {
         return Level;
     }
 
-    public void moveLeft(){
-        int[][][][] maybe= memoryEater.pullLatestState();
+    public void moveProperty(){
+        int[][][][] maybe= levelStoragePush;
         for (int i = 1; i < maybe.length-1; i++) {
             for (int j = 1; j < maybe[i].length-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0) {
+                        if(properties.checkProperty(levelStoragePush[i][j][k][0],4)&&levelStoragePush[i][j][k][4]<1){
                         levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
                         levelStoragePush[i][j-1][k][1]=2;
                         levelStoragePush[i][j-1][k][2]=maybe[i][j][k][2]+1;
+                        levelStoragePush[i][j+1][k][4]++;
                         if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
                         levelStoragePush[i][j][k][0]=0;
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
                         System.out.println(i+" "+j+" "+k);
                         Baba3DFrame.babakey.removeImage(i,j,k);
-                    }
+                    }}else{/*levelStoragePush[i][j][k][4]--;*/}
                 }
             }
         }
-        playGame();
     }
 
-    public void moveRight(){
-        int[][][][] maybe= memoryEater.pullLatestState();
-        for (int i = 1; i < maybe.length-1; i++) {
-            for (int j = 1; j < maybe[i].length-1; j++) {
-                for (int k = 0; k < maybe[i][j].length ; k++) {
-                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
-                        levelStoragePush[i][j+1][k][0]=maybe[i][j][k][0];
-                        levelStoragePush[i][j+1][k][1]=0;
-                        levelStoragePush[i][j+1][k][2]=maybe[i][j][k][2]+1;
-                        levelStoragePush[i][j+1][k][3]++;
-                        if (levelStoragePush[i][j+1][k][2]>3){levelStoragePush[i][j+1][k][2]=0;}
-                        levelStoragePush[i][j][k][0]=0;
-                        levelStoragePush[i][j][k][1]=0;
-                        levelStoragePush[i][k][k][2]=0;
-                        System.out.println(i+" "+j+" "+k);
-                        Baba3DFrame.babakey.removeImage(i,j,k);
-                    }
-                }
-            }
+    public void moveRight(int i, int j, int k) {
+        levelStoragePush[i][j - 1][k][0] = levelStoragePush[i][j][k][0];
+        levelStoragePush[i][j - 1][k][1] = 2;
+        levelStoragePush[i][j - 1][k][2] = levelStoragePush[i][j][k][2] + 1;
+        levelStoragePush[i][j + 1][k][4]++;
+        if (levelStoragePush[i][j - 1][k][2] > 3) {
+            levelStoragePush[i][j - 1][k][2] = 0;
         }
-        playGame();
+        levelStoragePush[i][j][k][0] = 0;
+        levelStoragePush[i][j][k][1] = 0;
+        levelStoragePush[i][k][k][2] = 0;
+        System.out.println(i + " " + j + " " + k);
+        Baba3DFrame.babakey.removeImage(i, j, k);
+
     }
     public void moveUp(){int[][][][] maybe= memoryEater.pullLatestState();
         for (int i = 1; i < maybe.length-1; i++) {
@@ -150,7 +143,7 @@ public class Engine {
         memoryEater.removeLastState();
         levelStoragePush= memoryEater.pullLatestState();}
 
-    public void playGame(){
+    public static void playGame(){//Idk why this has to be static but it doesnt break so
        /* for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 for (int k = 0; k < (levelStoragePush[i][j].size()) ; k++) {
@@ -163,11 +156,13 @@ public class Engine {
                 }
             }
         }*/
+        Engine.properties.moveProperty();
         for (int i = 0; i < levelStoragePush.length-1; i++) {
             for (int j = 0; j < levelStoragePush[i].length-1; j++) {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
                     if (levelStoragePush[i][j][k][0]!=0||levelStoragePush[i][j][k]!=null){
                         levelStoragePush[i][j][k][3]=0;
+                        levelStoragePush[i][j][k][4]=0;
                     }}}}
         memoryEater.pushNewState(levelStoragePush);
     }

@@ -39,25 +39,7 @@ public class GraphicsController {
         }
     }}
 
-    public String FileFinder(int id, int rotation, int walking){//Four thigns matter. These 3, and counter.
-        String first = null;
-         int second;
-         int third;
-        switch (id){
-            case 0: first = "algae";break;
-            case 1: first = "arm";break;
-            case 2: first = "arrow";break;
-            case 3: first = "baba";break;
-            case 4: first = "text_you";break;
-            case 5: first = "wall";break;//This needs to be something special. Wall is WEIRD.
-        }if (first==null){first="baba";}
-        third = getCounter();
-        if (rotation == 5){
-            second = walking;
-        }else {second = rotation*8+walking;
-        }
-        return "Sprites/"+first+'_'+second+'_'+third+".png";
-    }
+
     public String FileFinder(int[] x){//Four thigns matter. These 3, and counter.
         int id = x[0];
         int rotation = x[1];
@@ -72,7 +54,7 @@ public class GraphicsController {
             case 3: first = "baba";break;
             case 4: first = "text_you";break;
             case 5: first = "wall";break;//This needs to be something special. Wall is WEIRD.
-
+            case 6: first = "keke";break;
         }
         third = GraphicsController.getCounter();
         if (rotation == 5){

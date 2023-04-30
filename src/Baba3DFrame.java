@@ -208,37 +208,30 @@ public class Baba3DFrame extends JFrame implements KeyListener {
         int keyCode = e.getKeyCode();
         switch(keyCode) {
             case KeyEvent.VK_UP:
-                System.out.println("Up arrow key pressed");
-                Engine.BabaEngine.moveUp();
+            case KeyEvent.VK_W:
+                System.out.println("Up key pressed");
+                BabaObjects.moveYouUp();
                 break;
             case KeyEvent.VK_DOWN:
-                System.out.println("Down arrow key pressed");
-                Engine.BabaEngine.moveDown();
+            case KeyEvent.VK_S:
+                System.out.println("Down key pressed");
+                BabaObjects.moveYouDown();
                 break;
+            case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
-                System.out.println("Left arrow key pressed");
-                Engine.BabaEngine.moveLeft();
+                System.out.println("Left key pressed");
+                BabaObjects.moveYouLeft();
                 break;
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_D:
                 System.out.println("Right key pressed");
-                Engine.BabaEngine.moveRight();
-                break;
-            case KeyEvent.VK_W:
-                System.out.println("W key pressed");
-                Engine.BabaEngine.moveUp();
-                break;
-            case KeyEvent.VK_S:
-                System.out.println("S key pressed");
-                Engine.BabaEngine.moveDown();
-                break;
-            case KeyEvent.VK_A:
-                System.out.println("A key pressed");
-                Engine.BabaEngine.moveLeft();
+                BabaObjects.moveYouRight();
                 break;
             case KeyEvent.VK_SPACE:
                 System.out.println("Spacebar Pressed");
                 Engine.BabaEngine.moveWait();
+                Engine.properties.setProperty(6,4,true);
+                System.out.println("Keke is movE!");
                 break;
             case KeyEvent.VK_R:
                 System.out.println("R Pressed");
