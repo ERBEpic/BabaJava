@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class BabaFrame extends JFrame implements KeyListener {
-    public static BabaFrame babakey;
+    /*public static BabaFrame babakey;
 
     static {
         try {
@@ -14,7 +14,7 @@ public class BabaFrame extends JFrame implements KeyListener {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     public JPanel[][] contentPanels;
     public JLabel[][] imageLabels;

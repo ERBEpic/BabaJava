@@ -70,6 +70,7 @@ public class Engine {
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
                         System.out.println(i+" "+j+" "+k);
+                        Baba3DFrame.babakey.removeImage(i,j,k);
                     }
                 }
             }
@@ -92,6 +93,7 @@ public class Engine {
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
                         System.out.println(i+" "+j+" "+k);
+                        Baba3DFrame.babakey.removeImage(i,j,k);
                     }
                 }
             }
@@ -111,6 +113,7 @@ public class Engine {
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
                         System.out.println(i+" "+j+" "+k);
+                        Baba3DFrame.babakey.removeImage(i,j,k);
                     }
                 }
             }
@@ -132,6 +135,7 @@ public class Engine {
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
                         System.out.println(i+" "+j+" "+k);
+                        Baba3DFrame.babakey.removeImage(i,j,k);
                     }
                 }
             }
@@ -140,7 +144,7 @@ public class Engine {
     }
     public void moveWait(){
         playGame();
-        BabaFrame.babakey.repaint();
+        Baba3DFrame.babakey.repaint();
     }
     public void moveUndo(){
         memoryEater.removeLastState();

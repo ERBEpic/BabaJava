@@ -10,10 +10,9 @@ public class Main {
 
         //JPanelFrame.showFrame();
         //Engine EngineG = new Engine();
-        BabaFrame.babakey.showFrame();
+        Baba3DFrame.babakey.showFrame();
         //babakey.setScreenSize(2000,2000);
-        BabaFrame.babakey.setImage("/Sprites/baba_0_1.png",2,4);
-        BabaFrame.babakey.setBackground(Color.black);
+        Baba3DFrame.babakey.setBackground(Color.black);
 
 
         int[][][][] arraynew = new int[40][40][4][4];

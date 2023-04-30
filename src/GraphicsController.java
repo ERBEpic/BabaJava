@@ -9,25 +9,30 @@ import java.util.stream.Stream;
 public class GraphicsController {
     private static int counter = 9234521;
     public GraphicsController() throws InterruptedException {
+            walker();
+
+        while(true){ParserDisplay();}
+    }
+    public void walker() throws InterruptedException {
         while(true){
+            Thread.sleep(175);
             counter++;
             if (counter>3){counter=1;}
             ParserDisplay();
-            Thread.sleep(175);
         }
     }
     public static int getCounter(){
         return counter;
     }
     public void ParserDisplay() {
-        BabaFrame.babakey.repaint();
+        Baba3DFrame.babakey.repaint();
         int[][][][] temp = Engine.memoryEater.pullLatestState();
         if (temp!=null){//To solve NullPointerExceptions. Cheaper(runtime wise) try/catch
         for (int i = 0; i < temp.length; i++) {
             for (int j = 0; j < temp[i].length; j++) {
                 for (int k = 0; k < temp[i][j].length; k++) {
                         if (temp[i][j][k][0]!=0){
-                        BabaFrame.babakey.setImage(FileFinder(temp[i][j][k]),i,j);
+                        Baba3DFrame.babakey.setImageBetter(FileFinder(temp[i][j][k]),i,j,k);
                     }
                 }
             }
