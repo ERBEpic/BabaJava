@@ -20,10 +20,11 @@ public class BabaObjects {
 
     public static void moveYouLeft(){
         int[][][][] maybe= Engine.memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length; i++) {
-            for (int j = 0; j < maybe[i].length; j++) {
+        for (int i = 0; i < Engine.getxTiles(); i++) {
+            for (int j = 1; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
-                    if (maybe[i][j][k][0]!=0) {
+                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+                        //Put something here to find an open z position
                         Engine.levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
                         Engine.levelStoragePush[i][j-1][k][1]=2;
                         Engine.levelStoragePush[i][j-1][k][2]=maybe[i][j][k][2]+1;
@@ -43,11 +44,13 @@ public class BabaObjects {
     }
 
     public static void moveYouRight(){
+        System.out.println(Engine.getxTiles());
         int[][][][] maybe= Engine.memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length; i++) {
-            for (int j = 0; j < maybe[i].length; j++) {
+        for (int i = 0; i < Engine.getxTiles(); i++) {
+            for (int j = 0; j < Engine.getyTiles()-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
-                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1&&j < maybe[i].length - 1) {
+                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+                        //Put something here to find an open z position
                         Engine.levelStoragePush[i][j+1][k][0]=maybe[i][j][k][0];
                         Engine.levelStoragePush[i][j+1][k][1]=0;
                         Engine.levelStoragePush[i][j+1][k][2]=maybe[i][j][k][2]+1;
@@ -69,10 +72,11 @@ public class BabaObjects {
 
     public static void moveYouUp() {//Whydoesthisworkasstaticidontunderstand
         int[][][][] maybe = Engine.memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length; i++) {
-            for (int j = 0; j < maybe[i].length ; j++) {
+        for (int i = 1; i < Engine.getxTiles(); i++) {
+            for (int j = 0; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length; k++) {
-                    if (maybe[i][j][k][0] != 0) {
+                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+                        //Put something here to find an open z position
                         Engine.levelStoragePush[i-1][j][k][0] = maybe[i][j][k][0];
                         Engine.levelStoragePush[i-1][j][k][1] = 1;
                         Engine.levelStoragePush[i-1][j][k][2] = maybe[i][j][k][2] + 1;
@@ -94,10 +98,11 @@ public class BabaObjects {
     }
     public static void moveYouDown(){
         int[][][][] maybe= Engine.memoryEater.pullLatestState();
-        for (int i = 0; i < maybe.length; i++) {
-            for (int j = 0; j < maybe[i].length; j++) {
+        for (int i = 0; i < Engine.getxTiles(); i++) {
+            for (int j = 0; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+                        //Put something here to find an open z position
                         Engine.levelStoragePush[i+1][j][k][0]=maybe[i][j][k][0];
                         Engine.levelStoragePush[i+1][j][k][1]=3;
                         Engine.levelStoragePush[i+1][j][k][2]=maybe[i][j][k][2]+1;

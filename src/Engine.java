@@ -16,16 +16,16 @@ public class Engine {
     public static int[][][][] levelStoragePush = new int[39][39][4][5];
     public static BabaObjects properties = new BabaObjects();
 
-    private int xTiles = 20;
-    private int yTiles = 15;
+    private static int xTiles = 20;
+    private static int yTiles = 15;
     public static memoryController memoryEater = new memoryController();
     public static Engine BabaEngine = new Engine();
 
     private boolean isYou = true;
     private int Level;
     public Engine(){
-        xTiles = 39;
-        yTiles = 39;
+        xTiles = 20;
+        yTiles = 20;
         /*for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 levelStoragePush[i][j]= new ArrayList<BabaObjects>();
@@ -33,19 +33,19 @@ public class Engine {
 
         }*/
     }
-    public int getxTiles(){
+    public static int getxTiles(){
         return xTiles;
     }
-    public int getyTiles(){
+    public static int getyTiles(){
         return yTiles;
     }
     public boolean isYou(){
         return isYou;
     }
-    public void setxTiles(int x){
+    public static void setxTiles(int x){
         xTiles = x;
     }
-    public void setyTiles(int y){
+    public static void setyTiles(int y){
         yTiles = y;
     }
     public void setLevel(int x){
