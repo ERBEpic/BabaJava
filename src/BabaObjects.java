@@ -20,8 +20,8 @@ public class BabaObjects {
 
     public static void moveYouLeft(){
         int[][][][] maybe= Engine.memoryEater.pullLatestState();
-        for (int i = 1; i < maybe.length-1; i++) {
-            for (int j = 1; j < maybe[i].length-1; j++) {
+        for (int i = 0; i < maybe.length; i++) {
+            for (int j = 0; j < maybe[i].length; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0) {
                         Engine.levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
@@ -30,7 +30,9 @@ public class BabaObjects {
                         if (Engine.levelStoragePush[i][j-1][k][2]>3){Engine.levelStoragePush[i][j-1][k][2]=0;}
                         Engine.levelStoragePush[i][j][k][0]=0;
                         Engine.levelStoragePush[i][j][k][1]=0;
-                        Engine.levelStoragePush[i][k][k][2]=0;
+                        Engine.levelStoragePush[i][j][k][2]=0;
+                        Engine.levelStoragePush[i][j][k][3] = 0;
+                        Engine.levelStoragePush[i][j][k][4] = 0;
                         System.out.println(i+" "+j+" "+k);
                         Baba3DFrame.babakey.removeImage(i,j,k);
                     }
@@ -42,10 +44,10 @@ public class BabaObjects {
 
     public static void moveYouRight(){
         int[][][][] maybe= Engine.memoryEater.pullLatestState();
-        for (int i = 1; i < maybe.length-1; i++) {
-            for (int j = 1; j < maybe[i].length-1; j++) {
+        for (int i = 0; i < maybe.length; i++) {
+            for (int j = 0; j < maybe[i].length; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
-                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1&&j < maybe[i].length - 1) {
                         Engine.levelStoragePush[i][j+1][k][0]=maybe[i][j][k][0];
                         Engine.levelStoragePush[i][j+1][k][1]=0;
                         Engine.levelStoragePush[i][j+1][k][2]=maybe[i][j][k][2]+1;
@@ -53,7 +55,9 @@ public class BabaObjects {
                         if (Engine.levelStoragePush[i][j+1][k][2]>3){Engine.levelStoragePush[i][j+1][k][2]=0;}
                         Engine.levelStoragePush[i][j][k][0]=0;
                         Engine.levelStoragePush[i][j][k][1]=0;
-                        Engine.levelStoragePush[i][k][k][2]=0;
+                        Engine.levelStoragePush[i][j][k][2]=0;
+                        Engine.levelStoragePush[i][j][k][3] = 0;
+                        Engine.levelStoragePush[i][j][k][4] = 0;
                         System.out.println(i+" "+j+" "+k);
                         Baba3DFrame.babakey.removeImage(i,j,k);
                     }
@@ -62,21 +66,24 @@ public class BabaObjects {
         }
         Engine.playGame();
     }
+
     public static void moveYouUp() {//Whydoesthisworkasstaticidontunderstand
         int[][][][] maybe = Engine.memoryEater.pullLatestState();
-        for (int i = 1; i < maybe.length - 1; i++) {
-            for (int j = 1; j < maybe[i].length - 1; j++) {
+        for (int i = 0; i < maybe.length; i++) {
+            for (int j = 0; j < maybe[i].length ; j++) {
                 for (int k = 0; k < maybe[i][j].length; k++) {
                     if (maybe[i][j][k][0] != 0) {
-                        Engine.levelStoragePush[i - 1][j][k][0] = maybe[i][j][k][0];
-                        Engine.levelStoragePush[i - 1][j][k][1] = 1;
-                        Engine.levelStoragePush[i - 1][j][k][2] = maybe[i][j][k][2] + 1;
-                        if (Engine.levelStoragePush[i - 1][j][k][2] > 3) {
-                            Engine.levelStoragePush[i - 1][j][k][2] = 0;
+                        Engine.levelStoragePush[i-1][j][k][0] = maybe[i][j][k][0];
+                        Engine.levelStoragePush[i-1][j][k][1] = 1;
+                        Engine.levelStoragePush[i-1][j][k][2] = maybe[i][j][k][2] + 1;
+                        if (Engine.levelStoragePush[i-1][j][k][2] > 3) {
+                            Engine.levelStoragePush[i-1][j][k][2] = 0;
                         }
                         Engine.levelStoragePush[i][j][k][0] = 0;
                         Engine.levelStoragePush[i][j][k][1] = 0;
-                        Engine.levelStoragePush[i][k][k][2] = 0;
+                        Engine.levelStoragePush[i][j][k][2] = 0;
+                        Engine.levelStoragePush[i][j][k][3] = 0;
+                        Engine.levelStoragePush[i][j][k][4] = 0;
                         System.out.println(i + " " + j + " " + k);
                         Baba3DFrame.babakey.removeImage(i, j, k);
                     }
@@ -87,8 +94,8 @@ public class BabaObjects {
     }
     public static void moveYouDown(){
         int[][][][] maybe= Engine.memoryEater.pullLatestState();
-        for (int i = 1; i < maybe.length-1; i++) {
-            for (int j = 1; j < maybe[i].length-1; j++) {
+        for (int i = 0; i < maybe.length; i++) {
+            for (int j = 0; j < maybe[i].length; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
                         Engine.levelStoragePush[i+1][j][k][0]=maybe[i][j][k][0];
@@ -98,7 +105,9 @@ public class BabaObjects {
                         if (Engine.levelStoragePush[i+1][j][k][2]>3){Engine.levelStoragePush[i+1][j][k][2]=0;}
                         Engine.levelStoragePush[i][j][k][0]=0;
                         Engine.levelStoragePush[i][j][k][1]=0;
-                        Engine.levelStoragePush[i][k][k][2]=0;
+                        Engine.levelStoragePush[i][j][k][2]=0;
+                        Engine.levelStoragePush[i][j][k][3]=0;
+                        Engine.levelStoragePush[i][j][k][4]=0;
                         System.out.println(i+" "+j+" "+k);
                         Baba3DFrame.babakey.removeImage(i,j,k);
                     }
@@ -140,12 +149,13 @@ public class BabaObjects {
     }
     public void moveProperty(){
         int[][][][] maybe= Engine.levelStoragePush;
-        for (int i = 1; i < maybe.length-1; i++) {
-            for (int j = 1; j < maybe[i].length-1; j++) {
+        for (int i = 0; i <= maybe.length-1; i++) {
+            for (int j = 0; j <= maybe[i].length-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0) {
                         if(Engine.properties.checkProperty(Engine.levelStoragePush[i][j][k][0],4)&&Engine.levelStoragePush[i][j][k][4]<1){
-                            Engine.BabaEngine.moveRight(i,j,k);
+                            Engine.BabaEngine.moveLeft(i,j,k);
+                            System.out.println("hio");
                         }}else{/*Engine.levelStoragePush[i][j][k][4]--;*/}
                 }
             }

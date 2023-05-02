@@ -27,6 +27,7 @@ public class Main {
 
         Engine.levelStoragePush=Engine.memoryEater.pullLatestState().clone();
         Engine.BabaEngine.playGame();
+        Engine.BabaEngine.playGame();
 
 
 

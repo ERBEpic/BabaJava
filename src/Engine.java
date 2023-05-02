@@ -65,7 +65,7 @@ public class Engine {
                         levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
                         levelStoragePush[i][j-1][k][1]=2;
                         levelStoragePush[i][j-1][k][2]=maybe[i][j][k][2]+1;
-                        levelStoragePush[i][j+1][k][4]++;
+                        levelStoragePush[i][j-1][k][4]++;
                         if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
                         levelStoragePush[i][j][k][0]=0;
                         levelStoragePush[i][j][k][1]=0;
@@ -78,20 +78,23 @@ public class Engine {
         }
     }
 
-    public void moveRight(int i, int j, int k) {
-        levelStoragePush[i][j - 1][k][0] = levelStoragePush[i][j][k][0];
-        levelStoragePush[i][j - 1][k][1] = 2;
-        levelStoragePush[i][j - 1][k][2] = levelStoragePush[i][j][k][2] + 1;
-        levelStoragePush[i][j + 1][k][4]++;
-        if (levelStoragePush[i][j - 1][k][2] > 3) {
-            levelStoragePush[i][j - 1][k][2] = 0;
+    public void moveLeft(int i, int j, int k) {
+        if (j>0) {
+            levelStoragePush[i][j - 1][k][0] = levelStoragePush[i][j][k][0];
+            levelStoragePush[i][j - 1][k][1] = 2;
+            levelStoragePush[i][j - 1][k][2] = levelStoragePush[i][j][k][2] + 1;
+            levelStoragePush[i][j - 1][k][4]++;
+            if (levelStoragePush[i][j - 1][k][2] > 3) {
+                levelStoragePush[i][j - 1][k][2] = 0;
+            }
+            levelStoragePush[i][j][k][0] = 0;
+            levelStoragePush[i][j][k][1] = 0;
+            levelStoragePush[i][j][k][2] = 0;
+            levelStoragePush[i][j][k][3] = 0;
+            levelStoragePush[i][j][k][4] = 0;
+            System.out.println(i + " " + j + " " + k);
+            Baba3DFrame.babakey.removeImage(i, j, k);
         }
-        levelStoragePush[i][j][k][0] = 0;
-        levelStoragePush[i][j][k][1] = 0;
-        levelStoragePush[i][k][k][2] = 0;
-        System.out.println(i + " " + j + " " + k);
-        Baba3DFrame.babakey.removeImage(i, j, k);
-
     }
     public void moveUp(){int[][][][] maybe= memoryEater.pullLatestState();
         for (int i = 1; i < maybe.length-1; i++) {

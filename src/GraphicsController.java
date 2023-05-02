@@ -10,8 +10,6 @@ public class GraphicsController {
     private static int counter = 9234521;
     public GraphicsController() throws InterruptedException {
             walker();
-
-        while(true){ParserDisplay();}
     }
     public void walker() throws InterruptedException {
         while(true){
