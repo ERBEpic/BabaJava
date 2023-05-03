@@ -98,7 +98,7 @@ public class BabaObjects {
     }
     public static void moveYouDown(){
         int[][][][] maybe= Engine.memoryEater.pullLatestState();
-        for (int i = 0; i < Engine.getxTiles(); i++) {
+        for (int i = 0; i < Engine.getxTiles()-1; i++) {
             for (int j = 0; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {

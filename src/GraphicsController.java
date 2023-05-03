@@ -1,5 +1,5 @@
 //Talks between Engine and JPanelFrame
-public class GraphicsController {
+public class GraphicsController {//todo i need to color objects (keke is not white), and it has to happen here.
     private static int counter = 9234521;
     public GraphicsController() throws InterruptedException {
             walker();

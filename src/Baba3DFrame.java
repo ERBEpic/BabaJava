@@ -19,29 +19,29 @@ public class Baba3DFrame extends JFrame implements KeyListener {
     }
 
     public JPanel[][] contentPanels;
-    public LinkedList<JLabel>[][] imageLabels;
-    public LinkedList<ImageIcon>[][] imageIcons;
-    public LinkedList<Integer>[][] zPositions;
+    public LinkedList[][] imageLabels;
+    public LinkedList[][] imageIcons;
+    public LinkedList[][] zPositions;
     private int cellSize = 24;
 
     public Baba3DFrame() throws IOException {
         super("Baba is Me!");
         Image image = ImageIO.read(new File("Sprites/baba_0_1.png"));
         setIconImage(image);
-        setSize(Engine.BabaEngine.getxTiles() * cellSize, Engine.BabaEngine.getyTiles() * cellSize);
+        setSize(Engine.getxTiles() * cellSize, Engine.getyTiles() * cellSize);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        contentPanels = new JPanel[Engine.BabaEngine.getxTiles()][Engine.BabaEngine.getyTiles()];
-        imageLabels = new LinkedList[Engine.BabaEngine.getxTiles()][Engine.BabaEngine.getyTiles()];
-        imageIcons = new LinkedList[Engine.BabaEngine.getxTiles()][Engine.BabaEngine.getyTiles()];
-        zPositions = new LinkedList[Engine.BabaEngine.getxTiles()][Engine.BabaEngine.getyTiles()];
+        contentPanels = new JPanel[Engine.getxTiles()][Engine.getyTiles()];
+        imageLabels = new LinkedList[Engine.getxTiles()][Engine.getyTiles()];
+        imageIcons = new LinkedList[Engine.getxTiles()][Engine.getyTiles()];
+        zPositions = new LinkedList[Engine.getxTiles()][Engine.getyTiles()];
 
         Container pane = getContentPane();
-        pane.setLayout(new GridLayout(Engine.BabaEngine.getxTiles(), Engine.BabaEngine.getyTiles()));
+        pane.setLayout(new GridLayout(Engine.getxTiles(), Engine.getyTiles()));
 
-        for (int row = 0; row < Engine.BabaEngine.getxTiles(); row++) {
-            for (int col = 0; col < Engine.BabaEngine.getyTiles(); col++) {
+        for (int row = 0; row < Engine.getxTiles(); row++) {
+            for (int col = 0; col < Engine.getyTiles(); col++) {
                 contentPanels[row][col] = new JPanel();
                 contentPanels[row][col].setLayout(new BorderLayout());
                 contentPanels[row][col].setBackground(Color.black);
