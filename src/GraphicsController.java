@@ -1,10 +1,3 @@
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 //Talks between Engine and JPanelFrame
 public class GraphicsController {
     private static int counter = 9234521;
@@ -30,7 +23,7 @@ public class GraphicsController {
             for (int j = 0; j < temp[i].length; j++) {
                 for (int k = 0; k < temp[i][j].length; k++) {
                         if (temp[i][j][k][0]!=0){
-                        Baba3DFrame.babakey.setImageBetter(FileFinder(temp[i][j][k]),i,j,k);
+                        Baba3DFrame.babakey.setImagetemp(FileFinder(temp[i][j][k]),i,j,k);
                     }
                 }
             }

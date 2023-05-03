@@ -30,7 +30,6 @@ public class Engine {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 levelStoragePush[i][j]= new ArrayList<BabaObjects>();
             }
-
         }*/
     }
 
@@ -56,8 +55,9 @@ public class Engine {
         return Level;
     }
 
-    public void moveProperty(){
+    public void moveProperty(){//donext get this to be rotation dependant
         int[][][][] maybe= levelStoragePush;
+        //Put something here to find an open z position
         for (int i = 1; i < maybe.length-1; i++) {
             for (int j = 1; j < maybe[i].length-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
@@ -81,6 +81,7 @@ public class Engine {
 
     public void moveLeft(int i, int j, int k) {
         if (j>0) {
+            //Put something here to find an open z position
             levelStoragePush[i][j - 1][k][0] = levelStoragePush[i][j][k][0];
             levelStoragePush[i][j - 1][k][1] = 2;
             levelStoragePush[i][j - 1][k][2] = levelStoragePush[i][j][k][2] + 1;
@@ -98,6 +99,7 @@ public class Engine {
         }
     }
     public void moveUp(){int[][][][] maybe= memoryEater.pullLatestState();
+        //Put something here to find an open z position
         for (int i = 1; i < maybe.length-1; i++) {
             for (int j = 1; j < maybe[i].length-1; j++) {
                 for (int k = 0; k < maybe[i][j].length; k++) {
@@ -118,6 +120,7 @@ public class Engine {
         playGame();
     }
     public void moveDown(){
+        //Put something here to find an open z position
         int[][][][] maybe= memoryEater.pullLatestState();
         for (int i = 1; i < maybe.length-1; i++) {
             for (int j = 1; j < maybe[i].length-1; j++) {

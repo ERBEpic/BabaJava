@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class BabaObjects {
     private boolean[][] propertiesStorage = new boolean[100][100];//[]=id,[][]=property
     private boolean toBeDeleted = false;
-    private int x;
+    private int x;//toremove In biology we would call this a vestigial feature
     private int y;
     private int z;
     private int rotation;
@@ -24,7 +24,7 @@ public class BabaObjects {
             for (int j = 1; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
-                        //Put something here to find an open z position
+                        //donext Put something here to find an open z position (this applies to all but im not doing them all and flooding intellij)
                         Engine.levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
                         Engine.levelStoragePush[i][j-1][k][1]=2;
                         Engine.levelStoragePush[i][j-1][k][2]=maybe[i][j][k][2]+1;

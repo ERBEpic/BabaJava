@@ -1,5 +1,3 @@
-import javafx.scene.control.Cell;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -63,77 +61,24 @@ public class Baba3DFrame extends JFrame implements KeyListener {
         setVisible(true);
     }
 
-    public void setImage(String imagePath, int row, int col, int zPos) {
-        try {
-            Image image = ImageIO.read(new File(imagePath));
-            ImageIcon imageIcon = new ImageIcon(image);
-            JLabel imageLabel = new JLabel(imageIcon);
-            // Get the linked list for the current tile
-            LinkedList<JLabel> imageStack = imageLabels[row][col];
-            // If the stack is empty, add the image label to the front
-            if (imageStack.isEmpty()) {
-                imageStack.addFirst(imageLabel);
-            } else {
-                // Iterate through the stack to find the correct position to insert the image label
-                ListIterator<JLabel> iterator = imageStack.listIterator();
-                boolean inserted = false;
-                while (iterator.hasNext()) {
-                    JLabel currentLabel = iterator.next();
-                    int currentZPos = (int) currentLabel.getClientProperty("zPos");
-
-                    // If the z-position of the current label is greater than the new z-position,
-                    // insert the new label before the current label
-                    if (currentZPos > zPos) {
-                        iterator.previous();
-                        iterator.add(imageLabel);
-                        inserted = true;
-                        break;
-                    }
-                }
-
-                // If the new label has not been inserted, add it to the end of the stack
-                if (!inserted) {
-                    imageStack.addLast(imageLabel);
-                }
-            }
-
-            // Add the image label to the tile's content panel
-            JPanel contentPanel = contentPanels[row][col];
-            contentPanel.removeAll();
-            for (JLabel label : imageStack) {
-                contentPanel.add(label);
-            }
-            contentPanel.revalidate();
-            contentPanel.repaint();
-
-            // Set the z-position property of the image label
-            imageLabel.putClientProperty("zPos", zPos);
-        } catch (IOException ex) {
-            System.out.println("Error loading image: " + imagePath);
-        }
-    }
-    public void setImageBetter(String imagePath, int row, int col, int zPos) {
-        try {
+    public void setImagetemp(String imagePath, int row, int col, int zPos) {
+        try {//fixme This...doesnt actually stack images. zPos is just a priority system. Im gonna replace this with an actual thing that works
             Image image = ImageIO.read(new File(imagePath));
             ImageIcon imageIcon = new ImageIcon(image);
             JLabel imageLabel = new JLabel(imageIcon);
 
-            // Get the linked list for the current tile
             LinkedList<JLabel> imageStack = imageLabels[row][col];
 
-            // If the stack is empty, add the image label to the front
             if (imageStack.isEmpty()) {
                 imageStack.addFirst(imageLabel);
             } else {
-                // Iterate through the stack to find the correct position to insert the image label
                 ListIterator<JLabel> iterator = imageStack.listIterator();
                 boolean replaced = false;
-                while (iterator.hasNext()) {
+                while (iterator.hasNext()) {//if theres anything in the stack
                     JLabel currentLabel = iterator.next();
                     int currentZPos = (int) currentLabel.getClientProperty("zPos");
 
-                    // If the z-position of the current label is equal to the new z-position,
-                    // replace the current label with the new label
+                    //replace whats at zposition if same
                     if (currentZPos == zPos) {
                         iterator.set(imageLabel);
                         replaced = true;
@@ -180,7 +125,7 @@ public class Baba3DFrame extends JFrame implements KeyListener {
         LinkedList<JLabel> imageStack = imageLabels[row][col];
         // Iterate through the stack to find the image with the specified z-position
         ListIterator<JLabel> iterator = imageStack.listIterator();
-        while (iterator.hasNext()) {
+        while (iterator.hasNext()) {//If theres anything left in the list
             JLabel currentLabel = iterator.next();
             int currentZPos = (int) currentLabel.getClientProperty("zPos");
             if (currentZPos == zPos) {

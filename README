@@ -56,3 +56,9 @@ Per baba object, [0]=id,[1]=rotation,[2]=walkingcycle
 
 EFFICIENCY STUFF
 When im actually done, replace nested for loops with a hashmap for every babaobject. Refresh the hashmap on desync. Store positions of all babas at hashmap baba, maybe have a hashmap pointing to an array of arrays? ([]=each baba, [][]=properties of baba)
+
+end of efficiency
+
+The best way to stop your code from breaking is take away the ability to break it
+
+donext Make setImage in Baba3DFrame stack images, not just be a priority system. Also, make like actual code because it is really werid how ChatGPT did it.
