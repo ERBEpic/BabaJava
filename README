@@ -55,7 +55,7 @@ cool stuff is ordered like this.
 Per baba object, [0]=id,[1]=rotation,[2]=walkingcycle
 
 EFFICIENCY STUFF
-When im actually done, replace nested for loops with a hashmap for every babaobject. Refresh the hashmap on desync. Store positions of all babas at hashmap baba, maybe have a hashmap pointing to an array of arrays? ([]=each baba, [][]=properties of baba)
+When im actually done, replace nested for loops with a hashmap for every babaobject. Refresh the hashmap on desync. Store positions of all babas at hashmap baba, maybe have a hashmap pointing to an array of arrays? ([]=each baba, [][]=properties of baba). It could also just be a fake hashmap, like instead of using a hashmap just use a big array)
 
 end of efficiency
 
