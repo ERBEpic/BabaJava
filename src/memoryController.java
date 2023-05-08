@@ -30,7 +30,6 @@ public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1
     //i is for undos and stuff.
     //Why is it ordered like this? Because i want it to be 40,40,3 guaranteed, and z and i can change
 
-    //Pointer is THE NEXT PLACE TO BE WRITTEN IN.
     static private int pointer = 1;//Self evident what it does. Adds and removes always come paired with this.
     public memoryController(int[][][][] x){//Start off the stack. NEEDS TO BE ONE. Will get angy if there isnt.
     }
