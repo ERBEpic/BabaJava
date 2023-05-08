@@ -15,8 +15,7 @@ public class BabaObjects {
     private int walkingcycle;
     private Image image;
 
-    public BabaObjects(){
-    }
+    //public BabaObjects(){}
 
     public static void moveYouLeft(){
         int[][][][] maybe= Engine.memoryEater.pullLatestState();
@@ -158,7 +157,7 @@ public class BabaObjects {
             for (int j = 0; j <= maybe[i].length-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0) {
-                        if(Engine.properties.checkProperty(Engine.levelStoragePush[i][j][k][0],4)&&Engine.levelStoragePush[i][j][k][4]<1){
+                        if(Engine.checkProperty(Engine.levelStoragePush[i][j][k][0],4)&&Engine.levelStoragePush[i][j][k][4]<1){
                             Engine.BabaEngine.moveLeft(i,j,k);
                             System.out.println("hio");
                         }}else{/*Engine.levelStoragePush[i][j][k][4]--;*/}

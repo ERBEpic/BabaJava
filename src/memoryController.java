@@ -7,7 +7,7 @@ public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1
     //THREE. Walking Animation. 4 = no animation. 0 = step 0. 1 = step 1.
     //FOUR. X position
     //FIVE. Y Position
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
        // ArrayList<ArrayList<Integer>[][]> list = new ArrayList<>();
 
         // Create a 2D array of ArrayLists
@@ -20,8 +20,8 @@ public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1
         array1[1][0].add(3);
         array1[1][1] = new ArrayList<Integer>();
         array1[1][1].add(4);
-        list.add(array1);*/
-    }
+        list.add(array1);
+    }*/
     static private int[][][][][] memoryEater = new int[21][40][40][1][4];
     //i,x,y,z,a
     //x,y simple

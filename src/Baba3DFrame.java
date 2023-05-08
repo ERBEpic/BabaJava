@@ -155,27 +155,27 @@ public class Baba3DFrame extends JFrame implements KeyListener {
             case KeyEvent.VK_UP:
             case KeyEvent.VK_W:
                 System.out.println("Up key pressed");
-                BabaObjects.moveYouUp();
+                Engine.moveYouUp();
                 break;
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_S:
                 System.out.println("Down key pressed");
-                BabaObjects.moveYouDown();
+                Engine.moveYouDown();
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
                 System.out.println("Left key pressed");
-                BabaObjects.moveYouLeft();
+                Engine.moveYouLeft();
                 break;
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_D:
                 System.out.println("Right key pressed");
-                BabaObjects.moveYouRight();
+                Engine.moveYouRight();
                 break;
             case KeyEvent.VK_SPACE:
                 System.out.println("Spacebar Pressed");
                 Engine.BabaEngine.moveWait();
-                Engine.properties.setProperty(6,4,true);
+                Engine.setProperty(6,4,true);
                 System.out.println("Keke is movE!");
                 break;
             case KeyEvent.VK_R:

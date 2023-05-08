@@ -14,10 +14,10 @@ import java.util.stream.Stream;
 public class Engine {
     private static int[][][][] levelSelect = new int[20][15][3][5];//the last one is basically the equivalent of BabaObject
     public static int[][][][] levelStoragePush = new int[39][39][4][5];
-    public static BabaObjects properties = new BabaObjects();
+    //public static BabaObjects properties = new BabaObjects();
 
     private static int xTiles = 20;
-    private static int yTiles = 15;
+    private static int yTiles = 20;
     public static memoryController memoryEater = new memoryController();
     public static Engine BabaEngine = new Engine();
 
@@ -55,7 +55,7 @@ public class Engine {
         return Level;
     }
 
-    public void moveProperty(){//donext get this to be rotation dependant
+    /*public void moveProperty(){//donext get this to be rotation dependant
         int[][][][] maybe= levelStoragePush;
         //Put something here to find an open z position
         for (int i = 1; i < maybe.length-1; i++) {
@@ -73,11 +73,11 @@ public class Engine {
                         levelStoragePush[i][k][k][2]=0;
                         System.out.println(i+" "+j+" "+k);
                         Baba3DFrame.babakey.removeImage(i,j,k);
-                    }}else{/*levelStoragePush[i][j][k][4]--;*/}
+                    }}else{/*levelStoragePush[i][j][k][4]--;}
                 }
             }
         }
-    }
+    }*/
 
     public void moveLeft(int i, int j, int k) {
         if (j>0) {
@@ -163,7 +163,7 @@ public class Engine {
                 }
             }
         }*/
-        Engine.properties.moveProperty();
+        Engine.moveProperty();
         for (int i = 0; i < levelStoragePush.length-1; i++) {
             for (int j = 0; j < levelStoragePush[i].length-1; j++) {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
@@ -177,5 +177,134 @@ public class Engine {
     public void resetLevel(){
     }
 
+    //Babaobjects here
+
+
+    private static boolean[][] propertiesStorage = new boolean[100][100];//[]=id,[][]=property
+
+
+    public static void moveYouLeft(){
+        int[][][][] maybe= Engine.memoryEater.pullLatestState();
+        for (int i = 0; i < Engine.getxTiles(); i++) {
+            for (int j = 1; j < Engine.getyTiles(); j++) {
+                for (int k = 0; k < maybe[i][j].length ; k++) {
+                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+                        //donext Put something here to find an open z position (this applies to all but im not doing them all and flooding intellij)
+                        Engine.levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
+                        Engine.levelStoragePush[i][j-1][k][1]=2;
+                        Engine.levelStoragePush[i][j-1][k][2]=maybe[i][j][k][2]+1;
+                        if (Engine.levelStoragePush[i][j-1][k][2]>3){Engine.levelStoragePush[i][j-1][k][2]=0;}
+                        Engine.levelStoragePush[i][j][k][0]=0;
+                        Engine.levelStoragePush[i][j][k][1]=0;
+                        Engine.levelStoragePush[i][j][k][2]=0;
+                        Engine.levelStoragePush[i][j][k][3] = 0;
+                        Engine.levelStoragePush[i][j][k][4] = 0;
+                        System.out.println(i+" "+j+" "+k);
+                        Baba3DFrame.babakey.removeImage(i,j,k);
+                    }
+                }
+            }
+        }
+        Engine.playGame();
+    }
+
+    public static void moveYouRight(){
+        System.out.println(Engine.getxTiles());
+        int[][][][] maybe= Engine.memoryEater.pullLatestState();
+        for (int i = 0; i < Engine.getxTiles(); i++) {
+            for (int j = 0; j < Engine.getyTiles()-1; j++) {
+                for (int k = 0; k < maybe[i][j].length ; k++) {
+                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+                        //Put something here to find an open z position
+                        Engine.levelStoragePush[i][j+1][k][0]=maybe[i][j][k][0];
+                        Engine.levelStoragePush[i][j+1][k][1]=0;
+                        Engine.levelStoragePush[i][j+1][k][2]=maybe[i][j][k][2]+1;
+                        Engine.levelStoragePush[i][j+1][k][3]++;
+                        if (Engine.levelStoragePush[i][j+1][k][2]>3){Engine.levelStoragePush[i][j+1][k][2]=0;}
+                        Engine.levelStoragePush[i][j][k][0]=0;
+                        Engine.levelStoragePush[i][j][k][1]=0;
+                        Engine.levelStoragePush[i][j][k][2]=0;
+                        Engine.levelStoragePush[i][j][k][3] = 0;
+                        Engine.levelStoragePush[i][j][k][4] = 0;
+                        System.out.println(i+" "+j+" "+k);
+                        Baba3DFrame.babakey.removeImage(i,j,k);
+                    }
+                }
+            }
+        }
+        Engine.playGame();
+    }
+
+    public static void moveYouUp() {//Whydoesthisworkasstaticidontunderstand
+        int[][][][] maybe = Engine.memoryEater.pullLatestState();
+        for (int i = 1; i < Engine.getxTiles(); i++) {
+            for (int j = 0; j < Engine.getyTiles(); j++) {
+                for (int k = 0; k < maybe[i][j].length; k++) {
+                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+                        //Put something here to find an open z position
+                        Engine.levelStoragePush[i-1][j][k][0] = maybe[i][j][k][0];
+                        Engine.levelStoragePush[i-1][j][k][1] = 1;
+                        Engine.levelStoragePush[i-1][j][k][2] = maybe[i][j][k][2] + 1;
+                        if (Engine.levelStoragePush[i-1][j][k][2] > 3) {
+                            Engine.levelStoragePush[i-1][j][k][2] = 0;
+                        }
+                        Engine.levelStoragePush[i][j][k][0] = 0;
+                        Engine.levelStoragePush[i][j][k][1] = 0;
+                        Engine.levelStoragePush[i][j][k][2] = 0;
+                        Engine.levelStoragePush[i][j][k][3] = 0;
+                        Engine.levelStoragePush[i][j][k][4] = 0;
+                        System.out.println(i + " " + j + " " + k);
+                        Baba3DFrame.babakey.removeImage(i, j, k);
+                    }
+                }
+            }
+        }
+        Engine.playGame();
+    }
+    public static void moveYouDown(){
+        int[][][][] maybe= Engine.memoryEater.pullLatestState();
+        for (int i = 0; i < Engine.getxTiles()-1; i++) {
+            for (int j = 0; j < Engine.getyTiles(); j++) {
+                for (int k = 0; k < maybe[i][j].length ; k++) {
+                    if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+                        //Put something here to find an open z position
+                        Engine.levelStoragePush[i+1][j][k][0]=maybe[i][j][k][0];
+                        Engine.levelStoragePush[i+1][j][k][1]=3;
+                        Engine.levelStoragePush[i+1][j][k][2]=maybe[i][j][k][2]+1;
+                        Engine.levelStoragePush[i+1][j][k][3]++;
+                        if (Engine.levelStoragePush[i+1][j][k][2]>3){Engine.levelStoragePush[i+1][j][k][2]=0;}
+                        Engine.levelStoragePush[i][j][k][0]=0;
+                        Engine.levelStoragePush[i][j][k][1]=0;
+                        Engine.levelStoragePush[i][j][k][2]=0;
+                        Engine.levelStoragePush[i][j][k][3]=0;
+                        Engine.levelStoragePush[i][j][k][4]=0;
+                        System.out.println(i+" "+j+" "+k);
+                        Baba3DFrame.babakey.removeImage(i,j,k);
+                    }
+                }
+            }
+        }
+        Engine.playGame();
+    }
+    public static void moveProperty(){
+        int[][][][] maybe= Engine.levelStoragePush;
+        for (int i = 0; i <= maybe.length-1; i++) {
+            for (int j = 0; j <= maybe[i].length-1; j++) {
+                for (int k = 0; k < maybe[i][j].length ; k++) {
+                    if (maybe[i][j][k][0]!=0) {
+                        if(Engine.checkProperty(Engine.levelStoragePush[i][j][k][0],4)&&Engine.levelStoragePush[i][j][k][4]<1){
+                            Engine.BabaEngine.moveLeft(i,j,k);
+                            System.out.println("hio");
+                        }}else{/*Engine.levelStoragePush[i][j][k][4]--;*/}
+                }
+            }
+        }
+    }
+    public static boolean checkProperty(int id, int property){
+        return Engine.propertiesStorage[id][property];
+    }
+    public static void setProperty(int id, int prop, boolean sign){
+        Engine.propertiesStorage[id][prop]=sign;
+    }
 
 }
