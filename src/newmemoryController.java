@@ -16,10 +16,13 @@ public class newmemoryController {
             throw new RuntimeException(e);
         }
     }*/
-    public newmemoryController() throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("serializedArray.data")));
-        //oos.writeObject(data);
-        oos.flush();
-        oos.close();
+    public newmemoryController() throws IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("level1.data")));//todo add so multiple levels not that hard
+        Object obj = ois.readObject();
+        ois.close();
+        firstState = (int[][][][])obj;
+        System.out.println(firstState[6][7][0][0]);
+        Engine.memoryEater.pushNewState(firstState);
+        Engine.levelStoragePush=Engine.memoryEater.pullLatestState().clone();
     }
 }

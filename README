@@ -19,7 +19,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 
 
-To create stuff- ID, Rotation, Walking Cycle, X, Y.
+To create stuff- ID, Rotation, Walking Cycle
 ID - Check Graphics controller, FileFinder
 Rotation - 0 = Right, 1=up?, 2=left?, 5=Unrotatable
 Walking Cycle - Not set yet. Leave as 0.
@@ -63,3 +63,12 @@ The best way to stop your code from breaking is take away the ability to break i
 
 donext Make setImage in Baba3DFrame stack images, not just be a priority system. Also, make like actual code because it is really werid how ChatGPT did it.
 //also im not just copying from chatgpt for the sake of copying from chatgpt i need it to work at least a bit to test the rest
+
+
+
+To create an object
+[0]=id
+[1]=rotation
+[2]=walkingcycle
+[3]=hasbeenmovedbyyou(leave 0)
+[4]=hasbeenmoved(leave 0, need to make work for move more than 1)

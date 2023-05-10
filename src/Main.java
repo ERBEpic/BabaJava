@@ -22,14 +22,9 @@ public class Main {
         }
         arraynew[10][11][1][0]=6;
 
-        Engine.memoryEater.pushNewState(arraynew);
-        Engine.memoryEater.pushFirstState(arraynew);
-
         GraphicsController temp = new GraphicsController();
 
-        Engine.levelStoragePush=Engine.memoryEater.pullLatestState().clone();
-        Engine.BabaEngine.playGame();
-        Engine.BabaEngine.playGame();
+
 
 
 
