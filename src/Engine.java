@@ -1,5 +1,11 @@
 import jdk.nashorn.internal.runtime.JSONFunctions;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +18,20 @@ import java.util.stream.Stream;
 //Advantages of storing ints. - Less memory. Easier to code (hopefully)
 //Lets do ints.
 public class Engine {
+
+
+    public static newmemoryController newmemoryEater;
+
+    static {
+        try {
+            newmemoryEater = new newmemoryController();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private static int[][][][] levelSelect = new int[20][15][3][5];//the last one is basically the equivalent of BabaObject
     public static int[][][][] levelStoragePush = new int[39][39][4][5];
     //public static BabaObjects properties = new BabaObjects();
@@ -147,8 +167,18 @@ public class Engine {
         Baba3DFrame.babakey.repaint();
     }
     public void moveUndo(){
-        memoryEater.removeLastState();
-        levelStoragePush= memoryEater.pullLatestState();}
+        int x=Engine.memoryEater.getPointer();
+        if(Engine.memoryEater.pullNState(x)==null){
+            System.out.println("null!!");
+        }
+        Engine.memoryEater.removePointer();int[][][][] arraynew = new int[40][40][4][4];
+
+        for (int i = 0; i < 2; i++) {
+            arraynew[5][4][1][i] = 3;
+        }
+        arraynew[10][11][1][0]=6;
+        Engine.levelStoragePush=Engine.memoryEater.pullLatestState();
+    }
 
     public static void playGame(){//Idk why this has to be static but it doesnt break so
        /* for (int i = 0; i < levelStoragePush.length; i++) {
@@ -175,6 +205,8 @@ public class Engine {
     }
 
     public void resetLevel(){
+        memoryEater.resetState();
+        levelStoragePush= memoryEater.pullLatestState();
     }
 
     //Babaobjects here

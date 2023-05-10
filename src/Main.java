@@ -15,7 +15,7 @@ public class Main {
         Baba3DFrame.babakey.setBackground(Color.black);
 
 
-        int[][][][] arraynew = new int[40][40][4][4];
+        int[][][][] arraynew = new int[40][40][6][6];
 
         for (int i = 0; i < 2; i++) {
             arraynew[5][4][1][i] = 3;
@@ -23,6 +23,8 @@ public class Main {
         arraynew[10][11][1][0]=6;
 
         Engine.memoryEater.pushNewState(arraynew);
+        Engine.memoryEater.pushFirstState(arraynew);
+
         GraphicsController temp = new GraphicsController();
 
         Engine.levelStoragePush=Engine.memoryEater.pullLatestState().clone();
