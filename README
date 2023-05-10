@@ -72,3 +72,4 @@ To create an object
 [2]=walkingcycle
 [3]=hasbeenmovedbyyou(leave 0)
 [4]=hasbeenmoved(leave 0, need to make work for move more than 1)
+
