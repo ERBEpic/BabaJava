@@ -18,19 +18,18 @@ import java.util.stream.Stream;
 //Advantages of storing ints. - Less memory. Easier to code (hopefully)
 //Lets do ints.
 public class Engine {
-
-
+    public static memoryController memoryEater = new memoryController();
     public static newmemoryController newmemoryEater;
 
     static {
         try {
             newmemoryEater = new newmemoryController();
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            System.out.println("break");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("break");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            System.out.println("break");
         }
     }
 
@@ -40,7 +39,6 @@ public class Engine {
 
     private static int xTiles = 20;
     private static int yTiles = 20;
-    public static memoryController memoryEater = new memoryController();
     public static Engine BabaEngine = new Engine();
 
     private boolean isYou = true;

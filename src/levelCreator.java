@@ -20,6 +20,8 @@ public class levelCreator {
     }
     public static int findValidAndExpand(int x, int y){
         int z = 0;
+        x--;
+        y--;
         while(true){
             int[] i;
                 try{i = level[x][y][z];
@@ -30,7 +32,7 @@ public class levelCreator {
                 catch (Exception a){
                     System.out.println("bye");
                     int[][][][] tempArray = new int[20][20][z+1][5];
-                    System.arraycopy(level, 0, tempArray, 0, z);
+                    System.arraycopy(level,0, tempArray,0,);
                     level = tempArray;
                     return z;
                 }
@@ -41,6 +43,7 @@ public class levelCreator {
     public static void main(String[] args) throws IOException {
         add(6,7,3);
         add(2,4,6);
+        add(3,4,6);
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("level1.data")));
         oos.writeObject(level);
         oos.flush();

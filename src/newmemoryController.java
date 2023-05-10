@@ -21,7 +21,6 @@ public class newmemoryController {
         Object obj = ois.readObject();
         ois.close();
         firstState = (int[][][][])obj;
-        System.out.println(firstState[6][7][0][0]);
         Engine.memoryEater.pushNewState(firstState);
         Engine.levelStoragePush=Engine.memoryEater.pullLatestState().clone();
     }
