@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -33,6 +34,7 @@ public class Engine {
         }
     }
 
+
     private static int[][][][] levelSelect = new int[20][15][3][5];//the last one is basically the equivalent of BabaObject
     public static int[][][][] levelStoragePush = new int[39][39][4][5];
     //public static BabaObjects properties = new BabaObjects();
@@ -40,12 +42,13 @@ public class Engine {
     private static int xTiles = 20;
     private static int yTiles = 20;
     public static Engine BabaEngine = new Engine();
-
+    private static int[][] propertiesStorage = new int[100][100];//[]=id,[][]=property
     private boolean isYou = true;
     private int Level;
     public Engine(){
         xTiles = 20;
         yTiles = 20;
+
         /*for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 levelStoragePush[i][j]= new ArrayList<BabaObjects>();
@@ -58,9 +61,6 @@ public class Engine {
     }
     public static int getyTiles(){
         return yTiles;
-    }
-    public boolean isYou(){
-        return isYou;
     }
     public static void setxTiles(int x){
         xTiles = x;
@@ -99,7 +99,7 @@ public class Engine {
         }
     }*/
 
-    public void moveLeft(int i, int j, int k) {
+    public static void moveLeft(int i, int j, int k) {
         if (j>0) {
             //Put something here to find an open z position
             levelStoragePush[i][j - 1][k][0] = levelStoragePush[i][j][k][0];
@@ -207,12 +207,12 @@ public class Engine {
     public void resetLevel(){
         memoryEater.resetState();
         levelStoragePush= memoryEater.pullLatestState();
-    }
+    }//fixme
 
     //Babaobjects here
 
 
-    private static boolean[][] propertiesStorage = new boolean[100][100];//[]=id,[][]=property
+
 
 
     public static void moveYouLeft(){
@@ -267,7 +267,7 @@ public class Engine {
         Engine.playGame();
     }
 
-    public static void moveYouUp() {//Whydoesthisworkasstaticidontunderstand
+    public static void moveYouUp() {
         int[][][][] maybe = Engine.memoryEater.pullLatestState();
         for (int i = 1; i < Engine.getxTiles(); i++) {
             for (int j = 0; j < Engine.getyTiles(); j++) {
@@ -324,18 +324,37 @@ public class Engine {
             for (int j = 0; j <= maybe[i].length-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0) {
-                        if(Engine.checkProperty(Engine.levelStoragePush[i][j][k][0],4)&&Engine.levelStoragePush[i][j][k][4]<1){
-                            Engine.BabaEngine.moveLeft(i,j,k);
+                        if((Engine.checkProperty(Engine.levelStoragePush[i][j][k][0],4)>0)&&Engine.levelStoragePush[i][j][k][4]<1){
+                            Engine.moveLeft(i,j,k);
                             System.out.println("hio");
                         }}else{/*Engine.levelStoragePush[i][j][k][4]--;*/}
                 }
             }
         }
     }
-    public static boolean checkProperty(int id, int property){
+    private static HashMap<String, int[]> babaCache = new HashMap<String, int[]>();
+    public static ArrayList<Integer> thingsExisting = new ArrayList<Integer>();//MAKE SURE ONLY ONE OF EACH OBJECT IS IN THIS LIST
+    static{
+        for (int i = 0; i < 10; i++) {
+            thingsExisting.add(i);
+        }
+    }
+    public static void moveBetter()//todo put all the move into one BIG move method
+    {int[][][][] maybe= Engine.memoryEater.pullLatestState();
+        ArrayList<Integer> moving = new ArrayList<Integer>();
+        ArrayList<Integer> movingYou = new ArrayList<Integer>();
+        //Make a cache of all objects in thingsExisting that are in the level and check only those properties. Dont check everything that can exist, check everything that does exist. todo when you make a level select system, refresh thingsExisting
+        for (int i = 0; i < thingsExisting.size(); i++) {
+            if (Engine.propertiesStorage[thingsExisting.get(i)][0]>0){
+                moving.add(thingsExisting.get(i));
+            }
+        }
+        }
+
+    public static int checkProperty(int id, int property){
         return Engine.propertiesStorage[id][property];
     }
-    public static void setProperty(int id, int prop, boolean sign){
+    public static void setProperty(int id, int prop, int sign){
         Engine.propertiesStorage[id][prop]=sign;
     }
 

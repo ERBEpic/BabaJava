@@ -15,14 +15,7 @@ public class Main {
         //babakey.setScreenSize(2000,2000);
         Baba3DFrame.babakey.setBackground(Color.black);
 
-/*
-        int[][][][] arraynew = new int[40][40][6][6];
 
-        for (int i = 0; i < 2; i++) {
-            arraynew[5][4][1][i] = 3;
-        }
-        arraynew[10][11][1][0]=6;
-*/
         GraphicsController temp = new GraphicsController();
 
 

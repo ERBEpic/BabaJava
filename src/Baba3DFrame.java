@@ -175,7 +175,7 @@ public class Baba3DFrame extends JFrame implements KeyListener {
             case KeyEvent.VK_SPACE:
                 System.out.println("Spacebar Pressed");
                 Engine.BabaEngine.moveWait();
-                Engine.setProperty(6,4,true);
+                Engine.setProperty(6,4,1);
                 System.out.println("Keke is movE!");
                 break;
             case KeyEvent.VK_R:
