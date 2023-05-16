@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 //Advantages of storing ints. - Less memory. Easier to code (hopefully)
 //Lets do ints.
 public class Engine {
-    public static memoryController memoryEater = new memoryController();
+    //public static memoryController memoryEater = new memoryController();
     public static newmemoryController newmemoryEater;
 
     static {
@@ -31,7 +31,7 @@ public class Engine {
             System.out.println("break");
         } catch (ClassNotFoundException e) {
             System.out.println("break");
-        }
+        }//it should basically never crash but its easier to solve the try catch problems here
     }
 
 
@@ -118,7 +118,7 @@ public class Engine {
             Baba3DFrame.babakey.removeImage(i, j, k);
         }
     }
-    public void moveUp(){int[][][][] maybe= memoryEater.pullLatestState();
+    public void moveUp(){int[][][][] maybe= newmemoryEater.peek();
         //Put something here to find an open z position
         for (int i = 1; i < maybe.length-1; i++) {
             for (int j = 1; j < maybe[i].length-1; j++) {
@@ -141,7 +141,7 @@ public class Engine {
     }
     public void moveDown(){
         //Put something here to find an open z position
-        int[][][][] maybe= memoryEater.pullLatestState();
+        int[][][][] maybe= newmemoryEater.peek();
         for (int i = 1; i < maybe.length-1; i++) {
             for (int j = 1; j < maybe[i].length-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
@@ -166,39 +166,14 @@ public class Engine {
         playGame();
         Baba3DFrame.babakey.repaint();
     }
-    public void moveUndo(){
-        int x=Engine.memoryEater.getPointer();
-        if(Engine.memoryEater.pullNState(x)==null){
-            System.out.println("null!!");
-        }
-        Engine.memoryEater.removePointer();int[][][][] arraynew = new int[40][40][4][4];
 
-        for (int i = 0; i < 2; i++) {
-            arraynew[5][4][1][i] = 3;
-        }
-        arraynew[10][11][1][0]=6;
-        Engine.levelStoragePush=Engine.memoryEater.pullLatestState();
-
-    }
     public void moveUndoNew(){
         if(Engine.newmemoryEater.getSize()>1){
            Engine.levelStoragePush=Engine.newmemoryEater.pop();
         }
     }
 
-    public static void playGame(){//Idk why this has to be static but it doesnt break so
-       /* for (int i = 0; i < levelStoragePush.length; i++) {
-            for (int j = 0; j < levelStoragePush[i].length; j++) {
-                for (int k = 0; k < (levelStoragePush[i][j].size()) ; k++) {
-                    if (levelStoragePush[i][j].get(k).checkIfDeleted()==false&&levelStoragePush[i][j].get(k).checkIfDead()==false){
-                        if (levelStorage[i][j]==null){
-                            levelStorage[i][j] =new ArrayList<BabaObjects>();
-                        }
-                        levelStorage[i][j].add(levelStoragePush[i][j].get(k));
-                    }
-                }
-            }
-        }*/
+    public static void playGame(){
         Engine.moveProperty();
         for (int i = 0; i < levelStoragePush.length-1; i++) {
             for (int j = 0; j < levelStoragePush[i].length-1; j++) {
@@ -207,14 +182,14 @@ public class Engine {
                         levelStoragePush[i][j][k][3]=0;
                         levelStoragePush[i][j][k][4]=0;
                     }}}}
-        memoryEater.pushNewState(levelStoragePush);
+        newmemoryEater.push(levelStoragePush);
         System.out.println(levelStoragePush[0][0][0][0]+"play");
     }
 
-    public void resetLevel(){
+    public void resetLevel(){/*
         memoryEater.resetState();
-        levelStoragePush= memoryEater.pullLatestState();
-    }//fixme
+        levelStoragePush= memoryEater.pullLatestState();*/
+    }//fixme, wasnt even wrking before new memory. Maybe it was the root of the problem?
 
     //Babaobjects here
 
@@ -223,7 +198,7 @@ public class Engine {
 
 
     public static void moveYouLeft(){
-        int[][][][] maybe= Engine.memoryEater.pullLatestState();
+        int[][][][] maybe= Engine.newmemoryEater.peek();
         for (int i = 0; i < Engine.getxTiles(); i++) {
             for (int j = 1; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
@@ -249,7 +224,7 @@ public class Engine {
 
     public static void moveYouRight(){
         System.out.println(Engine.getxTiles());
-        int[][][][] maybe= Engine.memoryEater.pullLatestState();
+        int[][][][] maybe= Engine.newmemoryEater.peek();
         for (int i = 0; i < Engine.getxTiles(); i++) {
             for (int j = 0; j < Engine.getyTiles()-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
@@ -273,9 +248,8 @@ public class Engine {
         }
         Engine.playGame();
     }
-
     public static void moveYouUp() {
-        int[][][][] maybe = Engine.memoryEater.pullLatestState();
+        int[][][][] maybe = Engine.newmemoryEater.peek();
         for (int i = 1; i < Engine.getxTiles(); i++) {
             for (int j = 0; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length; k++) {
@@ -301,7 +275,7 @@ public class Engine {
         Engine.playGame();
     }
     public static void moveYouDown(){
-        int[][][][] maybe= Engine.memoryEater.pullLatestState();
+        int[][][][] maybe= Engine.newmemoryEater.peek();
         for (int i = 0; i < Engine.getxTiles()-1; i++) {
             for (int j = 0; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
@@ -347,7 +321,7 @@ public class Engine {
         }
     }
     public static void moveBetter()//todo put all the move into one BIG move method
-    {int[][][][] maybe= Engine.memoryEater.pullLatestState();
+    {int[][][][] maybe= Engine.newmemoryEater.peek();
         ArrayList<Integer> moving = new ArrayList<Integer>();
         ArrayList<Integer> movingYou = new ArrayList<Integer>();
         //Make a cache of all objects in thingsExisting that are in the level and check only those properties. Dont check everything that can exist, check everything that does exist. todo when you make a level select system, refresh thingsExisting

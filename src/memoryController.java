@@ -73,10 +73,10 @@ public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1
         int[][][][] x = new int[40][40][2][5];
         x=firstState;
         memoryStorer=new int[21][40][40][2][5];
-        Engine.memoryEater.pushNewState(x);
+        //Engine.memoryEater.pushNewState(x);
         pointer=1;
         Engine.levelStoragePush=firstState;
-        Engine.memoryEater.pushNewState(firstState);
+        //Engine.memoryEater.pushNewState(firstState);
     }
     public void addPointer(){pointer++;}
     public void removePointer(){pointer--;}

@@ -17,7 +17,7 @@ public class GraphicsController {//todo i need to color objects (keke is not whi
     }
     public void ParserDisplay() {
         Baba3DFrame.babakey.repaint();
-        int[][][][] temp = Engine.memoryEater.pullLatestState();
+        int[][][][] temp = Engine.newmemoryEater.peek();
         if (temp!=null){//To solve NullPointerExceptions. Cheaper(runtime wise) try/catch
         for (int i = 0; i < temp.length; i++) {
             for (int j = 0; j < temp[i].length; j++) {
