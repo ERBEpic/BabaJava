@@ -44,6 +44,12 @@ public class memoryController {//Memorycontroller stores 4 things. 1. ID. Baba=1
         System.out.println(pointer+" "+ memoryStorer.length);
         return memoryStorer[pointer-1];
     }
+    public void allOut00(){
+        for (int i = 1; i <= pointer; i++) {
+            System.out.print(memoryStorer[i][0][0][0][0]);
+        }
+        System.out.println(" ");
+    }
     public int[][][][] pullNState(int x){
         return memoryStorer[x-1];
     }

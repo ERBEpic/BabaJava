@@ -178,6 +178,12 @@ public class Engine {
         }
         arraynew[10][11][1][0]=6;
         Engine.levelStoragePush=Engine.memoryEater.pullLatestState();
+
+    }
+    public void moveUndoNew(){
+        if(Engine.newmemoryEater.getSize()>1){
+           Engine.levelStoragePush=Engine.newmemoryEater.pop();
+        }
     }
 
     public static void playGame(){//Idk why this has to be static but it doesnt break so
@@ -202,6 +208,7 @@ public class Engine {
                         levelStoragePush[i][j][k][4]=0;
                     }}}}
         memoryEater.pushNewState(levelStoragePush);
+        System.out.println(levelStoragePush[0][0][0][0]+"play");
     }
 
     public void resetLevel(){

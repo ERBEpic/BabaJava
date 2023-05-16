@@ -186,6 +186,10 @@ public class Baba3DFrame extends JFrame implements KeyListener {
                 System.out.println("Z Pressed");
                 Engine.BabaEngine.moveUndo();
                 break;
+            case KeyEvent.VK_O:
+                System.out.println("O Pressed");
+                Engine.memoryEater.allOut00();
+                break;
         }//Isnt this a masterpiece of code right here. Truly a magnum opus of cleanliness
     }
 
