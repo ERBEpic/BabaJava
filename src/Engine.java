@@ -36,7 +36,7 @@ public class Engine {
 
 
     private static int[][][][] levelSelect = new int[20][15][3][5];//the last one is basically the equivalent of BabaObject
-    public static int[][][][] levelStoragePush = new int[39][39][4][5];
+    public static int[][][][] levelStoragePush = new int[40][40][4][5];
     //public static BabaObjects properties = new BabaObjects();
 
     private static int xTiles = 20;
@@ -186,9 +186,20 @@ public class Engine {
         System.out.println(levelStoragePush[0][0][0][0]+"play");
     }
 
-    public void resetLevel(){/*
-        memoryEater.resetState();
-        levelStoragePush= memoryEater.pullLatestState();*/
+    public static void resetLevel(){
+        /*int[][][][] maybe= Engine.newmemoryEater.peek();
+        for (int i = 0; i < Engine.getxTiles(); i++) {
+            for (int j = 0; j < Engine.getyTiles(); j++) {
+                for (int k = 0; k < maybe[i][j].length ; k++) {
+                    Baba3DFrame.babakey.removeImage(i,j,k);
+                    }
+                }
+            }*/
+        Baba3DFrame.babakey.removeallImage();
+        Engine.levelStoragePush = new int[40][40][4][5];
+        Engine.newmemoryEater.reset();
+
+
     }//fixme, wasnt even wrking before new memory. Maybe it was the root of the problem?
 
     //Babaobjects here
@@ -338,5 +349,6 @@ public class Engine {
     public static void setProperty(int id, int prop, int sign){
         Engine.propertiesStorage[id][prop]=sign;
     }
+
 
 }

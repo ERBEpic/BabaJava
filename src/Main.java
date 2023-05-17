@@ -15,7 +15,6 @@ public class Main {
         //babakey.setScreenSize(2000,2000);
         Baba3DFrame.babakey.setBackground(Color.black);
 
-
         GraphicsController temp = new GraphicsController();
 
 

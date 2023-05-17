@@ -3,7 +3,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 
 public class newmemoryController {
-    static private int[][][][] firstState = new int[40][40][2][5];
+    static public int[][][][] firstState = new int[40][40][4][5];
     private static ArrayDeque<int[][][][]> memoryStack = new ArrayDeque<int[][][][]>();
     public newmemoryController() throws IOException, ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("level1.data")));//todo add so multiple levels not that hard
@@ -28,7 +28,7 @@ public class newmemoryController {
     public void push(int[][][][] x){memoryStack.push(x);}
 
     public void reset(){
-        memoryStack = new ArrayDeque<int[][][][]>();
+
         memoryStack.push(firstState);
     }
     public void allOut00(){
