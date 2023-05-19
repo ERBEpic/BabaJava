@@ -193,7 +193,7 @@ public class Engine {
                     }
                 }
             }*/
-        Baba3DFrame.babakey.removeallImage();
+       // Baba3DFrame.babakey.removeallImage();
         Engine.levelStoragePush = new int[40][40][4][5];
         Engine.newmemoryEater.reset();
 

@@ -1,18 +1,21 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class j extends JFrame {
+public class BabaFrameSimple extends JFrame implements KeyListener {
 
     private int tileSize;
+    private int walkingcycle = 0;
     private int numTilesX;
     private int numTilesY;
     private LinkedList<ImageLayer>[] tileMap;
 
-    public j(int tileSize, int numTilesX, int numTilesY) {
+    public BabaFrameSimple(int tileSize, int numTilesX, int numTilesY) {
         //this.setUndecorated(true);
         //this.setBackground(new Color(182, 42, 42)); // frame is transparent
         this.getRootPane().setOpaque(true); // frame content (rootpane) is transparent...
@@ -35,6 +38,12 @@ public class j extends JFrame {
         tileMap[y * numTilesX + x].add(new ImageLayer(image, layer));
         repaint();
     }
+    public void addImage(int x, int y, String name, int layer) {
+        String[] splitted = new String[2];
+        splitted =name.split("_");
+        tileMap[y * numTilesX + x].add(new ImageLayer(image, layer));
+        repaint();
+    }
 
     public void removeImage(int x, int y, int layer) {
         LinkedList<ImageLayer> layers = tileMap[y * numTilesX + x];
@@ -49,15 +58,69 @@ public class j extends JFrame {
 
     public void paint(Graphics g) {
         super.paint(g);
+        this.walkingcycle++;
         for (int i = 0; i < numTilesX * numTilesY; i++) {
             int x = i % numTilesX;
             int y = i / numTilesX;
-            LinkedList<ImageLayer> layers = tileMap[i];
+            LinkedList<ImageLayer> layers = new LinkedList<>(tileMap[i]); // Create a copy of the LinkedList
             for (ImageLayer layer : layers) {
+
                 g.drawImage(layer.image, x * tileSize, y * tileSize, tileSize, tileSize, null);
             }
         }
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+
+        switch (keyCode) {
+            case KeyEvent.VK_UP:
+                Engine.moveYouUp();
+                break;
+            case KeyEvent.VK_DOWN:
+                Engine.moveYouDown();
+                break;
+            case KeyEvent.VK_LEFT:
+                Engine.moveYouLeft();
+                break;
+            case KeyEvent.VK_RIGHT:
+                Engine.moveYouRight();
+                break;
+            case KeyEvent.VK_SPACE:
+                Engine.BabaEngine.moveWait();
+                Engine.setProperty(6, 4, 1);
+                System.out.println("Keke is movE!");
+                break;
+            case KeyEvent.VK_R:
+                System.out.println("R Pressed");
+                Engine.resetLevel();
+                break;
+            case KeyEvent.VK_Z:
+                System.out.println("Z Pressed");
+                Engine.BabaEngine.moveUndoNew();
+                break;
+            case KeyEvent.VK_O:
+                System.out.println("O Pressed");
+                Engine.newmemoryEater.allOut00();
+                break;
+            case KeyEvent.VK_B:
+                System.out.println("B Pressed");
+                Engine.newmemoryEater.allOut00();
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
 
     private class ImageLayer {
         public Image image;
@@ -69,12 +132,11 @@ public class j extends JFrame {
     }
 
     public static void main(String[] args) throws IOException {
-        j grid = new j(24, 21, 21);
+        BabaFrameSimple grid = new BabaFrameSimple(24, 21, 21);
         grid.addImage(2, 2, ImageIO.read(new File("Sprites/wall_9_2.png")), 0);
         grid.addImage(1, 3, ImageIO.read(new File("Sprites/wall_9_2.png")), 0);
         grid.addImage(1, 2, ImageIO.read(new File("Sprites/wall_9_2.png")), 0);
-        grid.addImage(1, 2, ImageIO.read(new File("Sprites/algae_0_1.png")), 1);
-        grid.addImage(1, 2, ImageIO.read(new File("Sprites/algae_0_1.png")), 4);
+        grid.addImage(1, 2, ImageIO.read(new File("Sprites/keke_0_1.png")), 100);
 
     }
 }

@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -6,14 +7,12 @@ import java.util.Collections;
 //Each tile is 24 wide
 public class Main {
     public int Level = 0;//0 = level seelct
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         Thread.sleep(100);
 
         //JPanelFrame.showFrame();
         //Engine EngineG = new Engine();
-        Baba3DFrame.babakey.showFrame();
         //babakey.setScreenSize(2000,2000);
-        Baba3DFrame.babakey.setBackground(Color.black);
 
         GraphicsController temp = new GraphicsController();
 

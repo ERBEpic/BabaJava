@@ -17,10 +17,10 @@ import javax.swing.JPanel;
 
 public class Baba3DFrame extends JFrame implements KeyListener {
 
-    public static Baba3DFrame babakey;
+    public static BabaFrameSimple babakey;
 
     static {
-        babakey = new Baba3DFrame();
+        babakey = new BabaFrameSimple(24,41,41);
     }
     private int cellSize = 24;
 
@@ -238,8 +238,8 @@ public class Baba3DFrame extends JFrame implements KeyListener {
     }
 
     public static void main(String[] args) throws IOException {
-        babakey.setImagetemp("Sprites/wall_9_2.png",1,2,0);
-        babakey.setImagetemp("Sprites/baba_0_1.png",1,2,1);
+       // babakey.setImagetemp("Sprites/wall_9_2.png",1,2,0);
+       // babakey.setImagetemp("Sprites/baba_0_1.png",1,2,1);
 
     }
 }
