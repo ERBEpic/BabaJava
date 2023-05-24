@@ -30,6 +30,9 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         setSize(numTilesX * tileSize, numTilesY * tileSize);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(Color.BLACK);
+        addKeyListener(this);
+        setFocusable(true);
+        setFocusTraversalKeysEnabled(false);
         setVisible(true);
 
     }
@@ -38,12 +41,12 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         tileMap[y * numTilesX + x].add(new ImageLayer(image, layer));
         repaint();
     }
-    public void addImage(int x, int y, String name, int layer) {
+    /*public void addImage(int x, int y, String name, int layer) {
         String[] splitted = new String[2];
         splitted =name.split("_");
         tileMap[y * numTilesX + x].add(new ImageLayer(image, layer));
         repaint();
-    }
+    }*/
 
     public void removeImage(int x, int y, int layer) {
         LinkedList<ImageLayer> layers = tileMap[y * numTilesX + x];
@@ -75,7 +78,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
 
     }
 
-    @Override
+
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
