@@ -6,6 +6,7 @@ import java.io.IOException;
 //Talks between Engine and JPanelFrame
 public class GraphicsController {//todo i need to color objects (keke is not white), and it has to happen here.
     private static int counter = 9234521;
+    static boolean display = true;
     public GraphicsController() throws InterruptedException, IOException {
             walker();
     }
@@ -20,19 +21,25 @@ public class GraphicsController {//todo i need to color objects (keke is not whi
     public static int getCounter(){
         return counter;
     }
+    public static boolean display(){return display;}
+    public static void sdisplay(){display=!display;}
+
     public void ParserDisplay() throws IOException {
+        Baba3DFrame.babakey.clear();
         int[][][][] temp = Engine.newmemoryEater.peek();
         if (temp!=null){//To solve NullPointerExceptions. Cheaper(runtime wise) try/catch
         for (int i = 0; i < temp.length; i++) {
             for (int j = 0; j < temp[i].length; j++) {
                 for (int k = 0; k < temp[i][j].length; k++) {
-                        if (temp[i][j][k][0]!=0){
+                        if (temp[i][j][k][0]!=0&&display){
                             Baba3DFrame.babakey.addImage(i,j,ImageIO.read(new File(FileFinder(temp[i][j][k]))),k);
                     }
                 }
             }
         }
-    }}
+    }
+
+    }
 
 
     public String FileFinder(int[] x){//Four thigns matter. These 3, and counter.

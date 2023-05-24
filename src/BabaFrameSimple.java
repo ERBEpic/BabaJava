@@ -3,6 +3,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -58,6 +59,9 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             }
         }
     }
+    public void clear(){
+        Arrays.stream(tileMap).forEach(x->x.remove());
+    }
 
     public void paint(Graphics g) {
         super.paint(g);
@@ -83,6 +87,9 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         int keyCode = e.getKeyCode();
 
         switch (keyCode) {
+            case KeyEvent.VK_I:
+                GraphicsController.sdisplay();
+                break;
             case KeyEvent.VK_UP:
                 Engine.moveYouUp();
                 break;
