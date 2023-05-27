@@ -62,7 +62,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     public void clear(){
         Arrays.stream(tileMap).forEach(x->x.remove());
     }
-
     public void paint(Graphics g) {
         super.paint(g);
         this.walkingcycle++;
