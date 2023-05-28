@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class BabaFrameSimple extends JFrame implements KeyListener {
+
     private Engine EngineReference;
     private int tileSize;
     private int walkingcycle = 0;
@@ -35,8 +36,9 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         EngineReference = engine;
     }
 
-    public BabaFrameSimple(int tileSize, int numTilesX, int numTilesY) throws IOException {
-        this.tileSize = tileSize;
+    public BabaFrameSimple(int numTilesX, int numTilesY) throws IOException {
+
+        this.tileSize = 24;
         this.numTilesX = numTilesX;
         this.numTilesY = numTilesY;
         this.tileMap = new LinkedList[numTilesX * numTilesY];
@@ -44,16 +46,28 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             tileMap[i] = new LinkedList<ImageLayer>();
         }
         setSize(numTilesX * tileSize, numTilesY * tileSize);
+
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.BLACK);
         addKeyListener(this);
         setFocusable(true);
+        setUndecorated(true);
         setFocusTraversalKeysEnabled(false);
+
         setVisible(true);
+
+        Insets insets = getInsets();
 
         offScreenImage = createImage(getWidth(), getHeight());
         offScreenGraphics = offScreenImage.getGraphics();//No idea why this doesnt have to be called constantly. Guess its also a reference?
         counterUpdater counteryay = new counterUpdater();
+
+        System.out.println(insets.bottom+"bottom");
+        System.out.println(insets.top+"top");
+        System.out.println(insets.left+"left");
+        System.out.println(insets.right+"right");
+        //fixme fix the stupid insets problem. This is what you get for trying to update to newer java versions.
 
     }
 
@@ -108,10 +122,14 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         int keyCode = e.getKeyCode();
 
         switch (keyCode) {
-            case KeyEvent.VK_T:
+            case KeyEvent.VK_B://debug
+                break;
+            case KeyEvent.VK_O://debug
+                break;
+            case KeyEvent.VK_T://Debug
                 this.clear();
                 break;
-            case KeyEvent.VK_I:
+            case KeyEvent.VK_I://debug
                 this.sdisplay();
                 break;
             case KeyEvent.VK_UP:
@@ -139,12 +157,8 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 System.out.println("Z Pressed");
                 EngineReference.moveUndoNew();
                 break;
-            case KeyEvent.VK_O:
-                System.out.println("O Pressed");
-                break;
-            case KeyEvent.VK_B:
-                System.out.println("B Pressed");
-                break;
+
+
         }
     }
 

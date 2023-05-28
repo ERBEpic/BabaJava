@@ -24,7 +24,7 @@ public class Engine {
     public Engine() throws IOException, ClassNotFoundException, InterruptedException {
         Thread.sleep(100);
         newmemoryEater = new newmemoryController();
-        babakey = new BabaFrameSimple(24,41,41);
+        babakey = new BabaFrameSimple(20,20);
         babakey.setEngine(this);//I kinda guessed you could just pass along (this) but Im glad that it works
     }
 
@@ -32,7 +32,6 @@ public class Engine {
 
 
 
-    private int[][][][] levelSelect = new int[20][15][3][5];//the last one is basically the equivalent of BabaObject
     public int[][][][] levelStoragePush = new int[40][40][4][5];
     //public static BabaObjects properties = new BabaObjects();
 
@@ -210,11 +209,22 @@ public class Engine {
             for (int j = 1; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
-                        //donext Put something here to find an open z position (this applies to all but im not doing them all and flooding intellij)
-                        levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
-                        levelStoragePush[i][j-1][k][1]=2;
-                        levelStoragePush[i][j-1][k][2]=maybe[i][j][k][2]+1;
-                        if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
+
+
+                        int temp =getOpenIndex(i,j-1,maybe);
+                        System.out.println(temp);
+                        while (temp==-1){//this should never run more than once but its nice to have it freeze when something goes wrong
+                            maybe=expandZTile(i,j-1,maybe);
+                            temp = getOpenIndex(i,j-1,maybe);
+                            System.out.println(temp);
+                        }//above here is the code to find an open Z position. Working :)
+
+                        levelStoragePush[i][j-1][temp][0]=maybe[i][j][k][0];
+                        levelStoragePush[i][j-1][temp][1]=2;
+                        levelStoragePush[i][j-1][temp][2]=maybe[i][j][k][2]+1;
+                        if (levelStoragePush[i][j-1][temp][2]>3){levelStoragePush[i][j-1][temp][2]=0;}
+
+
                         levelStoragePush[i][j][k][0]=0;
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][j][k][2]=0;
@@ -236,12 +246,22 @@ public class Engine {
             for (int j = 0; j < Engine.getyTiles()-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
-                        //Put something here to find an open z position
-                        levelStoragePush[i][j+1][k][0]=maybe[i][j][k][0];
-                        levelStoragePush[i][j+1][k][1]=0;
-                        levelStoragePush[i][j+1][k][2]=maybe[i][j][k][2]+1;
-                        levelStoragePush[i][j+1][k][3]++;
-                        if (levelStoragePush[i][j+1][k][2]>3){levelStoragePush[i][j+1][k][2]=0;}
+
+
+                        int temp =getOpenIndex(i,j+1,maybe);
+                        System.out.println(temp);
+                        while (temp==-1){//this should never run more than once but its nice to have it freeze when something goes wrong
+                            maybe=expandZTile(i,j+1,maybe);
+                            temp = getOpenIndex(i,j+1,maybe);
+                            System.out.println(temp);
+                        }//above here is the code to find an open Z position. Working :)
+
+                        levelStoragePush[i][j+1][temp][0]=maybe[i][j][k][0];
+                        levelStoragePush[i][j+1][temp][1]=0;
+                        levelStoragePush[i][j+1][temp][2]=maybe[i][j][k][2]+1;
+                        levelStoragePush[i][j+1][temp][3]++;
+                        if (levelStoragePush[i][j+1][temp][2]>3){levelStoragePush[i][j+1][temp][2]=0;}
+
                         levelStoragePush[i][j][k][0]=0;
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][j][k][2]=0;
@@ -263,13 +283,22 @@ public class Engine {
                 for (int k = 0; k < maybe[i][j].length; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
 
-                        //Put something here to find an open z position
-                        levelStoragePush[i-1][j][k][0] = maybe[i][j][k][0];
-                        levelStoragePush[i-1][j][k][1] = 1;
-                        levelStoragePush[i-1][j][k][2] = maybe[i][j][k][2] + 1;
-                        if (levelStoragePush[i-1][j][k][2] > 3) {
-                            levelStoragePush[i-1][j][k][2] = 0;
+                        int temp =getOpenIndex(i-1,j,maybe);
+                        System.out.println(temp);
+                        while (temp==-1){//this should never run more than once but its nice to have it freeze when something goes wrong
+                            maybe=expandZTile(i-1,j,maybe);
+                            temp = getOpenIndex(i-1,j,maybe);
+                            System.out.println(temp);
+                        }//above here is the code to find an open Z position. Working :)
+
+
+                        levelStoragePush[i-1][j][temp][0] = maybe[i][j][k][0];
+                        levelStoragePush[i-1][j][temp][1] = 1;
+                        levelStoragePush[i-1][j][temp][2] = maybe[i][j][k][2] + 1;
+                        if (levelStoragePush[i-1][j][temp][2] > 3) {
+                            levelStoragePush[i-1][j][temp][2] = 0;
                         }
+
                         levelStoragePush[i][j][k][0] = 0;
                         levelStoragePush[i][j][k][1] = 0;
                         levelStoragePush[i][j][k][2] = 0;
@@ -289,12 +318,23 @@ public class Engine {
             for (int j = 0; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
-                        //Put something here to find an open z position
-                        levelStoragePush[i+1][j][k][0]=maybe[i][j][k][0];
-                        levelStoragePush[i+1][j][k][1]=3;
-                        levelStoragePush[i+1][j][k][2]=maybe[i][j][k][2]+1;
-                        levelStoragePush[i+1][j][k][3]++;
-                        if (levelStoragePush[i+1][j][k][2]>3){levelStoragePush[i+1][j][k][2]=0;}
+
+
+                        int temp =getOpenIndex(i+1,j,maybe);
+                        System.out.println(temp);
+                        while (temp==-1){//this should never run more than once but its nice to have it freeze when something goes wrong
+                            maybe=expandZTile(i+1,j,maybe);
+                            temp = getOpenIndex(i+1,j,maybe);
+                            System.out.println(temp);
+                        }//above here is the code to find an open Z position. Working :)
+
+                        levelStoragePush[i+1][j][temp][0]=maybe[i][j][k][0];
+                        levelStoragePush[i+1][j][temp][1]=3;
+                        levelStoragePush[i+1][j][temp][2]=maybe[i][j][k][2]+1;
+                        levelStoragePush[i+1][j][temp][3]++;
+
+
+                        if (levelStoragePush[i+1][j][temp][2]>3){levelStoragePush[i+1][j][temp][2]=0;}
                         levelStoragePush[i][j][k][0]=0;
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][j][k][2]=0;
@@ -308,16 +348,100 @@ public class Engine {
         }
         playGame();
     }
+
+    private int getOpenIndex(int i, int j,int[][][][] maybe) {
+        for (int k = 0; k < maybe[i][j].length; k++) {
+            if (levelStoragePush[i][j][k][0] == 0) {
+                return k;
+            }
+        }
+        return -1; // No open index found
+    }
+    public static int[][][][] expandZTile(int x, int y, int[][][][] maybe){//I stole this from levelCreator
+        int currentDepth = maybe[x][y].length;
+        int[][] newArray = new int[currentDepth + 1][5];
+        for (int z = 0; z < currentDepth; z++) {
+            for (int i = 0; i < 5; i++) {
+                newArray[z][i] = maybe[x][y][z][i];
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            newArray[currentDepth][i] = 0;
+        }
+        maybe[x][y] = newArray;//above this just expands
+        return maybe;
+    }
     public void moveProperty(){
         int[][][][] maybe= levelStoragePush;
-        for (int i = 0; i <= maybe.length-1; i++) {
-            for (int j = 0; j <= maybe[i].length-1; j++) {
+        int rotation = 0;
+        int vertical=0;
+        int horizontal=0;
+        for (int i = 0; i < maybe.length-1; i++) {
+            for (int j = 0; j < maybe[i].length-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0) {
+
                         if((checkProperty(levelStoragePush[i][j][k][0],4)>0)&&levelStoragePush[i][j][k][4]<1){
-                            moveLeft(i,j,k);
-                            System.out.println("hio");
-                        }}else{/*levelStoragePush[i][j][k][4]--;*/}
+                            rotation = levelStoragePush[i][j][k][1];
+                            System.out.println(rotation+"rotation");
+                            System.out.println(rotation+"rotation");
+                            System.out.println(rotation+"rotation");
+                            switch(rotation){
+                                case 0:
+                                case 4:
+                                    vertical=1;
+                                    break;
+                                case 1:
+                                case 5:
+                                    horizontal=-1;
+                                    break;
+                                case 3:
+                                case 7:
+                                    horizontal=1;
+                                    break;
+                                case 2:
+                                case 6:
+                                    vertical=-1;
+                                    break;
+                            }
+                            System.out.println(horizontal+"horizontal");
+                            System.out.println(horizontal+"horizontal");
+                            System.out.println(horizontal+"horizontal");
+                            System.out.println(vertical+"vertical");
+                            System.out.println(vertical+"vertical");
+                            System.out.println(vertical+"vertical");
+
+                            if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {
+
+
+                                int temp =getOpenIndex(i+horizontal,j+vertical,maybe);
+                                System.out.println(temp);
+                                while (temp==-1){//this should never run more than once but its nice to have it freeze when something goes wrong
+                                    maybe=expandZTile(i+horizontal,j+vertical,maybe);
+                                    temp = getOpenIndex(i+horizontal,j+vertical,maybe);
+                                    System.out.println(temp);
+                                }//above here is the code to find an open Z position. Working :)
+
+
+
+                                levelStoragePush[i+horizontal][j+vertical][temp][0] = levelStoragePush[i][j][k][0];
+                                levelStoragePush[i+horizontal][j+vertical][temp][1] =levelStoragePush[i][j][k][1];
+                                levelStoragePush[i+horizontal][j+vertical][temp][2] = levelStoragePush[i][j][k][2] + 1;
+                                levelStoragePush[i+horizontal][j+vertical][temp][4]++;
+                                if (levelStoragePush[i+horizontal][j+vertical][temp][2] > 3) {
+                                    levelStoragePush[i+horizontal][j+vertical][temp][2] = 0;
+                                }
+
+
+                                levelStoragePush[i][j][k][0] = 0;
+                                levelStoragePush[i][j][k][1] = 0;
+                                levelStoragePush[i][j][k][2] = 0;
+                                levelStoragePush[i][j][k][3] = 0;
+                                levelStoragePush[i][j][k][4] = 0;
+                                System.out.println(i + " " + j + " " + k);
+                                babakey.removeImage(i, j, k);
+                            }
+                        }}
                 }
             }
         }

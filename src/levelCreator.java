@@ -58,6 +58,10 @@ public class levelCreator {
         add(6,7,3);
         add(2,4,6);
         add(5,4,6);
+        add(0,0,6);
+        add(19,19,6);
+
+
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("level1.data")));
         oos.writeObject(level);
         oos.flush();
