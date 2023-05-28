@@ -62,5 +62,6 @@ public class levelCreator {
         oos.writeObject(level);
         oos.flush();
         oos.close();
+        System.out.println(level[6][7][0][0]);
     }
 }

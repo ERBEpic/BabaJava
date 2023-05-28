@@ -18,41 +18,30 @@ import java.util.stream.Stream;
 //Lets do ints.
 public class Engine {
     //public static memoryController memoryEater = new memoryController();
-    public static newmemoryController newmemoryEater;
+    public newmemoryController newmemoryEater;
+    public BabaFrameSimple babakey;
 
-    static {
-        try {
-            newmemoryEater = new newmemoryController();
-        } catch (FileNotFoundException e) {
-            System.out.println("break");
-        } catch (IOException e) {
-            System.out.println("break");
-        } catch (ClassNotFoundException e) {
-            System.out.println("break");
-        }//it should basically never crash but its easier to solve the try catch problems here
+    public Engine() throws IOException, ClassNotFoundException, InterruptedException {
+        Thread.sleep(100);
+        newmemoryEater = new newmemoryController();
+        babakey = new BabaFrameSimple(24,41,41);
+        babakey.setEngine(this);//I kinda guessed you could just pass along (this) but Im glad that it works
     }
 
+    //it should basically never crash but its easier to solve the try catch problems here
 
-    private static int[][][][] levelSelect = new int[20][15][3][5];//the last one is basically the equivalent of BabaObject
-    public static int[][][][] levelStoragePush = new int[40][40][4][5];
+
+
+    private int[][][][] levelSelect = new int[20][15][3][5];//the last one is basically the equivalent of BabaObject
+    public int[][][][] levelStoragePush = new int[40][40][4][5];
     //public static BabaObjects properties = new BabaObjects();
 
     private static int xTiles = 20;
     private static int yTiles = 20;
-    public static Engine BabaEngine = new Engine();
-    private static int[][] propertiesStorage = new int[100][100];//[]=id,[][]=property
+    private int[][] propertiesStorage = new int[100][100];//[]=id,[][]=property
     private boolean isYou = true;
     private int Level;
-    public Engine(){
-        xTiles = 20;
-        yTiles = 20;
 
-        /*for (int i = 0; i < levelStoragePush.length; i++) {
-            for (int j = 0; j < levelStoragePush[i].length; j++) {
-                levelStoragePush[i][j]= new ArrayList<BabaObjects>();
-            }
-        }*/
-    }
 
     public static int getxTiles(){
         return xTiles;
@@ -90,14 +79,14 @@ public class Engine {
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
                         System.out.println(i+" "+j+" "+k);
-                        Baba3DFrame.babakey.removeImage(i,j,k);
+                        BabaFrameSimple.babakey.removeImage(i,j,k);
                     }}else{/*levelStoragePush[i][j][k][4]--;}
                 }
             }
         }
     }*/
 
-    public static void moveLeft(int i, int j, int k) {
+    public void moveLeft(int i, int j, int k) {
         if (j>0) {
             //Put something here to find an open z position
             levelStoragePush[i][j - 1][k][0] = levelStoragePush[i][j][k][0];
@@ -113,10 +102,10 @@ public class Engine {
             levelStoragePush[i][j][k][3] = 0;
             levelStoragePush[i][j][k][4] = 0;
             System.out.println(i + " " + j + " " + k);
-            Baba3DFrame.babakey.removeImage(i, j, k);
+            babakey.removeImage(i, j, k);
         }
     }
-    public void moveUp(){int[][][][] maybe= newmemoryEater.peek();
+    public void moveUp(){int[][][][] maybe= this.newmemoryEater.peek();
         //Put something here to find an open z position
         for (int i = 1; i < maybe.length-1; i++) {
             for (int j = 1; j < maybe[i].length-1; j++) {
@@ -130,7 +119,7 @@ public class Engine {
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
                         System.out.println(i+" "+j+" "+k);
-                        Baba3DFrame.babakey.removeImage(i,j,k);
+                        babakey.removeImage(i,j,k);
                     }
                 }
             }
@@ -153,7 +142,7 @@ public class Engine {
                         levelStoragePush[i][j][k][1]=0;
                         levelStoragePush[i][k][k][2]=0;
                         System.out.println(i+" "+j+" "+k);
-                        Baba3DFrame.babakey.removeImage(i,j,k);
+                        babakey.removeImage(i,j,k);
                     }
                 }
             }
@@ -162,17 +151,16 @@ public class Engine {
     }
     public void moveWait(){
         playGame();
-        Baba3DFrame.babakey.repaint();
     }
 
     public void moveUndoNew(){
-        if(Engine.newmemoryEater.getSize()>1){
-           Engine.levelStoragePush=Engine.newmemoryEater.pop();
+        if(this.newmemoryEater.getSize()>1){
+           levelStoragePush=this.newmemoryEater.pop();
         }
     }
 
-    public static void playGame(){
-        Engine.moveProperty();
+    public void playGame(){
+        moveProperty();
         for (int i = 0; i < levelStoragePush.length-1; i++) {
             for (int j = 0; j < levelStoragePush[i].length-1; j++) {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
@@ -182,20 +170,30 @@ public class Engine {
                     }}}}
         newmemoryEater.push(levelStoragePush);
         System.out.println(levelStoragePush[0][0][0][0]+"play");
+        try {
+            babakey.ParserDisplay();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
-    public static void resetLevel(){
+    public static void main(String[] args) {
+
+    }
+
+    public void resetLevel(){
         /*int[][][][] maybe= Engine.newmemoryEater.peek();
         for (int i = 0; i < Engine.getxTiles(); i++) {
             for (int j = 0; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
-                    Baba3DFrame.babakey.removeImage(i,j,k);
+                    BabaFrameSimple.babakey.removeImage(i,j,k);
                     }
                 }
             }*/
-       // Baba3DFrame.babakey.removeallImage();
-        Engine.levelStoragePush = new int[40][40][4][5];
-        Engine.newmemoryEater.reset();
+       // BabaFrameSimple.babakey.removeallImage();
+        levelStoragePush = new int[40][40][4][5];
+        newmemoryEater.reset();
 
 
     }//fixme, wasnt even wrking before new memory. Maybe it was the root of the problem?
@@ -206,118 +204,120 @@ public class Engine {
 
 
 
-    public static void moveYouLeft(){
-        int[][][][] maybe= Engine.newmemoryEater.peek();
+    public void moveYouLeft(){
+        int[][][][] maybe= newmemoryEater.peek();
         for (int i = 0; i < Engine.getxTiles(); i++) {
             for (int j = 1; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
                         //donext Put something here to find an open z position (this applies to all but im not doing them all and flooding intellij)
-                        Engine.levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
-                        Engine.levelStoragePush[i][j-1][k][1]=2;
-                        Engine.levelStoragePush[i][j-1][k][2]=maybe[i][j][k][2]+1;
-                        if (Engine.levelStoragePush[i][j-1][k][2]>3){Engine.levelStoragePush[i][j-1][k][2]=0;}
-                        Engine.levelStoragePush[i][j][k][0]=0;
-                        Engine.levelStoragePush[i][j][k][1]=0;
-                        Engine.levelStoragePush[i][j][k][2]=0;
-                        Engine.levelStoragePush[i][j][k][3] = 0;
-                        Engine.levelStoragePush[i][j][k][4] = 0;
+                        levelStoragePush[i][j-1][k][0]=maybe[i][j][k][0];
+                        levelStoragePush[i][j-1][k][1]=2;
+                        levelStoragePush[i][j-1][k][2]=maybe[i][j][k][2]+1;
+                        if (levelStoragePush[i][j-1][k][2]>3){levelStoragePush[i][j-1][k][2]=0;}
+                        levelStoragePush[i][j][k][0]=0;
+                        levelStoragePush[i][j][k][1]=0;
+                        levelStoragePush[i][j][k][2]=0;
+                        levelStoragePush[i][j][k][3] = 0;
+                        levelStoragePush[i][j][k][4] = 0;
                         System.out.println(i+" "+j+" "+k);
-                        Baba3DFrame.babakey.removeImage(i,j,k);
+                        babakey.removeImage(i,j,k);
                     }
                 }
             }
         }
-        Engine.playGame();
+        playGame();
     }
 
-    public static void moveYouRight(){
+    public void moveYouRight(){
         System.out.println(Engine.getxTiles());
-        int[][][][] maybe= Engine.newmemoryEater.peek();
+        int[][][][] maybe= newmemoryEater.peek();
         for (int i = 0; i < Engine.getxTiles(); i++) {
             for (int j = 0; j < Engine.getyTiles()-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
                         //Put something here to find an open z position
-                        Engine.levelStoragePush[i][j+1][k][0]=maybe[i][j][k][0];
-                        Engine.levelStoragePush[i][j+1][k][1]=0;
-                        Engine.levelStoragePush[i][j+1][k][2]=maybe[i][j][k][2]+1;
-                        Engine.levelStoragePush[i][j+1][k][3]++;
-                        if (Engine.levelStoragePush[i][j+1][k][2]>3){Engine.levelStoragePush[i][j+1][k][2]=0;}
-                        Engine.levelStoragePush[i][j][k][0]=0;
-                        Engine.levelStoragePush[i][j][k][1]=0;
-                        Engine.levelStoragePush[i][j][k][2]=0;
-                        Engine.levelStoragePush[i][j][k][3] = 0;
-                        Engine.levelStoragePush[i][j][k][4] = 0;
+                        levelStoragePush[i][j+1][k][0]=maybe[i][j][k][0];
+                        levelStoragePush[i][j+1][k][1]=0;
+                        levelStoragePush[i][j+1][k][2]=maybe[i][j][k][2]+1;
+                        levelStoragePush[i][j+1][k][3]++;
+                        if (levelStoragePush[i][j+1][k][2]>3){levelStoragePush[i][j+1][k][2]=0;}
+                        levelStoragePush[i][j][k][0]=0;
+                        levelStoragePush[i][j][k][1]=0;
+                        levelStoragePush[i][j][k][2]=0;
+                        levelStoragePush[i][j][k][3] = 0;
+                        levelStoragePush[i][j][k][4] = 0;
                         System.out.println(i+" "+j+" "+k);
-                        Baba3DFrame.babakey.removeImage(i,j,k);
+                        babakey.removeImage(i,j,k);
                     }
                 }
             }
         }
-        Engine.playGame();
+        playGame();
     }
-    public static void moveYouUp() {
-        int[][][][] maybe = Engine.newmemoryEater.peek();
+    public void moveYouUp() {
+        int[][][][] maybe = newmemoryEater.peek();
+        System.out.println(maybe[6][7][0][0]);
         for (int i = 1; i < Engine.getxTiles(); i++) {
             for (int j = 0; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
+
                         //Put something here to find an open z position
-                        Engine.levelStoragePush[i-1][j][k][0] = maybe[i][j][k][0];
-                        Engine.levelStoragePush[i-1][j][k][1] = 1;
-                        Engine.levelStoragePush[i-1][j][k][2] = maybe[i][j][k][2] + 1;
-                        if (Engine.levelStoragePush[i-1][j][k][2] > 3) {
-                            Engine.levelStoragePush[i-1][j][k][2] = 0;
+                        levelStoragePush[i-1][j][k][0] = maybe[i][j][k][0];
+                        levelStoragePush[i-1][j][k][1] = 1;
+                        levelStoragePush[i-1][j][k][2] = maybe[i][j][k][2] + 1;
+                        if (levelStoragePush[i-1][j][k][2] > 3) {
+                            levelStoragePush[i-1][j][k][2] = 0;
                         }
-                        Engine.levelStoragePush[i][j][k][0] = 0;
-                        Engine.levelStoragePush[i][j][k][1] = 0;
-                        Engine.levelStoragePush[i][j][k][2] = 0;
-                        Engine.levelStoragePush[i][j][k][3] = 0;
-                        Engine.levelStoragePush[i][j][k][4] = 0;
+                        levelStoragePush[i][j][k][0] = 0;
+                        levelStoragePush[i][j][k][1] = 0;
+                        levelStoragePush[i][j][k][2] = 0;
+                        levelStoragePush[i][j][k][3] = 0;
+                        levelStoragePush[i][j][k][4] = 0;
                         System.out.println(i + " " + j + " " + k);
-                        Baba3DFrame.babakey.removeImage(i, j, k);
+                        babakey.removeImage(i, j, k);
                     }
                 }
             }
         }
-        Engine.playGame();
+        playGame();
     }
-    public static void moveYouDown(){
-        int[][][][] maybe= Engine.newmemoryEater.peek();
+    public void moveYouDown(){
+        int[][][][] maybe= newmemoryEater.peek();
         for (int i = 0; i < Engine.getxTiles()-1; i++) {
             for (int j = 0; j < Engine.getyTiles(); j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0&&maybe[i][j][k][3]<1) {
                         //Put something here to find an open z position
-                        Engine.levelStoragePush[i+1][j][k][0]=maybe[i][j][k][0];
-                        Engine.levelStoragePush[i+1][j][k][1]=3;
-                        Engine.levelStoragePush[i+1][j][k][2]=maybe[i][j][k][2]+1;
-                        Engine.levelStoragePush[i+1][j][k][3]++;
-                        if (Engine.levelStoragePush[i+1][j][k][2]>3){Engine.levelStoragePush[i+1][j][k][2]=0;}
-                        Engine.levelStoragePush[i][j][k][0]=0;
-                        Engine.levelStoragePush[i][j][k][1]=0;
-                        Engine.levelStoragePush[i][j][k][2]=0;
-                        Engine.levelStoragePush[i][j][k][3]=0;
-                        Engine.levelStoragePush[i][j][k][4]=0;
+                        levelStoragePush[i+1][j][k][0]=maybe[i][j][k][0];
+                        levelStoragePush[i+1][j][k][1]=3;
+                        levelStoragePush[i+1][j][k][2]=maybe[i][j][k][2]+1;
+                        levelStoragePush[i+1][j][k][3]++;
+                        if (levelStoragePush[i+1][j][k][2]>3){levelStoragePush[i+1][j][k][2]=0;}
+                        levelStoragePush[i][j][k][0]=0;
+                        levelStoragePush[i][j][k][1]=0;
+                        levelStoragePush[i][j][k][2]=0;
+                        levelStoragePush[i][j][k][3]=0;
+                        levelStoragePush[i][j][k][4]=0;
                         System.out.println(i+" "+j+" "+k);
-                        Baba3DFrame.babakey.removeImage(i,j,k);
+                        babakey.removeImage(i,j,k);
                     }
                 }
             }
         }
-        Engine.playGame();
+        playGame();
     }
-    public static void moveProperty(){
-        int[][][][] maybe= Engine.levelStoragePush;
+    public void moveProperty(){
+        int[][][][] maybe= levelStoragePush;
         for (int i = 0; i <= maybe.length-1; i++) {
             for (int j = 0; j <= maybe[i].length-1; j++) {
                 for (int k = 0; k < maybe[i][j].length ; k++) {
                     if (maybe[i][j][k][0]!=0) {
-                        if((Engine.checkProperty(Engine.levelStoragePush[i][j][k][0],4)>0)&&Engine.levelStoragePush[i][j][k][4]<1){
-                            Engine.moveLeft(i,j,k);
+                        if((checkProperty(levelStoragePush[i][j][k][0],4)>0)&&levelStoragePush[i][j][k][4]<1){
+                            moveLeft(i,j,k);
                             System.out.println("hio");
-                        }}else{/*Engine.levelStoragePush[i][j][k][4]--;*/}
+                        }}else{/*levelStoragePush[i][j][k][4]--;*/}
                 }
             }
         }
@@ -329,23 +329,23 @@ public class Engine {
             thingsExisting.add(i);
         }
     }
-    public static void moveBetter()//todo put all the move into one BIG move method
-    {int[][][][] maybe= Engine.newmemoryEater.peek();
+    public void moveBetter()//todo put all the move into one BIG move method
+    {int[][][][] maybe= newmemoryEater.peek();
         ArrayList<Integer> moving = new ArrayList<Integer>();
         ArrayList<Integer> movingYou = new ArrayList<Integer>();
         //Make a cache of all objects in thingsExisting that are in the level and check only those properties. Dont check everything that can exist, check everything that does exist. todo when you make a level select system, refresh thingsExisting
         for (int i = 0; i < thingsExisting.size(); i++) {
-            if (Engine.propertiesStorage[thingsExisting.get(i)][0]>0){
+            if (propertiesStorage[thingsExisting.get(i)][0]>0){
                 moving.add(thingsExisting.get(i));
             }
         }
         }
 
-    public static int checkProperty(int id, int property){
-        return Engine.propertiesStorage[id][property];
+    public int checkProperty(int id, int property){
+        return propertiesStorage[id][property];
     }
-    public static void setProperty(int id, int prop, int sign){
-        Engine.propertiesStorage[id][prop]=sign;
+    public void setProperty(int id, int prop, int sign){
+        propertiesStorage[id][prop]=sign;
     }
 
 

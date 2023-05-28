@@ -6,7 +6,7 @@ public class newmemoryController {
     static public int[][][][] firstState = new int[40][40][4][5];
     private static ArrayDeque<int[][][][]> memoryStack = new ArrayDeque<int[][][][]>();
     public newmemoryController() throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("level1.data")));//todo add so multiple levels not that hard
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("level1.data"));//todo add so multiple levels not that hard
         Object obj = ois.readObject();
         ois.close();
         firstState = (int[][][][])obj;
@@ -17,6 +17,9 @@ public class newmemoryController {
         memoryStack.push(firstState);
     }
 
+    public static void main(String[] args) {
+
+    }
     public int getSize(){return memoryStack.size();}
 
     public int[][][][] pullLatestState(){
@@ -28,7 +31,6 @@ public class newmemoryController {
     public void push(int[][][][] x){memoryStack.push(x);}
 
     public void reset(){
-
         memoryStack.push(firstState);
     }
     public void allOut00(){
