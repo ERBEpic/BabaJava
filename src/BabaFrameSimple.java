@@ -21,6 +21,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     private LinkedList<ImageLayer>[] tileMap;
     private Image offScreenImage;
     private Graphics offScreenGraphics;
+    private boolean seizure = false;
 
     {
         try {
@@ -48,7 +49,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             tileMap[i] = new LinkedList<ImageLayer>();
         }
         setSize(numTilesX * tileSize, numTilesY * tileSize);
-
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.BLACK);
@@ -97,10 +97,11 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
-        this.walkingcycle++;
+        if (seizure){super.paint(g);}//Seizure mode (Its an intentional feature)
+        else{try {Thread.sleep(10);} catch (InterruptedException e) {}}
 
         offScreenGraphics.clearRect(0, 0, getWidth(), getHeight());
+        this.walkingcycle++;
 
         for (int i = 0; i < numTilesX * numTilesY; i++) {
             int y = i % numTilesX;
@@ -123,9 +124,15 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         int keyCode = e.getKeyCode();
 
         switch (keyCode) {
-            case KeyEvent.VK_B://debug
+            case KeyEvent.VK_ESCAPE:
+                System.exit(0);//this is what ExitOnClose calls, so it works great
+                break;
+            case KeyEvent.VK_Y://debug
+                EngineReference.setProperty(3,0,1);
+                System.out.println("hio");
                 break;
             case KeyEvent.VK_O://debug
+                seizure=!seizure;
                 break;
             case KeyEvent.VK_T://Debug
                 this.clear();
@@ -134,16 +141,20 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 this.sdisplay();
                 break;
             case KeyEvent.VK_UP:
-                EngineReference.moveYouUp();
+                //EngineReference.moveYouUp();
+                EngineReference.moveBetter(1);
                 break;
             case KeyEvent.VK_DOWN:
-                EngineReference.moveYouDown();
+                //EngineReference.moveYouDown();
+                EngineReference.moveBetter(3);
                 break;
             case KeyEvent.VK_LEFT:
-                EngineReference.moveYouLeft();
+                //EngineReference.moveYouLeft();
+                EngineReference.moveBetter(2);
                 break;
             case KeyEvent.VK_RIGHT:
-                EngineReference.moveYouRight();
+                //EngineReference.moveYouRight();
+                EngineReference.moveBetter(0);
                 break;
             case KeyEvent.VK_SPACE:
                 EngineReference.moveWait();
@@ -208,10 +219,9 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 for (int j = 0; j < temp[i].length; j++) {
                     for (int k = 0; k < temp[i][j].length; k++) {
                         if (temp[i][j][k][0] != 0 && display) {
-                            System.out.println("race1");
                             if (temp[i][j][k][0]!=5){
                             addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k]))), k);
-                                System.out.println("brac");}
+                                }
 
                             //+1=connected right
                             //+2 = connected up
@@ -324,7 +334,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         if (around[1]){second+=2;}
         if (around[2]){second+=4;}
         if (around[3]){second+=8;}
-        System.out.println(second+"Second is");
 
         return "Sprites/" + first + '_' + second + '_' + third + ".png";
     }
