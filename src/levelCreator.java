@@ -9,6 +9,11 @@ public class levelCreator {
         level[x][y][z][2]=0;
         level[x][y][z][3]=0;
         level[x][y][z][4]=0;
+        switch (id){
+            case 5:
+                level[x][y][z][1]+=4;
+                break;
+        }
     }
     public static void add(int x, int y, int id){
         int z = expandZTile(x,y);
@@ -17,6 +22,11 @@ public class levelCreator {
         level[x][y][z][2]=0;
         level[x][y][z][3]=0;
         level[x][y][z][4]=0;
+        switch (id){
+            case 5:
+                level[x][y][z][1]+=4;
+                break;
+        }
     }
     public static int findValidAndExpand(int x, int y){
         int z = 0;
@@ -60,6 +70,12 @@ public class levelCreator {
         add(5,4,6);
         add(0,0,6);
         add(19,19,6);
+        add(5,5,5);
+        add(6,5,5);
+        add(5,6,5);
+        add(6,6,5);
+
+
 
 
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("level1.data")));

@@ -37,7 +37,9 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     }
 
     public BabaFrameSimple(int numTilesX, int numTilesY) throws IOException {
-
+        super("Baba is Me!");
+        Image image = ImageIO.read(new File("Sprites/baba_0_1.png"));
+        setIconImage(image);
         this.tileSize = 24;
         this.numTilesX = numTilesX;
         this.numTilesY = numTilesY;
@@ -67,7 +69,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         System.out.println(insets.top+"top");
         System.out.println(insets.left+"left");
         System.out.println(insets.right+"right");
-        //fixme fix the stupid insets problem. This is what you get for trying to update to newer java versions.
 
     }
 
@@ -207,7 +208,52 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 for (int j = 0; j < temp[i].length; j++) {
                     for (int k = 0; k < temp[i][j].length; k++) {
                         if (temp[i][j][k][0] != 0 && display) {
+                            System.out.println("race1");
+                            if (temp[i][j][k][0]!=5){
                             addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k]))), k);
+                                System.out.println("brac");}
+
+                            //+1=connected right
+                            //+2 = connected up
+                            //+4 = connected left
+                            //+8 = connected down
+                            else{
+                                boolean[] around = {false,false,false,false};
+                                try{
+                                    for (int l = 0; l < temp[i][j+1].length; l++) {
+                                        if(temp[i][j+1][l][0]==temp[i][j][k][0]){//Connects to the right
+                                            around[0]=true;//break;
+                                        }
+                                    }
+                                }catch(Exception e){}
+
+
+                                try{
+                                    for (int l = 0; l < temp[i-1][j].length; l++) {
+                                        if(temp[i-1][j][l][0]==temp[i][j][k][0]){//Connects to up
+                                            around[1]=true;//break;
+                                        }
+                                    }
+                                }catch(Exception e){}
+                                try{
+                                    for (int l = 0; l < temp[i][j-1].length; l++) {
+                                        if(temp[i][j-1][l][0]==temp[i][j][k][0]){//Connects to the left
+                                            around[2]=true;//break;
+                                        }
+                                    }
+                                }catch(Exception e){}
+                                try{
+                                    for (int l = 0; l < temp[i+1][j].length; l++) {
+                                        if(temp[i+1][j][l][0]==temp[i][j][k][0]){//Connects to down
+                                            around[3]=true;//break;
+                                        }
+                                    }
+                                }catch(Exception e){}
+
+
+                                addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k],around))), k);
+                            }
+
                         }
                     }
                 }
@@ -246,7 +292,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 break;
         }
         third = counter;
-        if (rotation == 5) {
+        if (rotation >= 5) {
             second = walkingcycle;
         } else {
             second = rotation * 8 + walkingcycle;
@@ -254,6 +300,35 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
 
         return "Sprites/" + first + '_' + second + '_' + third + ".png";
     }
+    public String FileFinder(int[] x, boolean[] around) {
+        int id = x[0];
+        int rotation = x[1];
+        int walkingcycle = x[2];
+        String first = null;
+        int second = 0;
+        int third;
+        switch (id) {
+
+            case 5:
+                first = "wall";
+                break;
+
+        }
+        third = counter;
+        //this is genius
+        //+1=connected right
+        //+2 = connected up
+        //+4 = connected left
+        //+8 = connected down
+        if (around[0]){second++;}
+        if (around[1]){second+=2;}
+        if (around[2]){second+=4;}
+        if (around[3]){second+=8;}
+        System.out.println(second+"Second is");
+
+        return "Sprites/" + first + '_' + second + '_' + third + ".png";
+    }
+
     public int counter =1;
     public boolean display = true;
 

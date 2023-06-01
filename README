@@ -60,9 +60,7 @@ end of efficiency
 
 The best way to stop your code from breaking is take away the ability to break it
 
-donext Make setImage in Baba3DFrame stack images, not just be a priority system. Also, make like actual code because it is really werid how ChatGPT did it.
 //also im not just copying from chatgpt for the sake of copying from chatgpt i need it to work at least a bit to test the rest
-//donow OBJECTS DONT GO TO A NEW Z LEVEL AND THEY MAINTAIN THEIR OLD Z LEVEL
 
 
 To create an object

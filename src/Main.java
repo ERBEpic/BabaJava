@@ -22,4 +22,3 @@ public class Main {
     }
 }
 
-//TODO make the X and Y positions not go offscreen?

@@ -3,9 +3,11 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 
 public class newmemoryController {
+    private Engine EngineReference;
     static public int[][][][] firstState = new int[40][40][4][5];
     private static ArrayDeque<int[][][][]> memoryStack = new ArrayDeque<int[][][][]>();
-    public newmemoryController() throws IOException, ClassNotFoundException {
+    public newmemoryController(Engine engine) throws IOException, ClassNotFoundException {
+        EngineReference = engine;
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream("level1.data"));//todo add so multiple levels not that hard
         Object obj = ois.readObject();
         ois.close();
@@ -15,6 +17,7 @@ public class newmemoryController {
         //Engine.levelStoragePush=Engine.memoryEater.pullLatestState().clone();
         //above here
         memoryStack.push(firstState);
+        EngineReference.levelStoragePush=firstState;
     }
 
     public static void main(String[] args) {
