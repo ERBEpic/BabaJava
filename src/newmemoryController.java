@@ -18,6 +18,7 @@ public class newmemoryController {
         //above here
         memoryStack.push(firstState);
         EngineReference.levelStoragePush=firstState;
+
     }
 
     public static void main(String[] args) {
@@ -34,6 +35,7 @@ public class newmemoryController {
     public void push(int[][][][] x){memoryStack.push(x);}
 
     public void reset(){
+        memoryStack = new ArrayDeque<int[][][][]>();
         memoryStack.push(firstState);
     }
     public void allOut00(){

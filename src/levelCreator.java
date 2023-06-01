@@ -74,6 +74,24 @@ public class levelCreator {
         add(6,5,5);
         add(5,6,5);
         add(6,6,5);
+        add(2,0,5);
+        add(3,0,5);
+        add(4,0,5);
+        add(5,0,5);
+        add(6,0,5);
+        add(7,0,5);
+        add(7,2,5);
+        add(7,1,5);
+        add(7,2,5);
+        add(7,3,5);
+        add(7,4,5);
+        add(7,5,5);
+        add(7,6,5);
+        add(7,7,5);
+        add(7,8,5);
+
+
+
 
 
 
