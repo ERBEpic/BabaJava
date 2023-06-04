@@ -88,7 +88,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     }
 
     public void clear() {
-        for (int i = 0; i < numTilesX * numTilesY; i++) {
+        for (int i = 0; i < tileMap.length; i++) {
             tileMap[i].clear();
         }
         repaint();
