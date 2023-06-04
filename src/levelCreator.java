@@ -1,5 +1,6 @@
 import java.io.*;
 import java.lang.*;
+//This is NOT code meant for the user to run. This is DEVELOPER code meant for level creation.
 public class levelCreator {
     static int[][][][] level = new int[20][20][0][5];
     public static void add(int x, int y, int id, int rotation){
@@ -22,10 +23,21 @@ public class levelCreator {
         level[x][y][z][2]=0;
         level[x][y][z][3]=0;
         level[x][y][z][4]=0;
-        switch (id){
+        switch (id){//Unrotatable
+            case 1:
+            case 2:
+            case 3:
             case 5:
+            case 6:
+            case 9:
+            case 10:
+            case 11:
                 level[x][y][z][1]+=4;
                 break;
+        }
+        switch (id){//has a walking cycle
+            case 7:
+                level[x][y][z][2]=1;
         }
     }
     public static int findValidAndExpand(int x, int y){
@@ -65,30 +77,30 @@ public class levelCreator {
         return currentDepth;
     }
     public static void main(String[] args) throws IOException {
-        add(6,7,3);
+        add(6,7,7);
         add(2,4,6);
         add(5,4,6);
         add(0,0,6);
         add(19,19,6);
-        add(5,5,5);
-        add(6,5,5);
-        add(5,6,5);
-        add(6,6,5);
-        add(2,0,5);
-        add(3,0,5);
-        add(4,0,5);
-        add(5,0,5);
-        add(6,0,5);
-        add(7,0,5);
-        add(7,2,5);
-        add(7,1,5);
-        add(7,2,5);
-        add(7,3,5);
-        add(7,4,5);
-        add(7,5,5);
-        add(7,6,5);
-        add(7,7,5);
-        add(7,8,5);
+        add(5,5,1);
+        add(6,5,1);
+        add(5,6,1);
+        add(6,6,1);
+        add(2,0,1);
+        add(3,0,1);
+        add(4,0,1);
+        add(5,0,1);
+        add(6,0,1);
+        add(7,0,1);
+        add(7,2,1);
+        add(7,1,1);
+        add(7,2,1);
+        add(7,3,1);
+        add(7,4,1);
+        add(7,5,1);
+        add(7,6,1);
+        add(7,7,1);
+        add(7,8,1);
 
 
 

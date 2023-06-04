@@ -1,6 +1,10 @@
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+/*
+What this class does is it is basically an interface for the ArrayDeque memoryStack, allowing access for Engine to talk to it.
+It also stores the class I made for deepcopying, but thats more just a DRY(don't repeat yourself) thing.
+*/
 
 //Why is java so annoying when it comes to references and copying? Why cant I just copy one object, not copy a reference to an object?
 public class newmemoryController {

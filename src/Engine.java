@@ -31,27 +31,11 @@ public class Engine {
     private static int xTiles = 20;
     private static int yTiles = 20;
 
-    private boolean isYou = true;
-    private int Level;
-
-
     public static int getxTiles(){
         return xTiles;
     }
     public static int getyTiles(){
         return yTiles;
-    }
-    public static void setxTiles(int x){
-        xTiles = x;
-    }
-    public static void setyTiles(int y){
-        yTiles = y;
-    }
-    public void setLevel(int x){
-        Level = x;
-    }
-    public int getLevel(){
-        return Level;
     }
 
     public void moveWait(){
@@ -66,11 +50,9 @@ public class Engine {
     }
 
 
-    public static void main(String[] args) {
 
-    }
 
-    public void resetLevel(){//This is weirdly not working? Like nothing happens???
+    public void resetLevel(){
         newmemoryEater.reset();
         int[][][][] x  = newmemoryEater.peek();
         newmemoryEater.allOut00();
@@ -79,14 +61,9 @@ public class Engine {
         babakey.clear();
 
 
-    }//fixme, wasnt even wrking before new memory. Maybe it was the root of the problem?
-
-
-    public void refresh(){
-        //This is likely why reset/undo arent working.
-        babakey.clear();
-
     }
+
+
 
 
 
@@ -113,13 +90,7 @@ public class Engine {
         return maybe;
     }
 
-    private static HashMap<String, int[]> babaCache = new HashMap<String, int[]>();
-    public static ArrayList<Integer> thingsExisting = new ArrayList<Integer>();//MAKE SURE ONLY ONE OF EACH OBJECT IS IN THIS LIST
-    static{
-        for (int i = 0; i < 10; i++) {
-            thingsExisting.add(i);
-        }
-    }
+
 
     //Special
     public void youProperty(int d){
@@ -161,8 +132,9 @@ public class Engine {
                             System.out.println(vertical+"vertical");
                             System.out.println(vertical+"vertical");
                             System.out.println(vertical+"vertical");
-                            levelStoragePush[i][j][k][1] =d%4;//rotation
-
+                            if (levelStoragePush[i][j][k][1]>=4){levelStoragePush[i][j][k][1] =(d%4)+4;//rotation}else {
+                                levelStoragePush[i][j][k][1] = d%4;//rotation
+                            }
                             if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {
 
                                 int temp =getOpenIndex(i+horizontal,j+vertical,levelStoragePush);
@@ -175,19 +147,22 @@ public class Engine {
 
 
                                 levelStoragePush[i+horizontal][j+vertical][temp][0] = levelStoragePush[i][j][k][0];//Copy ID                                levelStoragePush[i+1][j][temp][1]=3;
-                                levelStoragePush[i+horizontal][j+vertical][temp][1] =d%4;//rotation
-                                levelStoragePush[i+horizontal][j+vertical][temp][2]=levelStoragePush[i][j][k][2]+1;//walkingcycle
+                                levelStoragePush[i+horizontal][j+vertical][temp][1] =levelStoragePush[i][j][k][1];//rotation
+
+                                if(levelStoragePush[i][j][k][2]!=0){
+                                levelStoragePush[i+horizontal][j+vertical][temp][2]=levelStoragePush[i][j][k][2]+1;}//walkingcycle
+                                else{levelStoragePush[i+horizontal][j+vertical][temp][2]=0;}
                                 levelStoragePush[i+horizontal][j+vertical][temp][3]++;//hasbeenmoved
 
 
-                                if (levelStoragePush[i+horizontal][j+vertical][temp][2]>3){levelStoragePush[i+horizontal][j+vertical][temp][2]=0;}
+                                if (levelStoragePush[i+horizontal][j+vertical][temp][2]>4){levelStoragePush[i+horizontal][j+vertical][temp][2]=1;}
                                 levelStoragePush[i][j][k][0]=0;
                                 levelStoragePush[i][j][k][1]=0;
                                 levelStoragePush[i][j][k][2]=0;
                                 levelStoragePush[i][j][k][3]=0;
                                 levelStoragePush[i][j][k][4]=0;
                                 System.out.println(i+" "+j+" "+k);
-                                babakey.removeImage(i,j,k);
+                                //babakey.removeImage(i,j,k); (This doesnt actually do anything)
 
                             }
                         }}
@@ -207,17 +182,12 @@ public class Engine {
                     }}}}
         newmemoryEater.push(newmemoryController.deepCopy(levelStoragePush));
         System.out.println(levelStoragePush[0][0][0][0]+"play");
-        try {
-            babakey.ParserDisplay();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        babakey.ParserDisplay();
         levelStoragePush= newmemoryController.deepCopy(newmemoryEater.peek());
 
     }
     //Controller of update order
     public void updateOrder(){
-        shiftProperty();
         moveProperty();
         defeatProperty();
         winProperty();
@@ -225,7 +195,7 @@ public class Engine {
         newmemoryEater.allOut00();
     }
     //Active properties (run on game cycle, IE shift&move, defeat& win, theyre all in UpdateOrder)
-    public void moveProperty(){//ID 4, on gamecycle moves tiles in direction of rotation
+    public void moveProperty(){//Unused, probably, because there isnt any move in World one.
         int rotation = 0;
         int vertical=0;
         int horizontal=0;
@@ -292,14 +262,13 @@ public class Engine {
                                 levelStoragePush[i][j][k][3] = 0;
                                 levelStoragePush[i][j][k][4] = 0;
                                 System.out.println(i + " " + j + " " + k);
-                                babakey.removeImage(i, j, k);
+                                //babakey.removeImage(i, j, k);(Not doing anything)
                             }
                         }}
                 }
             }
         }
     }
-    public void shiftProperty(){}
     public void defeatProperty(){}
     public void winProperty(){}
     //Reactive properties (stop, float, push, they are not in UpdateOrder)

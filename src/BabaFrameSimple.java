@@ -9,7 +9,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
+/*
+This class is responsible for the Frame which is actually displayed to the player.
+Its responsible for taking the inputs, and passing them through methods to Engine
+Its responsible for displaying the output to the player through a JFrame.
+Engine tells it, through add/remove image,
+ */
 public class BabaFrameSimple extends JFrame implements KeyListener {
 
     private Engine EngineReference;
@@ -127,7 +132,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 System.exit(0);//this is what ExitOnClose calls, so it works great
                 break;
             case KeyEvent.VK_Y://debug
-                EngineReference.newmemoryEater.setProperty(3,0,1);
+                EngineReference.newmemoryEater.setProperty(6,0,1);
                 System.out.println("hio");
                 break;
             case KeyEvent.VK_O://debug
@@ -187,8 +192,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-    }
+
 
     public void sdisplay() {
         display = !display;
@@ -210,7 +214,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         }
     }
 
-    public void ParserDisplay() throws IOException {
+    public void ParserDisplay() {
         clear();
         int[][][][] temp = EngineReference.newmemoryEater.peek();
         if (temp != null && EngineReference != null) {
@@ -218,9 +222,13 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 for (int j = 0; j < temp[i].length; j++) {
                     for (int k = 0; k < temp[i][j].length; k++) {
                         if (temp[i][j][k][0] != 0 && display) {
-                            if (temp[i][j][k][0]!=5){
-                            addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k]))), k);
+                            if (temp[i][j][k][0]>4){
+                                try {
+                                    addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k]))), k);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
                                 }
+                            }
 
                             //+1=connected right
                             //+2 = connected up
@@ -260,9 +268,12 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                                 }catch(Exception e){}
 
 
-                                addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k],around))), k);
+                                try {
+                                    addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k],around))), k);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
-
                         }
                     }
                 }
@@ -278,50 +289,62 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         int second;
         int third;
         switch (id) {
-            case 0:
-                first = "algae";
-                break;
-            case 1:
-                first = "arm";
-                break;
-            case 2:
-                first = "arrow";
-                break;
-            case 3:
-                first = "baba";
-                break;
             case 4:
-                first = "text_you";
+                first = "brick";
                 break;
             case 5:
-                first = "wall";
+                first = "flag";
                 break;
             case 6:
-                first = "keke";
+                first = "rock";
+                break;
+            case 7:
+                first = "baba";
+                break;
+            case 8:
+                first = "skull";
+                break;
+            case 9:
+                first = "tile";
+                break;
+            case 10:
+                first = "grass";
+                break;
+            case 11:
+                first = "flower";
+                break;
+            case 12:
+                first = "text_is";
                 break;
         }
         third = counter;
-        if (rotation >= 5) {
+        if (rotation >= 4) {
             second = walkingcycle;
         } else {
             second = rotation * 8 + walkingcycle;
         }
+        System.out.println(walkingcycle);
+        System.out.println(rotation);
+        System.out.println("Sprites/" + first + '_' + second + '_' + third + ".png");
 
         return "Sprites/" + first + '_' + second + '_' + third + ".png";
     }
     public String FileFinder(int[] x, boolean[] around) {
         int id = x[0];
-        int rotation = x[1];
-        int walkingcycle = x[2];
         String first = null;
         int second = 0;
         int third;
         switch (id) {
 
-            case 5:
+            case 1:
                 first = "wall";
                 break;
-
+            case 2:
+                first = "lava";
+                break;
+            case 3:
+                first = "water";
+                break;
         }
         third = counter;
         //this is genius
@@ -364,10 +387,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 if (counter > 3) {
                     counter = 1;
                 }
-                try {
-                    ParserDisplay();
-                } catch (IOException e) {
-                }
+                ParserDisplay();
                 repaint();
             }
         }

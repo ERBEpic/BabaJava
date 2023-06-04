@@ -1,0 +1,72 @@
+I need to write down documentation for GraphicsController because this is a mess
+
+FileFinder accepts 4 inputs. One it grabs on its own
+
+It combines everything into one final string, the path.
+It combines First, Second, And third. (first_second_third.png)
+One, id. Very simple. What the object is. No issues here.
+This is directly "First".
+Three, counter. *EVERYTHING* rotates on a 3 frame basis (Thank god.) Very simple.
+
+
+Second, is a mess. Its a combination of rotation and walking.
+
+Some objects rotate but dont walk. (Arrow).
+Some objects walk but dont rotate. (Bat)
+Some objects have a walk cycle of 4 (Arrow)
+BABA IS NOT A CYCLE OF 5. BABA_7, 15, and 23 are FAKE.
+
+
+
+To create stuff- ID, Rotation, Walking Cycle
+ID - Check Graphics controller, FileFinder
+Rotation - 0 = Right, 1=up, 2=left, 3=down, 4=Unrotatable right, 5=unrotatable up, 6=unrotatable left, 3=unrotatable down
+Walking Cycle - Not set yet. Leave as 0.
+
+Im gonna move this all into "BabaObjects"
+
+
+
+IDs
+case 0: first = "algae";break;
+            case 1: first = "arm";break;
+            case 2: first = "arrow";break;
+            case 3: first = "baba";break;
+            case 4: first = "text_you";break;
+            case 5: first = "wall";break;
+            case 6: first = "keke";break;
+
+
+PropertiesStorage[id][property]
+id 0= You
+id 1=push
+id 2=stop
+id 3 = defeat
+id 4 = move;
+
+
+
+How im storing memory
+
+Regular memoryeater stuff.
+[blah][blah][][][cool stuff]
+cool stuff is ordered like this.
+Per baba object, [0]=id,[1]=rotation,[2]=walkingcycle
+
+EFFICIENCY STUFF
+When im actually done, replace nested for loops with a hashmap for every babaobject. Refresh the hashmap on desync. Store positions of all babas at hashmap baba, maybe have a hashmap pointing to an array of arrays? ([]=each baba, [][]=properties of baba). It could also just be a fake hashmap, like instead of using a hashmap just use a big array)
+
+end of efficiency
+
+The best way to stop your code from breaking is take away the ability to break it
+
+//also im not just copying from chatgpt for the sake of copying from chatgpt i need it to work at least a bit to test the rest
+
+
+To create an object
+[0]=id
+[1]=rotation
+[2]=walkingcycle
+[3]=hasbeenmovedbyyou(leave 0)
+[4]=hasbeenmoved(leave 0, need to make work for move more than 1)
+
