@@ -1,13 +1,12 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-//Wait.. Does a 4D array with 5 1D elements take up much more space than a 1D array with 5 1D elements?
-//(EX.) Baba - keke- wall are stored in that order next to eachother. In the 4D array beacuse idk there is one will they take up that much more space?
-//An arraylist, of 2x2 arrays, of arraylists. Storing Baba objects? or integers?
-//Advantages of storing Baba Objects - I have no idea.
-//Advantages of storing ints. - Less memory. Easier to code (hopefully)
-//Lets do ints.
+/*
+This class is responsible for holding the previous state from memoryController, whether that be the starting state or previously calculated state is irrelevant.
+When it recieves an input, if it is a direct game input (IE up down left right wait), it moves (or doesnt) the player, and calculates one game cycle (if the player isnt dead) (Game cycle = playgame)
+It then outputs that resulting new state back into memoryController, as a new state. The next game cycle works off that state just made.
+It also directly talks with Babaframe, in add and remove images.
+*/
 public class Engine {
     //public static memoryController memoryEater = new memoryController();
     public newmemoryController newmemoryEater;
@@ -59,9 +58,10 @@ public class Engine {
         playGame();
     }
 
-    public void moveUndoNew(){//not work :(
-        if(this.newmemoryEater.getSize()>1){
-           levelStoragePush=this.newmemoryEater.pop();
+    public void moveUndoNew() {
+        if (newmemoryEater.getSize() > 1) {
+            newmemoryEater.pop();
+            this.levelStoragePush = newmemoryController.deepCopy(newmemoryEater.peek());
         }
     }
 
@@ -74,14 +74,19 @@ public class Engine {
         newmemoryEater.reset();
         int[][][][] x  = newmemoryEater.peek();
         newmemoryEater.allOut00();
-        levelStoragePush= x;
+        this.levelStoragePush= x;
+        System.out.println(levelStoragePush[0][0][0][0]);
+        babakey.clear();
 
 
     }//fixme, wasnt even wrking before new memory. Maybe it was the root of the problem?
 
 
+    public void refresh(){
+        //This is likely why reset/undo arent working.
+        babakey.clear();
 
-
+    }
 
 
 
@@ -125,7 +130,7 @@ public class Engine {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
                     if (levelStoragePush[i][j][k][0]!=0) {
 
-                        if((newmemoryEater.checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){
+                        if((this.newmemoryEater.checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){
 
                             switch(d){
                                 case 0:
@@ -200,14 +205,14 @@ public class Engine {
                         levelStoragePush[i][j][k][3]=0;
                         levelStoragePush[i][j][k][4]=0;
                     }}}}
-        newmemoryEater.push(levelStoragePush);
+        newmemoryEater.push(newmemoryController.deepCopy(levelStoragePush));
         System.out.println(levelStoragePush[0][0][0][0]+"play");
         try {
             babakey.ParserDisplay();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        levelStoragePush= newmemoryEater.peek();
+        levelStoragePush= newmemoryController.deepCopy(newmemoryEater.peek());
 
     }
     //Controller of update order
@@ -216,6 +221,8 @@ public class Engine {
         moveProperty();
         defeatProperty();
         winProperty();
+        System.out.println(newmemoryEater.getSize()+"sizetotal");
+        newmemoryEater.allOut00();
     }
     //Active properties (run on game cycle, IE shift&move, defeat& win, theyre all in UpdateOrder)
     public void moveProperty(){//ID 4, on gamecycle moves tiles in direction of rotation

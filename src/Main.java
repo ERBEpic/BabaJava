@@ -24,7 +24,7 @@ public class Main {
 
         //main.BabaEngine.babakey.setDelay((int) (main.BabaEngine.newmemoryEater.firstState.toString().length()*(scaler+1)));
         //main.BabaEngine.babakey.setDelay(100);
-        System.out.println(main.BabaEngine.newmemoryEater.firstState.toString().length()*(scaler+1));
+        //System.out.println(main.BabaEngine.newmemoryEater.firstState.toString().length()*(scaler+1));
     }
 }
 
