@@ -1,14 +1,6 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Stream;
 
 //Wait.. Does a 4D array with 5 1D elements take up much more space than a 1D array with 5 1D elements?
 //(EX.) Baba - keke- wall are stored in that order next to eachother. In the 4D array beacuse idk there is one will they take up that much more space?
@@ -39,7 +31,7 @@ public class Engine {
 
     private static int xTiles = 20;
     private static int yTiles = 20;
-    private int[][] propertiesStorage = new int[100][100];//[]=id,[][]=property
+
     private boolean isYou = true;
     private int Level;
 
@@ -73,25 +65,6 @@ public class Engine {
         }
     }
 
-    public void playGame(){
-        moveProperty();
-        for (int i = 0; i < levelStoragePush.length; i++) {
-            for (int j = 0; j < levelStoragePush[i].length; j++) {
-                for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
-                    if (levelStoragePush[i][j][k][0]!=0||levelStoragePush[i][j][k]!=null){
-                        levelStoragePush[i][j][k][3]=0;
-                        levelStoragePush[i][j][k][4]=0;
-                    }}}}
-        newmemoryEater.push(levelStoragePush);
-        System.out.println(levelStoragePush[0][0][0][0]+"play");
-        try {
-            babakey.ParserDisplay();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        levelStoragePush= newmemoryEater.peek();
-
-    }
 
     public static void main(String[] args) {
 
@@ -99,7 +72,9 @@ public class Engine {
 
     public void resetLevel(){//This is weirdly not working? Like nothing happens???
         newmemoryEater.reset();
-        levelStoragePush= newmemoryEater.peek();
+        int[][][][] x  = newmemoryEater.peek();
+        newmemoryEater.allOut00();
+        levelStoragePush= x;
 
 
     }//fixme, wasnt even wrking before new memory. Maybe it was the root of the problem?
@@ -132,7 +107,17 @@ public class Engine {
         maybe[x][y] = newArray;//above this just expands
         return maybe;
     }
-    public void moveBetter(int d){
+
+    private static HashMap<String, int[]> babaCache = new HashMap<String, int[]>();
+    public static ArrayList<Integer> thingsExisting = new ArrayList<Integer>();//MAKE SURE ONLY ONE OF EACH OBJECT IS IN THIS LIST
+    static{
+        for (int i = 0; i < 10; i++) {
+            thingsExisting.add(i);
+        }
+    }
+
+    //Special
+    public void youProperty(int d){
         int vertical=0;
         int horizontal=0;
         for (int i = 0; i < levelStoragePush.length; i++) {
@@ -140,7 +125,7 @@ public class Engine {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
                     if (levelStoragePush[i][j][k][0]!=0) {
 
-                        if((checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){
+                        if((newmemoryEater.checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){
 
                             switch(d){
                                 case 0:
@@ -171,6 +156,7 @@ public class Engine {
                             System.out.println(vertical+"vertical");
                             System.out.println(vertical+"vertical");
                             System.out.println(vertical+"vertical");
+                            levelStoragePush[i][j][k][1] =d%4;//rotation
 
                             if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {
 
@@ -205,8 +191,34 @@ public class Engine {
         }
         playGame();
     }
-//todo also make it so rotation changes even IF the movement doesnt occur
-    public void moveProperty(){
+    public void playGame(){
+        updateOrder();
+        for (int i = 0; i < levelStoragePush.length; i++) {
+            for (int j = 0; j < levelStoragePush[i].length; j++) {
+                for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
+                    if (levelStoragePush[i][j][k][0]!=0||levelStoragePush[i][j][k]!=null){
+                        levelStoragePush[i][j][k][3]=0;
+                        levelStoragePush[i][j][k][4]=0;
+                    }}}}
+        newmemoryEater.push(levelStoragePush);
+        System.out.println(levelStoragePush[0][0][0][0]+"play");
+        try {
+            babakey.ParserDisplay();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        levelStoragePush= newmemoryEater.peek();
+
+    }
+    //Controller of update order
+    public void updateOrder(){
+        shiftProperty();
+        moveProperty();
+        defeatProperty();
+        winProperty();
+    }
+    //Active properties (run on game cycle, IE shift&move, defeat& win, theyre all in UpdateOrder)
+    public void moveProperty(){//ID 4, on gamecycle moves tiles in direction of rotation
         int rotation = 0;
         int vertical=0;
         int horizontal=0;
@@ -215,7 +227,7 @@ public class Engine {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
                     if (levelStoragePush[i][j][k][0]!=0) {
 
-                        if((checkProperty(levelStoragePush[i][j][k][0],4)>0)&&levelStoragePush[i][j][k][4]<1){
+                        if((newmemoryEater.checkProperty(levelStoragePush[i][j][k][0],4)>0)&&levelStoragePush[i][j][k][4]<1){
                             rotation = levelStoragePush[i][j][k][1];
                             System.out.println(rotation+"rotation");
                             System.out.println(rotation+"rotation");
@@ -280,20 +292,10 @@ public class Engine {
             }
         }
     }
-    private static HashMap<String, int[]> babaCache = new HashMap<String, int[]>();
-    public static ArrayList<Integer> thingsExisting = new ArrayList<Integer>();//MAKE SURE ONLY ONE OF EACH OBJECT IS IN THIS LIST
-    static{
-        for (int i = 0; i < 10; i++) {
-            thingsExisting.add(i);
-        }
-    }
+    public void shiftProperty(){}
+    public void defeatProperty(){}
+    public void winProperty(){}
+    //Reactive properties (stop, float, push, they are not in UpdateOrder)
 
-    public int checkProperty(int id, int property){//TODO ALL OF PROPERTIESSTORAGE NEEDS TO GO INTO MEMORYCONTROLLER
-        return propertiesStorage[id][property];
-    }
-    public void setProperty(int id, int prop, int sign){
-        propertiesStorage[id][prop]=sign;
-    }
-
-
+    //Misc
 }

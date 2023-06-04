@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class newmemoryController {
     private Engine EngineReference;
     static public int[][][][] firstState = new int[40][40][4][5];
-    private static ArrayDeque<int[][][][]> memoryStack = new ArrayDeque<int[][][][]>();
+    private ArrayDeque<int[][][][]> memoryStack = new ArrayDeque<int[][][][]>();
     public newmemoryController(Engine engine) throws IOException, ClassNotFoundException {
         EngineReference = engine;
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream("level1.data"));//todo add so multiple levels not that hard
@@ -20,22 +20,15 @@ public class newmemoryController {
         EngineReference.levelStoragePush=firstState;
 
     }
-
-    public static void main(String[] args) {
-
-    }
     public int getSize(){return memoryStack.size();}
 
-    public int[][][][] pullLatestState(){
-        int[][][][] x = new int[0][][][];//this is the shortest way to return an int array at least from what i can guess
-        return x;
-    }
     public int[][][][] pop(){return memoryStack.pop();}
     public int[][][][] peek(){return memoryStack.peek();}//no need for long names if the people who made Arraydeque did it right the first time
     public void push(int[][][][] x){memoryStack.push(x);}
 
     public void reset(){
-        memoryStack = new ArrayDeque<int[][][][]>();
+
+        while(true){try{memoryStack.pop();}catch(Exception e){break;}}
         memoryStack.push(firstState);
     }
     public void allOut00(){
@@ -44,5 +37,12 @@ public class newmemoryController {
             System.out.print(value);
         }
         System.out.println(" ");
+    }
+    private int[][] propertiesStorage = new int[100][100];//[]=id,[][]=property
+    public int checkProperty(int id, int property){//TODO ALL OF PROPERTIESSTORAGE NEEDS TO GO INTO MEMORYCONTROLLER
+        return propertiesStorage[id][property];
+    }
+    public void setProperty(int id, int prop, int sign){
+        propertiesStorage[id][prop]=sign;
     }
 }

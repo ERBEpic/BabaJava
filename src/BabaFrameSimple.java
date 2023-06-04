@@ -3,7 +3,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -66,7 +65,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         counterUpdater counteryay = new counterUpdater();
 
         System.out.println(insets.bottom+"bottom");
-        System.out.println(insets.top+"top");
+        System.out.println(insets.top+"top");//these are not needed, but debug
         System.out.println(insets.left+"left");
         System.out.println(insets.right+"right");
 
@@ -128,7 +127,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 System.exit(0);//this is what ExitOnClose calls, so it works great
                 break;
             case KeyEvent.VK_Y://debug
-                EngineReference.setProperty(3,0,1);
+                EngineReference.newmemoryEater.setProperty(3,0,1);
                 System.out.println("hio");
                 break;
             case KeyEvent.VK_O://debug
@@ -142,23 +141,23 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 break;
             case KeyEvent.VK_UP:
                 //EngineReference.moveYouUp();
-                EngineReference.moveBetter(1);
+                EngineReference.youProperty(1);
                 break;
             case KeyEvent.VK_DOWN:
                 //EngineReference.moveYouDown();
-                EngineReference.moveBetter(3);
+                EngineReference.youProperty(3);
                 break;
             case KeyEvent.VK_LEFT:
                 //EngineReference.moveYouLeft();
-                EngineReference.moveBetter(2);
+                EngineReference.youProperty(2);
                 break;
             case KeyEvent.VK_RIGHT:
                 //EngineReference.moveYouRight();
-                EngineReference.moveBetter(0);
+                EngineReference.youProperty(0);
                 break;
             case KeyEvent.VK_SPACE:
                 EngineReference.moveWait();
-                EngineReference.setProperty(6, 4, 1);
+                EngineReference.newmemoryEater.setProperty(6, 4, 1);//debug
                 System.out.println("Keke is movE!");
                 break;
             case KeyEvent.VK_R:
