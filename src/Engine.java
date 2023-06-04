@@ -132,9 +132,11 @@ public class Engine {
                             System.out.println(vertical+"vertical");
                             System.out.println(vertical+"vertical");
                             System.out.println(vertical+"vertical");
-                            if (levelStoragePush[i][j][k][1]>=4){levelStoragePush[i][j][k][1] =(d%4)+4;//rotation}else {
+                            if (levelStoragePush[i][j][k][1]>=4){levelStoragePush[i][j][k][1] =(d%4)+4;//rotation
+                                }else {
                                 levelStoragePush[i][j][k][1] = d%4;//rotation
                             }
+                            System.out.println();
                             if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {//If we are not going out of bounds,
                                 int [] tempe = {i,j,horizontal,vertical};
                                 if(ifTileIsMoveableTo(tempe)) {
@@ -148,11 +150,12 @@ public class Engine {
                                     }//above here is the code to find an open Z position. Working :)
 
 
-                                    levelStoragePush[i + horizontal][j + vertical][temp][0] = levelStoragePush[i][j][k][0];//Copy ID                                levelStoragePush[i+1][j][temp][1]=3;
-                                    levelStoragePush[i + horizontal][j + vertical][temp][1] = levelStoragePush[i][j][k][1];//rotation
+                                    levelStoragePush[i+horizontal][j+vertical][temp][0] = levelStoragePush[i][j][k][0];//Copy ID                                levelStoragePush[i+1][j][temp][1]=3;
+                                    levelStoragePush[i+horizontal][j+vertical][temp][1] = levelStoragePush[i][j][k][1];//rotation
 
                                     if (levelStoragePush[i][j][k][2] != 0) {
                                         levelStoragePush[i + horizontal][j + vertical][temp][2] = levelStoragePush[i][j][k][2] + 1;
+                                        if(levelStoragePush[i+horizontal][j+vertical][temp][2]==5){levelStoragePush[i+horizontal][j+vertical][temp][2]=1;}
                                     }//walkingcycle
                                     else {
                                         levelStoragePush[i + horizontal][j + vertical][temp][2] = 0;

@@ -132,8 +132,11 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 System.exit(0);//this is what ExitOnClose calls, so it works great
                 break;
             case KeyEvent.VK_Y://debug
-                EngineReference.newmemoryEater.setProperty(6,0,1);
-                EngineReference.newmemoryEater.setProperty(1,4,1);
+                EngineReference.newmemoryEater.setProperty(7,4,1);//Rock is move
+                EngineReference.newmemoryEater.setProperty(6,4,1);//Rock is move
+                EngineReference.newmemoryEater.setProperty(6,0,1);//Rock is move
+
+                EngineReference.newmemoryEater.setProperty(1,0,1);//Wall is stop
 
                 System.out.println("hio");
                 break;
@@ -228,6 +231,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                                 try {
                                     addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k]))), k);
                                 } catch (IOException e) {
+                                    System.out.println("1: Cant read file "+FileFinder(temp[i][j][k]));
                                     throw new RuntimeException(e);
                                 }
                             }
@@ -273,6 +277,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                                 try {
                                     addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k],around))), k);
                                 } catch (IOException e) {
+                                    System.out.println("2: Cant read file "+FileFinder(temp[i][j][k], around));
                                     throw new RuntimeException(e);
                                 }
                             }
@@ -284,6 +289,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     }
 
     public String FileFinder(int[] x) {
+        System.out.println(x[1]+"rotation");
         int id = x[0];
         int rotation = x[1];
         int walkingcycle = x[2];
@@ -318,8 +324,34 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             case 12:
                 first = "text_is";
                 break;
+            case 13:
+                first = "text_you";
+                break;
+            case 14:
+                first = "text_win";
+                break;
+            case 15:
+                first = "text_defeat";
+                break;
+            case 16:
+                first = "text_push";
+                break;
+            case 17:
+                first = "text_stop";
+                break;
+            case 18:
+                first = "text_hot";
+                break;
+            case 19:
+                first = "text_melt";
+                break;
+            case 20:
+                first = "text_sink";
+                break;
         }
         third = counter;
+        if (walkingcycle==0){return "Sprites/" + first +  "_0_" + third + ".png";}
+        walkingcycle--;
         if (rotation >= 4) {
             second = walkingcycle;
         } else {
@@ -342,10 +374,13 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 first = "wall";
                 break;
             case 2:
-                first = "lava";
+                first = "cloud";//Lava is recolored water. If i recolor, fix.
                 break;
             case 3:
                 first = "water";
+                break;
+            case 4:
+                first = "brick";
                 break;
         }
         third = counter;
@@ -390,7 +425,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                     counter = 1;
                 }
                 ParserDisplay();
-                repaint();
+                //repaint(); Unneeded?
             }
         }
 
