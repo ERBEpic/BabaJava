@@ -103,7 +103,7 @@ public class Engine {
 
                         if((this.newmemoryEater.checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){
 
-                            switch(d){
+                            switch(d){//This converts rotation from its udlr to H/V movements.
                                 case 0:
                                 case 4:
                                     vertical=1;
@@ -135,35 +135,42 @@ public class Engine {
                             if (levelStoragePush[i][j][k][1]>=4){levelStoragePush[i][j][k][1] =(d%4)+4;//rotation}else {
                                 levelStoragePush[i][j][k][1] = d%4;//rotation
                             }
-                            if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {
+                            if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {//If we are not going out of bounds,
+                                int [] tempe = {i,j,horizontal,vertical};
+                                if(ifTileIsMoveableTo(tempe)) {
 
-                                int temp =getOpenIndex(i+horizontal,j+vertical,levelStoragePush);
-                                System.out.println(temp);
-                                while (temp==-1){//this should never run more than once but its nice to have it freeze when something goes wrong
-                                    levelStoragePush=expandZTile(i+horizontal,j+vertical,levelStoragePush);
-                                    temp = getOpenIndex(i+horizontal,j+vertical,levelStoragePush);
+                                    int temp = getOpenIndex(i + horizontal, j + vertical, levelStoragePush);
                                     System.out.println(temp);
-                                }//above here is the code to find an open Z position. Working :)
+                                    while (temp == -1) {//this should never run more than once but its nice to have it freeze when something goes wrong
+                                        levelStoragePush = expandZTile(i + horizontal, j + vertical, levelStoragePush);
+                                        temp = getOpenIndex(i + horizontal, j + vertical, levelStoragePush);
+                                        System.out.println(temp);
+                                    }//above here is the code to find an open Z position. Working :)
 
 
-                                levelStoragePush[i+horizontal][j+vertical][temp][0] = levelStoragePush[i][j][k][0];//Copy ID                                levelStoragePush[i+1][j][temp][1]=3;
-                                levelStoragePush[i+horizontal][j+vertical][temp][1] =levelStoragePush[i][j][k][1];//rotation
+                                    levelStoragePush[i + horizontal][j + vertical][temp][0] = levelStoragePush[i][j][k][0];//Copy ID                                levelStoragePush[i+1][j][temp][1]=3;
+                                    levelStoragePush[i + horizontal][j + vertical][temp][1] = levelStoragePush[i][j][k][1];//rotation
 
-                                if(levelStoragePush[i][j][k][2]!=0){
-                                levelStoragePush[i+horizontal][j+vertical][temp][2]=levelStoragePush[i][j][k][2]+1;}//walkingcycle
-                                else{levelStoragePush[i+horizontal][j+vertical][temp][2]=0;}
-                                levelStoragePush[i+horizontal][j+vertical][temp][3]++;//hasbeenmoved
+                                    if (levelStoragePush[i][j][k][2] != 0) {
+                                        levelStoragePush[i + horizontal][j + vertical][temp][2] = levelStoragePush[i][j][k][2] + 1;
+                                    }//walkingcycle
+                                    else {
+                                        levelStoragePush[i + horizontal][j + vertical][temp][2] = 0;
+                                    }
+                                    levelStoragePush[i + horizontal][j + vertical][temp][3]++;//hasbeenmoved
 
 
-                                if (levelStoragePush[i+horizontal][j+vertical][temp][2]>4){levelStoragePush[i+horizontal][j+vertical][temp][2]=1;}
-                                levelStoragePush[i][j][k][0]=0;
-                                levelStoragePush[i][j][k][1]=0;
-                                levelStoragePush[i][j][k][2]=0;
-                                levelStoragePush[i][j][k][3]=0;
-                                levelStoragePush[i][j][k][4]=0;
-                                System.out.println(i+" "+j+" "+k);
-                                //babakey.removeImage(i,j,k); (This doesnt actually do anything)
-
+                                    if (levelStoragePush[i + horizontal][j + vertical][temp][2] > 4) {
+                                        levelStoragePush[i + horizontal][j + vertical][temp][2] = 1;
+                                    }
+                                    levelStoragePush[i][j][k][0] = 0;
+                                    levelStoragePush[i][j][k][1] = 0;
+                                    levelStoragePush[i][j][k][2] = 0;
+                                    levelStoragePush[i][j][k][3] = 0;
+                                    levelStoragePush[i][j][k][4] = 0;
+                                    System.out.println(i + " " + j + " " + k);
+                                    //babakey.removeImage(i,j,k); (This doesnt actually do anything)
+                                }
                             }
                         }}
                 }
@@ -188,7 +195,7 @@ public class Engine {
     }
     //Controller of update order
     public void updateOrder(){
-        moveProperty();
+        //moveProperty();
         defeatProperty();
         winProperty();
         System.out.println(newmemoryEater.getSize()+"sizetotal");
@@ -251,8 +258,8 @@ public class Engine {
                                 levelStoragePush[i+horizontal][j+vertical][temp][1] =levelStoragePush[i][j][k][1];
                                 levelStoragePush[i+horizontal][j+vertical][temp][2] = levelStoragePush[i][j][k][2] + 1;
                                 levelStoragePush[i+horizontal][j+vertical][temp][4]++;
-                                if (levelStoragePush[i+horizontal][j+vertical][temp][2] > 3) {
-                                    levelStoragePush[i+horizontal][j+vertical][temp][2] = 0;
+                                if (levelStoragePush[i+horizontal][j+vertical][temp][2] > 4) {
+                                    levelStoragePush[i+horizontal][j+vertical][temp][2] = 1;
                                 }
 
 
@@ -272,6 +279,23 @@ public class Engine {
     public void defeatProperty(){}
     public void winProperty(){}
     //Reactive properties (stop, float, push, they are not in UpdateOrder)
+    public boolean checkPushProperty(int[] prop){//Takes an x,y, horizontal, and vertical movement. Tries to move from that place. Returns true if and when the tile is moveable to.
 
+        return true;
+    }
+    public boolean checkStopProperty(int[] coordinates){//takes an x,y, finds if anything there is stop. If it is, returns true.
+        for (int i = 0; i < levelStoragePush[coordinates[0]][coordinates[1]].length; i++) {
+            if (newmemoryEater.checkProperty(levelStoragePush[coordinates[0]][coordinates[1]][i][0],4)>0){
+                return true;
+            }//If trying to move into something that is stop, stop immediately.
+        }
+        return false;
+    }
     //Misc
+    public boolean ifTileIsMoveableTo(int[] properties){//Takes an x,y, horizontal and vertical movement. Tries to push from that place. Returns true if the tile is available to move to.
+        //WE ASSUME THAT WE ARE NOT PUSHING ONTO BORDERS, at least for first check
+
+        int[] temp = {properties[0]+properties[2],properties[1]+properties[3]};
+        if (checkStopProperty(temp)){return false;}//If the tile you are moving into is stop, give up.
+        return true;}
 }

@@ -133,6 +133,8 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 break;
             case KeyEvent.VK_Y://debug
                 EngineReference.newmemoryEater.setProperty(6,0,1);
+                EngineReference.newmemoryEater.setProperty(1,4,1);
+
                 System.out.println("hio");
                 break;
             case KeyEvent.VK_O://debug

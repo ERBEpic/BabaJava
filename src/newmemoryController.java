@@ -13,7 +13,7 @@ public class newmemoryController {
     private ArrayDeque<int[][][][]> memoryStack = new ArrayDeque<int[][][][]>();
     public newmemoryController(Engine engine) throws IOException, ClassNotFoundException {
         EngineReference = engine;
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("level1.data"));//todo add so multiple levels not that hard
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("levels/level1.data"));//todo add so multiple levels not that hard
         Object obj = ois.readObject();
         ois.close();
         firstState = (int[][][][])obj;
