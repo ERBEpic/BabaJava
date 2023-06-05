@@ -489,9 +489,13 @@ public class Engine {
     }
     public void setProperty(int id, int prop, int sign){
         if (prop>7){//If its not actually a property and instead is a noun->noun transformation
-            System.out.println("Le Transformation");
+            for (int i = 0; i < levelStoragePush.length; i++) {
+                for (int j = 0; j < levelStoragePush[i].length; j++) {
+                    for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
+                        if (levelStoragePush[i][j][k][0]==id){levelStoragePush[i][j][k][0]=prop-7;}
+                    }}}
         }else{
         propertiesStorage[id][prop]=sign;//This feels like it should not be allowed
     }}
-
+//TODO Fix the fact that unrotatableness and walkingcycle transfer over when transforming a noun. Maybe make the system check the ID of the object and...not a janky way through the stats themselves?
 }
