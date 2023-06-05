@@ -132,14 +132,10 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 System.exit(0);//this is what ExitOnClose calls, so it works great
                 break;
             case KeyEvent.VK_Y://debug
-                EngineReference.newmemoryEater.setProperty(7,0,1);//Baba is you
-                EngineReference.newmemoryEater.setProperty(1,3,1);//Wall is push
-                EngineReference.newmemoryEater.setProperty(4,2,1);//Brick is defeat
-                EngineReference.newmemoryEater.setProperty(2,1,1);//Lava is win
-
-
-
-                System.out.println("hio");
+                EngineReference.setProperty(7,0,1);//Baba is you
+                EngineReference.setProperty(1,3,1);//Wall is push
+                EngineReference.setProperty(4,2,1);//Brick is defeat
+                EngineReference.setProperty(2,1,1);//Lava is win
                 break;
             case KeyEvent.VK_O://debug
                 seizure=!seizure;
@@ -148,28 +144,29 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 this.clear();
                 break;
             case KeyEvent.VK_I://debug
-                this.sdisplay();
+                this.sdisplay();//Toggles the display
                 break;
             case KeyEvent.VK_UP:
-                //EngineReference.moveYouUp();
+            case KeyEvent.VK_W:
                 EngineReference.youProperty(1);
                 break;
             case KeyEvent.VK_DOWN:
-                //EngineReference.moveYouDown();
+            case KeyEvent.VK_S:
                 EngineReference.youProperty(3);
                 break;
             case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
                 //EngineReference.moveYouLeft();
                 EngineReference.youProperty(2);
                 break;
             case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
                 //EngineReference.moveYouRight();
                 EngineReference.youProperty(0);
                 break;
             case KeyEvent.VK_SPACE:
                 EngineReference.moveWait();
-                EngineReference.newmemoryEater.setProperty(6, 4, 1);//debug
-                System.out.println("Keke is movE!");
+                System.out.println("Space pressed");
                 break;
             case KeyEvent.VK_R:
                 System.out.println("R Pressed");
@@ -290,7 +287,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     }
 
     public String FileFinder(int[] x) {
-        System.out.println(x[1]+"rotation");
         int id = x[0];
         int rotation = x[1];
         int walkingcycle = x[2];
@@ -349,6 +345,40 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             case 20:
                 first = "text_sink";
                 break;
+            case 21:
+                first = "text_wall";
+                break;
+            case 22:
+                first = "text_lava";
+                break;
+            case 23:
+                first = "text_water";
+                break;
+            case 24:
+                first = "text_brick";
+                break;
+            case 25:
+                first = "text_flag";
+                break;
+            case 26:
+                first = "text_rock";
+                break;
+            case 27:
+                first = "text_baba";
+                break;
+            case 28:
+                first = "text_skull";
+                break;
+            case 29:
+                first = "text_tile";
+                break;
+            case 30:
+                first = "text_grass";
+                break;
+            case 31:
+                first = "text_flower";
+                break;
+                //I really do regret not asking GPT to type this all up for me
         }
         third = counter;
         if (walkingcycle==0){return "Sprites/" + first +  "_0_" + third + ".png";}
@@ -358,9 +388,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         } else {
             second = rotation * 8 + walkingcycle;
         }
-        System.out.println(walkingcycle);
-        System.out.println(rotation);
-        System.out.println("Sprites/" + first + '_' + second + '_' + third + ".png");
+
 
         return "Sprites/" + first + '_' + second + '_' + third + ".png";
     }

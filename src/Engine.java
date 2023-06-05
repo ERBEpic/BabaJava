@@ -18,7 +18,56 @@ public class Engine {
         babakey = new BabaFrameSimple(20,20);
         babakey.setEngine(this);//I kinda guessed you could just pass along (this) but Im glad that it works
         //^^ also not every frame needs an engine so its changeable (this isnt just inconsistent coding)
+        for (int i = 0; i < levelStoragePush.length; i++) {
+            for (int j = 0; j < levelStoragePush[i].length; j++) {
+                for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
+                    if (levelStoragePush[i][j][k][0]!=0||levelStoragePush[i][j][k]!=null){
+                        levelStoragePush[i][j][k][3]=0;
+                        levelStoragePush[i][j][k][4]=0;
 
+                        //adding in here because its already a nested for loop the code to refresh the rules
+                        if (levelStoragePush[i][j][k][0]==12){//Check around it for anything that makes a sentence, add that to properties storage, push yada yada
+                            //NO TEXT STACKING, so I dont have to worry about multiple nouns or verb or both or some stacked.
+                            int noun = 0;//if this isnt a noun :(
+                            int verb = 0;
+                            for (int l = 0; l < levelStoragePush[i-1][j].length; l++) {
+                                if (levelStoragePush[i - 1][j][l][0] >= 21) {//21 is the start of object words/nouns
+                                    noun = levelStoragePush[i - 1][j][l][0];
+                                    l=102109;
+                                }
+                            }
+                            for (int l = 0; l < levelStoragePush[i+1][j].length; l++) {
+                                if (levelStoragePush[i+1][j][l][0] >=13&&levelStoragePush[i+1][j][l][0]<=20) {//12 is is, doesnt count. 20 is sink. 21 is wall.
+                                    verb = levelStoragePush[i+1][j][l][0];
+                                    l=102109;
+                                }
+                            }
+                            try{setProperty(noun-20,verb-13,1);}catch (Exception e){}
+
+                            System.out.println(noun-20+" "+(verb-13));
+
+                            noun = 0; verb = 0;
+
+                            for (int l = 0; l < levelStoragePush[i][j-1].length; l++) {
+                                if(levelStoragePush[i][j-1][l][0]>=21){
+                                    noun=levelStoragePush[i][j-1][l][0];
+                                    l=102109;
+                                }
+                            }
+                            for (int l = 0; l < levelStoragePush[i][j+1].length; l++) {
+                                if (levelStoragePush[i][j+1][l][0] >=13&&levelStoragePush[i][j+1][l][0]<=20) {//12 is is, doesnt count. 20 is sink. 21 is wall.
+                                    verb = levelStoragePush[i][j+1][l][0];
+                                    l=102109;
+                                }
+                            }
+                            try{setProperty(noun-20,verb-13,1);}catch (Exception e){}
+                            System.out.println(noun-20+" "+(verb-13));
+                        }
+
+                    }}}}
+        for (int i = 0; i < 20; i++) {
+            setProperty(12+i,3,1);
+        }
     }
 
     //it should basically never crash but its easier to solve the try catch problems here
@@ -47,7 +96,10 @@ public class Engine {
         if (newmemoryEater.getSize() > 1) {
             newmemoryEater.pop();
             this.levelStoragePush = newmemoryController.deepCopy(newmemoryEater.peek());
+            newmemoryEater.popreties();
+            propertiesStorage=newmemoryController.deepCopy(newmemoryEater.peekreties());
         }
+
     }
 
 
@@ -58,7 +110,6 @@ public class Engine {
         int[][][][] x  = newmemoryEater.peek();
         newmemoryEater.allOut00();
         this.levelStoragePush= x;
-        System.out.println(levelStoragePush[0][0][0][0]);
         babakey.clear();
 
 
@@ -105,62 +156,50 @@ public class Engine {
                     if (levelStoragePush[i][j][k][0]!=0) {
 
 
-                        if((this.newmemoryEater.checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){
+                        if((this.checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){
 
                             switch(d){//This converts rotation from its udlr to H/V movements.
                                 case 0:
                                 case 4:
                                     vertical=1;
-                                    System.out.println("vertitcal1");
                                     break;
                                 case 1:
                                 case 5:
                                     horizontal=-1;
-                                    System.out.println("horizontal-1");
 
                                     break;
                                 case 3:
                                 case 7:
                                     horizontal=1;
-                                    System.out.println("horizontal1");
                                     break;
                                 case 2:
                                 case 6:
                                     vertical=-1;
-                                    System.out.println("vertitcal-1");
                                     break;
                             }
-                            System.out.println(horizontal+"horizontal");
-                            System.out.println(horizontal+"horizontal");
-                            System.out.println(horizontal+"horizontal");
-                            System.out.println(vertical+"vertical");
-                            System.out.println(vertical+"vertical");
-                            System.out.println(vertical+"vertical");
+
                             if (levelStoragePush[i][j][k][1]>=4){levelStoragePush[i][j][k][1] =(d%4)+4;//rotation
                                 }else {
                                 levelStoragePush[i][j][k][1] = d%4;//rotation
                             }
-                            System.out.println();
                             if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {//If we are not going out of bounds,
                                 int [] tempe = {i,j,horizontal,vertical};
                                 if(ifTileIsMoveableTo(tempe)) {
 
                                     int temp = getOpenIndex(i + horizontal, j + vertical, levelStoragePush);
-                                    System.out.println(temp);
                                     while (temp == -1) {//this should never run more than once but its nice to have it freeze when something goes wrong
                                         levelStoragePush = expandZTile(i + horizontal, j + vertical, levelStoragePush);
                                         temp = getOpenIndex(i + horizontal, j + vertical, levelStoragePush);
-                                        System.out.println(temp);
                                     }//above here is the code to find an open Z position. Working :)
 
                                     levelStoragePush[i+horizontal][j+vertical][temp][0] = levelStoragePush[i][j][k][0];//Copy ID
 
                                     for (int l = 0; l < levelStoragePush[i+horizontal][j+vertical].length; l++) {
                                         //Check if ANYTHING is defeat. Including yourself.
-                                        if(newmemoryEater.checkProperty(levelStoragePush[i+horizontal][j+vertical][l][0],2)>0){
+                                        if(checkProperty(levelStoragePush[i+horizontal][j+vertical][l][0],2)>0){
                                             defeated=true;
                                         }//If something is defeated, dont move to the next tile, only remove from previous.
-                                        if(newmemoryEater.checkProperty(levelStoragePush[i+horizontal][j+vertical][l][0],1)>0){
+                                        if(checkProperty(levelStoragePush[i+horizontal][j+vertical][l][0],1)>0){
                                             won=true;
                                         }
                                     }
@@ -194,7 +233,6 @@ public class Engine {
                                     levelStoragePush[i][j][k][2] = 0;
                                     levelStoragePush[i][j][k][3] = 0;
                                     levelStoragePush[i][j][k][4] = 0;
-                                    System.out.println(i + " " + j + " " + k);
                                     //babakey.removeImage(i,j,k); (This doesnt actually do anything)
                                     defeated=false;
                                     if(won){
@@ -221,24 +259,70 @@ public class Engine {
     }
     public void playGame(){
         updateOrder();
+        propertiesStorage = new int[100][100];
         for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
                     if (levelStoragePush[i][j][k][0]!=0||levelStoragePush[i][j][k]!=null){
                         levelStoragePush[i][j][k][3]=0;
                         levelStoragePush[i][j][k][4]=0;
+//below here is code for re checking the rules of the game.
+                        //adding in here because its already a nested for loop the code to refresh the rules
+                        if (levelStoragePush[i][j][k][0]==12){//Check around it for anything that makes a sentence, add that to properties storage, push yada yada
+                           //NO TEXT STACKING, so I dont have to worry about multiple nouns or verb or both or some stacked.
+                            int noun = 0;//if this isnt a noun :(
+                            int verb = 0;
+                            try{for (int l = 0; l < levelStoragePush[i-1][j].length; l++) {
+                                if (levelStoragePush[i - 1][j][l][0] >= 21) {//21 is the start of object words/nouns
+                                    noun = levelStoragePush[i - 1][j][l][0];
+                                    l=102109;
+                                }
+                            }}catch(Exception e){}
+
+                            try{for (int l = 0; l < levelStoragePush[i+1][j].length; l++) {
+                                if (levelStoragePush[i+1][j][l][0] >=13) {//12 is is, doesnt count. 20 is sink. 21 is wall. Why isnt wall ignored? Because we can simplify a bit, by making setProperty also transform
+                                    verb = levelStoragePush[i+1][j][l][0];
+                                    l=102109;
+                                }
+                            }}catch(Exception e){}
+                            try{setProperty(noun-20,verb-13,1);}catch (Exception e){}
+                            
+                            System.out.println(noun-20+" "+(verb-13));
+                            
+                            noun = 0; verb = 0;
+                            
+                            try{for (int l = 0; l < levelStoragePush[i][j-1].length; l++) {
+                                if(levelStoragePush[i][j-1][l][0]>=21){
+                                    noun=levelStoragePush[i][j-1][l][0];
+                                    l=102109;
+                                }
+                            }}catch(Exception e){}
+                            try{for (int l = 0; l < levelStoragePush[i][j+1].length; l++) {
+                                if (levelStoragePush[i][j+1][l][0] >=13) {
+                                    verb = levelStoragePush[i][j+1][l][0];
+                                    l=102109;
+                                }
+                            }}catch(Exception e){}
+                            try{setProperty(noun-20,verb-13,1);}catch (Exception e){}
+                            System.out.println(noun-20+" "+(verb-13));
+                        }
+//above here
                     }}}}
+        for (int i = 0; i < 20; i++) {
+            setProperty(12+i,3,1);
+        }
+
         newmemoryEater.push(newmemoryController.deepCopy(levelStoragePush));
-        System.out.println(levelStoragePush[0][0][0][0]+"play");
         babakey.ParserDisplay();
         levelStoragePush= newmemoryController.deepCopy(newmemoryEater.peek());
+        //and AFTER everything is done
+
+        newmemoryEater.pushreties(newmemoryController.deepCopy(propertiesStorage));//Does this come before or after the rules are checked? Please guess and check. Thank you.
 
     }
     //Controller of update order
     public void updateOrder(){
         moveProperty();
-        defeatProperty();
-        winProperty();
         System.out.println(newmemoryEater.getSize()+"sizetotal");
         newmemoryEater.allOut00();
     }
@@ -252,11 +336,9 @@ public class Engine {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
                     if (levelStoragePush[i][j][k][0]!=0) {
 
-                        if((newmemoryEater.checkProperty(levelStoragePush[i][j][k][0],4)>0)&&levelStoragePush[i][j][k][4]<1){
+                        if((checkProperty(levelStoragePush[i][j][k][0],8)>0)&&levelStoragePush[i][j][k][4]<1){
                             rotation = levelStoragePush[i][j][k][1];
-                            System.out.println(rotation+"rotation");
-                            System.out.println(rotation+"rotation");
-                            System.out.println(rotation+"rotation");
+
                             switch(rotation){
                                 case 0:
                                 case 4:
@@ -275,22 +357,15 @@ public class Engine {
                                     vertical=-1;
                                     break;
                             }
-                            System.out.println(horizontal+"horizontal");
-                            System.out.println(horizontal+"horizontal");
-                            System.out.println(horizontal+"horizontal");
-                            System.out.println(vertical+"vertical");
-                            System.out.println(vertical+"vertical");
-                            System.out.println(vertical+"vertical");
+
 
                             if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {
 
 
                                 int temp =getOpenIndex(i+horizontal,j+vertical,levelStoragePush);
-                                System.out.println(temp);
                                 while (temp==-1){//this should never run more than once but its nice to have it freeze when something goes wrong
                                     levelStoragePush=expandZTile(i+horizontal,j+vertical,levelStoragePush);
                                     temp = getOpenIndex(i+horizontal,j+vertical,levelStoragePush);
-                                    System.out.println(temp);
                                 }//above here is the code to find an open Z position. Working :)
 
 
@@ -309,7 +384,6 @@ public class Engine {
                                 levelStoragePush[i][j][k][2] = 0;
                                 levelStoragePush[i][j][k][3] = 0;
                                 levelStoragePush[i][j][k][4] = 0;
-                                System.out.println(i + " " + j + " " + k);
                                 //babakey.removeImage(i, j, k);(Not doing anything)
                             }
                         }}
@@ -317,9 +391,7 @@ public class Engine {
             }
         }
     }
-    public void defeatProperty(){//Defeat and win should be in moveYou
-    }
-    public void winProperty(){}
+
     //Reactive properties (stop, float, push, they are not in UpdateOrder)
     public boolean checkPushProperty(int[] properties){
         //Takes an x,y, horizontal, and vertical movement. Tries to move from that place.
@@ -334,7 +406,7 @@ public class Engine {
         if (x+horizontal!=-1&&x+horizontal!=getxTiles()&&y+vertical!=-1&&y+vertical!=getyTiles()){//If it goes out of bounds, go to else below, false.
         if (checkStopProperty(temp)){return false;}//Is there something that is stop?
             for (int i = 0; i < levelStoragePush[properties[0]+properties[2]][properties[1]+properties[3]].length; i++) {
-            if(newmemoryEater.checkProperty(levelStoragePush[properties[0]+properties[2]][properties[1]+properties[3]][i][0],3)>0){
+            if(checkProperty(levelStoragePush[properties[0]+properties[2]][properties[1]+properties[3]][i][0],3)>0){
                 thereispush=true;
                 int[] temp2 = {x+horizontal,y+vertical,horizontal,vertical};
                 if(!checkPushProperty(temp2)){return false;}//If false, push false all the way up out the chain
@@ -350,14 +422,12 @@ public class Engine {
                 //Now, we push everything that is push, as theyre all able to be pushed. We dont want to split a stack.
 
                 for (int r = 0; r < levelStoragePush[x+horizontal][y+vertical].length; r++) {//Im using r because im reusing code that used i
-                    if(newmemoryEater.checkProperty((levelStoragePush[x+horizontal][y+vertical][r][0]),3)>0){//^^If the thing is push, and only reachable if pushable.
+                    if(checkProperty((levelStoragePush[x+horizontal][y+vertical][r][0]),3)>0){//^^If the thing is push, and only reachable if pushable.
                         //MOVE!
                         int temp3 = getOpenIndex(x + horizontal+horizontal, y + vertical+ vertical, levelStoragePush);//Im really creative when it comes to variable names
-                        System.out.println(temp3);
                         while (temp3 == -1) {//this should never run more than once but its nice to have it freeze when something goes wrong
                             levelStoragePush = expandZTile(x + horizontal+horizontal, y + vertical+ vertical, levelStoragePush);
                             temp3 = getOpenIndex(x+ horizontal+horizontal, y + vertical+ vertical, levelStoragePush);
-                            System.out.println(temp3);
                         }//above here is the code to find an open Z position. Working :)
 
 
@@ -398,7 +468,7 @@ public class Engine {
     }
     public boolean checkStopProperty(int[] coordinates){//takes an x,y, finds if anything there is stop. If it is, returns true.
         for (int i = 0; i < levelStoragePush[coordinates[0]][coordinates[1]].length; i++) {
-            if (newmemoryEater.checkProperty(levelStoragePush[coordinates[0]][coordinates[1]][i][0],4)>0){
+            if (checkProperty(levelStoragePush[coordinates[0]][coordinates[1]][i][0],4)>0){
                 return true;
             }//If trying to move into something that is stop, stop immediately.
         }
@@ -413,4 +483,15 @@ public class Engine {
         if (checkStopProperty(temp)){return false;}//If the tile you are moving into is stop, give up.
         if(checkPushProperty(properties)){return true;}//If the tile isnt stop...Is it push and pushable?
          return false;}
+    private int[][] propertiesStorage = new int[32][9];
+    public int checkProperty(int id, int property){
+        return propertiesStorage[id][property];
+    }
+    public void setProperty(int id, int prop, int sign){
+        if (prop>7){//If its not actually a property and instead is a noun->noun transformation
+            System.out.println("Le Transformation");
+        }else{
+        propertiesStorage[id][prop]=sign;//This feels like it should not be allowed
+    }}
+
 }

@@ -38,11 +38,58 @@ public class levelCreator {
         return currentDepth;
     }
     public static void main(String[] args) throws IOException {
-        add(0,0,6);//Why is this required?
+
+        add(4,3,27);
+        add(5,3,12);
+        add(6,3,13);
+
+        add(12,3,25);
+        add(13,3,12);
+        add(14,3,14);
+        for (int i = 0; i < 11; i++) {
+            add(4+i,5,1);
+        }
+        add(9,6,6);
+        for (int i = 0; i < 5; i++) {
+            add(4+i,6,9);
+        }
+        for (int i = 0; i < 5; i++) {
+            add(10+i,6,9);
+        }
+
+        add(4,7,9);
+        add(5,7,7);
+        add(6,7,9);
+        add(7,7,9);
+        add(8,7,9);
+        add(9,7,6);
+        add(10,7,9);
+        add(11,7,9);
+        add(12,7,9);
+        add(13,7,5);
+        add(14,7,9);
+        for (int i = 0; i < 5; i++) {
+            add(4+i,8,9);
+        }
+        add(9,8,6);
+        for (int i = 0; i < 5; i++) {
+            add(10+i,8,9);
+        }
+        for (int i = 0; i < 11; i++) {
+            add(4+i,9,1);
+        }
+
+        add(4,11,21);
+        add(5,11,12);
+        add(6,11,17);
+
+        add(12,11,26);
+        add(13,11,12);
+        add(14,11,16);
 
 
 
-        int levelnumber = 2;
+        int levelnumber = 1;
 
 
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("levels/level"+levelnumber+".data"));

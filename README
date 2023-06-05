@@ -40,6 +40,19 @@ Words
 19:Melt
 20:Sink
 
+Object Words (Nouns? I dunno english)
+21:Wall
+22:Lava
+23:Water
+24:Brick
+25:Flag
+26:Rock
+27:Baba
+28:Skull
+29:Tile
+30:Grass
+31:Flower
+
 
 
 Properties are stored by ID(of object), property

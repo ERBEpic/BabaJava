@@ -11,9 +11,11 @@ public class newmemoryController {
     private Engine EngineReference;
     private int[][][][] firstState = new int[40][40][4][5];
     private ArrayDeque<int[][][][]> memoryStack = new ArrayDeque<int[][][][]>();
+    private ArrayDeque<int[][]> propertiesStack = new ArrayDeque<int[][]>();
+
     public newmemoryController(Engine engine) throws IOException, ClassNotFoundException {
         EngineReference = engine;
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("levels/level1.data"));//todo add so multiple levels not that hard
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("levels/level1.data"));
         Object obj = ois.readObject();
         ois.close();
         firstState = (int[][][][])obj;
@@ -23,6 +25,7 @@ public class newmemoryController {
         //above here
         memoryStack.push(deepCopy(firstState));
         EngineReference.levelStoragePush=memoryStack.peek();
+        propertiesStack.push(propertiesStorage);
     }
     public int getSize() {
         return memoryStack.size();
@@ -55,18 +58,32 @@ public class newmemoryController {
         memoryStack.push(deepCopy(firstState));
     }
     public void allOut00(){
-        for (int[][][][] element : memoryStack) {
+        /*for (int[][][][] element : memoryStack) {
             int value = element[0][0][0][0];
             System.out.print(value);
         }
         System.out.println(" ");
+
+         */
     }
     private int[][] propertiesStorage = new int[100][100];//[]=id,[][]=property
-    public int checkProperty(int id, int property){//TODO ALL OF PROPERTIESSTORAGE NEEDS TO GO INTO MEMORYCONTROLLER
-        return propertiesStorage[id][property];
+    /*
+    public int checkProperty(int id, int property){
+        return propertiesStack.peek()[id][property];
     }
     public void setProperty(int id, int prop, int sign){
-        propertiesStorage[id][prop]=sign;
+        propertiesStack.peek()[id][prop]=sign;//This feels like it should not be allowed
+    }
+
+     */
+    public int[][] popreties(){
+        return propertiesStack.pop();
+    }
+    public void pushreties(int[][] x){
+        propertiesStack.push(x);
+    }
+    public int[][] peekreties(){
+        return propertiesStack.peek();
     }
     public static int[][][][] deepCopy(int[][][][] array) {//This is why I dont like java.
         int[][][][] copy = new int[array.length][][][];
@@ -81,4 +98,12 @@ public class newmemoryController {
         }
         return copy;
     }
+    public static int[][] deepCopy(int[][] array) {
+        int[][] copy = new int[array.length][];
+        for (int i = 0; i < array.length; i++) {
+            copy[i] = Arrays.copyOf(array[i], array[i].length);
+        }
+        return copy;
+    }
+
 }
