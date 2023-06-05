@@ -15,7 +15,7 @@ public class newmemoryController {
 
     public newmemoryController(Engine engine) throws IOException, ClassNotFoundException {
         EngineReference = engine;
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("levels/level1.data"));
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("levels/level0.data"));
         Object obj = ois.readObject();
         ois.close();
         firstState = (int[][][][])obj;
@@ -48,6 +48,9 @@ public class newmemoryController {
     }
 
     public void newLevel(int id){
+        System.out.println(id);
+        propertiesStack.clear();
+        EngineReference.clearProperties();
         memoryStack.clear();
         ObjectInputStream ois = null;
         try {

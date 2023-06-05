@@ -79,7 +79,8 @@ public class Engine {
 
     private static int xTiles = 20;
     private static int yTiles = 20;
-    private static int level = 1;
+    private static int level = 0;
+    private static int currentlevel = 0;
 
     public static int getxTiles(){
         return xTiles;
@@ -248,14 +249,13 @@ public class Engine {
     }
 
     public void moveToNextLevel(){
-        level++;
+        level=currentlevel+1;
         newmemoryEater.newLevel(level);
         int[][][][] x  = newmemoryEater.peek();
         newmemoryEater.allOut00();
         this.levelStoragePush= x;
-        System.out.println(levelStoragePush[0][0][0][0]);
         babakey.clear();
-
+        currentlevel=level;
     }
     public void playGame(){
         updateOrder();
@@ -484,6 +484,9 @@ public class Engine {
         if(checkPushProperty(properties)){return true;}//If the tile isnt stop...Is it push and pushable?
          return false;}
     private int[][] propertiesStorage = new int[32][9];
+    public void clearProperties(){
+        propertiesStorage = new int[32][9];
+    }
     public int checkProperty(int id, int property){
         return propertiesStorage[id][property];
     }
