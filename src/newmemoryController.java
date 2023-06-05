@@ -42,6 +42,18 @@ public class newmemoryController {
         System.out.println(memoryStack.size()+"size");
         memoryStack.push(deepCopy(firstState));
     }
+
+    public void newLevel(int id){
+        memoryStack.clear();
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(new FileInputStream("levels/level"+id+".data"));
+        Object obj = ois.readObject();
+        ois.close();
+        firstState = (int[][][][])obj;
+        }catch (IOException e){throw new RuntimeException(e);}catch (ClassNotFoundException e){throw new RuntimeException(e);}
+        memoryStack.push(deepCopy(firstState));
+    }
     public void allOut00(){
         for (int[][][][] element : memoryStack) {
             int value = element[0][0][0][0];

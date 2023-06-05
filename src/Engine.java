@@ -30,6 +30,7 @@ public class Engine {
 
     private static int xTiles = 20;
     private static int yTiles = 20;
+    private static int level = 1;
 
     public static int getxTiles(){
         return xTiles;
@@ -97,6 +98,7 @@ public class Engine {
         int vertical=0;
         int horizontal=0;
         boolean defeated = false;
+        boolean won = false;
         for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
@@ -158,6 +160,9 @@ public class Engine {
                                         if(newmemoryEater.checkProperty(levelStoragePush[i+horizontal][j+vertical][l][0],2)>0){
                                             defeated=true;
                                         }//If something is defeated, dont move to the next tile, only remove from previous.
+                                        if(newmemoryEater.checkProperty(levelStoragePush[i+horizontal][j+vertical][l][0],1)>0){
+                                            won=true;
+                                        }
                                     }
 
 
@@ -182,6 +187,7 @@ public class Engine {
                                     }else{//if you HAVE been defeated
                                         levelStoragePush[i+horizontal][j+vertical][temp][0] = 0;
                                         //fix the ID, that was used to check defeat.
+                                        won=false;
                                     }
                                     levelStoragePush[i][j][k][0] = 0;
                                     levelStoragePush[i][j][k][1] = 0;
@@ -191,6 +197,9 @@ public class Engine {
                                     System.out.println(i + " " + j + " " + k);
                                     //babakey.removeImage(i,j,k); (This doesnt actually do anything)
                                     defeated=false;
+                                    if(won){
+                                        moveToNextLevel();
+                                    }
                                 }
                             }
                         }}
@@ -198,6 +207,17 @@ public class Engine {
             }
         }
         playGame();
+    }
+
+    public void moveToNextLevel(){
+        level++;
+        newmemoryEater.newLevel(level);
+        int[][][][] x  = newmemoryEater.peek();
+        newmemoryEater.allOut00();
+        this.levelStoragePush= x;
+        System.out.println(levelStoragePush[0][0][0][0]);
+        babakey.clear();
+
     }
     public void playGame(){
         updateOrder();
