@@ -40,6 +40,7 @@ public class newmemoryController {
         memoryStack.push(x);
     }
 
+
     public void reset(){
         memoryStack.clear();
         System.out.println(memoryStack.size()+"size");

@@ -16,7 +16,7 @@ Its responsible for displaying the output to the player through a JFrame.
 Engine tells it, through add/remove image,
  */
 public class BabaFrameSimple extends JFrame implements KeyListener {
-
+    private int delay = 10;
     private Engine EngineReference;
     private int tileSize;
     private int walkingcycle = 0;
@@ -102,7 +102,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     @Override
     public void paint(Graphics g) {
         if (seizure){super.paint(g);}//Seizure mode (Its an intentional feature)
-        else{try {Thread.sleep(10);} catch (InterruptedException e) {}}
+        else{try {Thread.sleep(delay);} catch (InterruptedException e) {}}
 
         offScreenGraphics.clearRect(0, 0, getWidth(), getHeight());
         this.walkingcycle++;
@@ -175,6 +175,14 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             case KeyEvent.VK_Z:
                 System.out.println("Z Pressed");
                 EngineReference.moveUndoNew();
+                break;
+            case KeyEvent.VK_N:
+                System.out.println("N Pressed");
+                if(delay!=0){delay-=10;}
+                break;
+            case KeyEvent.VK_M:
+                System.out.println("M Pressed");
+                delay+=10;
                 break;
 
 
