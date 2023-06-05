@@ -235,6 +235,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                         if (temp[i][j][k][0] != 0 && display) {
                             if (temp[i][j][k][0]>4){
                                 try {
+                                    System.out.print("a");
                                     addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k]))), k);
                                 } catch (IOException e) {
                                     System.out.println("1: Cant read file "+FileFinder(temp[i][j][k]));
@@ -296,7 +297,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
 
     public String FileFinder(int[] x) {
         int id = x[0];
-        int rotation = x[1];
+        int rotation = x[1]%4;
         int walkingcycle = x[2];
         String first = null;
         int second;
@@ -389,15 +390,21 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 //I really do regret not asking GPT to type this all up for me
         }
         third = counter;
-        if (walkingcycle==0){return "Sprites/" + first +  "_0_" + third + ".png";}
-        walkingcycle--;
-        if (rotation >= 4) {
-            second = walkingcycle;
-        } else {
-            second = rotation * 8 + walkingcycle;
+
+        if(id!=7){
+            walkingcycle=0;
         }
 
+        if(id==4||id==7||id==8){//If rotatable
+            second = ((rotation%4) * 8) + (walkingcycle-1);
+        }else{
+            second = walkingcycle;
+        }
+        if (walkingcycle==0){return "Sprites/" + first +  "_0_" + third + ".png";}
+        walkingcycle--;
 
+
+        System.out.println(id+" "+second);
         return "Sprites/" + first + '_' + second + '_' + third + ".png";
     }
     public String FileFinder(int[] x, boolean[] around) {

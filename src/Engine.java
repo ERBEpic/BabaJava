@@ -44,7 +44,6 @@ public class Engine {
                             }
                             try{setProperty(noun-20,verb-13,1);}catch (Exception e){}
 
-                            System.out.println(noun-20+" "+(verb-13));
 
                             noun = 0; verb = 0;
 
@@ -61,7 +60,6 @@ public class Engine {
                                 }
                             }
                             try{setProperty(noun-20,verb-13,1);}catch (Exception e){}
-                            System.out.println(noun-20+" "+(verb-13));
                         }
 
                     }}}}
@@ -179,10 +177,7 @@ public class Engine {
                                     break;
                             }
 
-                            if (levelStoragePush[i][j][k][1]>=4){levelStoragePush[i][j][k][1] =(d%4)+4;//rotation
-                                }else {
-                                levelStoragePush[i][j][k][1] = d%4;//rotation
-                            }
+                            levelStoragePush[i][j][k][1] =(d%4);//rotation
                             if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {//If we are not going out of bounds,
                                 int [] tempe = {i,j,horizontal,vertical};
                                 if(ifTileIsMoveableTo(tempe)) {
@@ -209,15 +204,11 @@ public class Engine {
                                     if (!defeated) {
                                         levelStoragePush[i + horizontal][j + vertical][temp][1] = levelStoragePush[i][j][k][1];//rotation
 
-                                        if (levelStoragePush[i][j][k][2] != 0) {
                                             levelStoragePush[i + horizontal][j + vertical][temp][2] = levelStoragePush[i][j][k][2] + 1;
                                             if (levelStoragePush[i + horizontal][j + vertical][temp][2] == 5) {
                                                 levelStoragePush[i + horizontal][j + vertical][temp][2] = 1;
                                             }
-                                        }//walkingcycle
-                                        else {
-                                            levelStoragePush[i + horizontal][j + vertical][temp][2] = 0;
-                                        }
+                                        //walkingcycle
                                         levelStoragePush[i + horizontal][j + vertical][temp][3]++;//hasbeenmoved
 
 
@@ -287,8 +278,7 @@ public class Engine {
                             }}catch(Exception e){}
                             try{setProperty(noun-20,verb-13,1);}catch (Exception e){}
                             
-                            System.out.println(noun-20+" "+(verb-13));
-                            
+
                             noun = 0; verb = 0;
                             
                             try{for (int l = 0; l < levelStoragePush[i][j-1].length; l++) {
@@ -304,7 +294,6 @@ public class Engine {
                                 }
                             }}catch(Exception e){}
                             try{setProperty(noun-20,verb-13,1);}catch (Exception e){}
-                            System.out.println(noun-20+" "+(verb-13));
                         }
 //above here
                     }}}}

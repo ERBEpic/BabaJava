@@ -1,1 +1,10 @@
-05-04-
+BabaFrame - Not working stacking images ontop of eachother, instead just shows the top image.
+Solution - Completely rewrote the code for the frame, as it wasnt working at all, especially after moving from java 8->java 16
+
+BabaFrame crashes when things are displayed at x=0, or y=0, and x/y=1 are at the corners
+Solution - shift everything by one x and one y positive, making it work.
+
+When doing (noun) is (noun), the walkingcycle and rotation properties are carried over with it, resulting in Babas that cannot walk and are stuck facing right, and walls that crash the game.
+Expected - When wall is baba, resulting babas are able to rotate and walk.
+Outcome - Babas do not rotate or walk, like walls.
+Solution - Move the code for walkingcycle and rotation allowed from levelcreator into BabaFrame.Filefinder

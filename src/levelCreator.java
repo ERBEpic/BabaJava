@@ -7,21 +7,11 @@ public class levelCreator {
 
         int z = expandZTile(y,x);
         level[y][x][z][0]=id;
-        level[y][x][z][1]=4;
+        level[y][x][z][1]=0;
         level[y][x][z][2]=0;
         level[y][x][z][3]=0;
         level[y][x][z][4]=0;
-        switch (id){//Rotatable
-            case 4:
-            case 7:
-            case 8:
-                level[y][x][z][1]-=4;
-                break;
-        }
-        switch (id){//has a walking cycle
-            case 7:
-                level[y][x][z][2]=1;
-        }
+
     }
     public static int expandZTile(int x, int y){
         int currentDepth = level[x][y].length;
@@ -114,7 +104,7 @@ public class levelCreator {
 
 
 
-        int levelnumber = 2;
+        int levelnumber = 1;
 
 
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("levels/level"+levelnumber+".data"));
