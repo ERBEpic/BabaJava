@@ -96,10 +96,12 @@ public class Engine {
     public void youProperty(int d){
         int vertical=0;
         int horizontal=0;
+        boolean defeated = false;
         for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
                     if (levelStoragePush[i][j][k][0]!=0) {
+
 
                         if((this.newmemoryEater.checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){
 
@@ -149,22 +151,37 @@ public class Engine {
                                         System.out.println(temp);
                                     }//above here is the code to find an open Z position. Working :)
 
+                                    levelStoragePush[i+horizontal][j+vertical][temp][0] = levelStoragePush[i][j][k][0];//Copy ID
 
-                                    levelStoragePush[i+horizontal][j+vertical][temp][0] = levelStoragePush[i][j][k][0];//Copy ID                                levelStoragePush[i+1][j][temp][1]=3;
-                                    levelStoragePush[i+horizontal][j+vertical][temp][1] = levelStoragePush[i][j][k][1];//rotation
-
-                                    if (levelStoragePush[i][j][k][2] != 0) {
-                                        levelStoragePush[i + horizontal][j + vertical][temp][2] = levelStoragePush[i][j][k][2] + 1;
-                                        if(levelStoragePush[i+horizontal][j+vertical][temp][2]==5){levelStoragePush[i+horizontal][j+vertical][temp][2]=1;}
-                                    }//walkingcycle
-                                    else {
-                                        levelStoragePush[i + horizontal][j + vertical][temp][2] = 0;
+                                    for (int l = 0; l < levelStoragePush[i+horizontal][j+vertical].length; l++) {
+                                        //Check if ANYTHING is defeat. Including yourself.
+                                        if(newmemoryEater.checkProperty(levelStoragePush[i+horizontal][j+vertical][l][0],2)>0){
+                                            defeated=true;
+                                        }//If something is defeated, dont move to the next tile, only remove from previous.
                                     }
-                                    levelStoragePush[i + horizontal][j + vertical][temp][3]++;//hasbeenmoved
 
 
-                                    if (levelStoragePush[i + horizontal][j + vertical][temp][2] > 4) {
-                                        levelStoragePush[i + horizontal][j + vertical][temp][2] = 1;
+                                    if (!defeated) {
+                                        levelStoragePush[i + horizontal][j + vertical][temp][1] = levelStoragePush[i][j][k][1];//rotation
+
+                                        if (levelStoragePush[i][j][k][2] != 0) {
+                                            levelStoragePush[i + horizontal][j + vertical][temp][2] = levelStoragePush[i][j][k][2] + 1;
+                                            if (levelStoragePush[i + horizontal][j + vertical][temp][2] == 5) {
+                                                levelStoragePush[i + horizontal][j + vertical][temp][2] = 1;
+                                            }
+                                        }//walkingcycle
+                                        else {
+                                            levelStoragePush[i + horizontal][j + vertical][temp][2] = 0;
+                                        }
+                                        levelStoragePush[i + horizontal][j + vertical][temp][3]++;//hasbeenmoved
+
+
+                                        if (levelStoragePush[i + horizontal][j + vertical][temp][2] > 4) {
+                                            levelStoragePush[i + horizontal][j + vertical][temp][2] = 1;
+                                        }
+                                    }else{//if you HAVE been defeated
+                                        levelStoragePush[i+horizontal][j+vertical][temp][0] = 0;
+                                        //fix the ID, that was used to check defeat.
                                     }
                                     levelStoragePush[i][j][k][0] = 0;
                                     levelStoragePush[i][j][k][1] = 0;
@@ -173,6 +190,7 @@ public class Engine {
                                     levelStoragePush[i][j][k][4] = 0;
                                     System.out.println(i + " " + j + " " + k);
                                     //babakey.removeImage(i,j,k); (This doesnt actually do anything)
+                                    defeated=false;
                                 }
                             }
                         }}
@@ -198,7 +216,7 @@ public class Engine {
     }
     //Controller of update order
     public void updateOrder(){
-        //moveProperty();
+        moveProperty();
         defeatProperty();
         winProperty();
         System.out.println(newmemoryEater.getSize()+"sizetotal");
@@ -279,10 +297,12 @@ public class Engine {
             }
         }
     }
-    public void defeatProperty(){}
+    public void defeatProperty(){//Defeat and win should be in moveYou
+    }
     public void winProperty(){}
     //Reactive properties (stop, float, push, they are not in UpdateOrder)
-    public boolean checkPushProperty(int[] properties){//Takes an x,y, horizontal, and vertical movement. Tries to move from that place.
+    public boolean checkPushProperty(int[] properties){
+        //Takes an x,y, horizontal, and vertical movement. Tries to move from that place.
         // Returns true if and when the tile is moveable to.
         //This should run recursively in a recursive search.
         int x = properties[0];
@@ -365,7 +385,8 @@ public class Engine {
         return false;
     }
     //Misc
-    public boolean ifTileIsMoveableTo(int[] properties){//Takes an x,y, horizontal and vertical movement. Tries to push from that place. Returns true if the tile is available to move to.
+    public boolean ifTileIsMoveableTo(int[] properties){
+        //Takes an x,y, horizontal and vertical movement. Tries to push from that place. Returns true if the tile is available to move to.
         //WE ASSUME THAT WE ARE NOT PUSHING ONTO BORDERS, at least for first check
 
         int[] temp = {properties[0]+properties[2],properties[1]+properties[3]};

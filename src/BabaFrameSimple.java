@@ -134,6 +134,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             case KeyEvent.VK_Y://debug
                 EngineReference.newmemoryEater.setProperty(7,0,1);//Rock is move
                 EngineReference.newmemoryEater.setProperty(1,3,1);//Rock is move
+                EngineReference.newmemoryEater.setProperty(4,2,1);//Rock is move
 
 
 
