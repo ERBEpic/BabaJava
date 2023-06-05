@@ -132,11 +132,10 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 System.exit(0);//this is what ExitOnClose calls, so it works great
                 break;
             case KeyEvent.VK_Y://debug
-                EngineReference.newmemoryEater.setProperty(7,4,1);//Rock is move
-                EngineReference.newmemoryEater.setProperty(6,4,1);//Rock is move
-                EngineReference.newmemoryEater.setProperty(6,0,1);//Rock is move
+                EngineReference.newmemoryEater.setProperty(7,0,1);//Rock is move
+                EngineReference.newmemoryEater.setProperty(1,3,1);//Rock is move
 
-                EngineReference.newmemoryEater.setProperty(1,0,1);//Wall is stop
+
 
                 System.out.println("hio");
                 break;

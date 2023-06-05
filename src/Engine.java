@@ -282,9 +282,79 @@ public class Engine {
     public void defeatProperty(){}
     public void winProperty(){}
     //Reactive properties (stop, float, push, they are not in UpdateOrder)
-    public boolean checkPushProperty(int[] prop){//Takes an x,y, horizontal, and vertical movement. Tries to move from that place. Returns true if and when the tile is moveable to.
+    public boolean checkPushProperty(int[] properties){//Takes an x,y, horizontal, and vertical movement. Tries to move from that place.
+        // Returns true if and when the tile is moveable to.
+        //This should run recursively in a recursive search.
+        int x = properties[0];
+        int y = properties[1];
+        int horizontal = properties[2];
+        int vertical = properties[3];
+        boolean thereispush = false;
+        int[] temp = {x+horizontal,y+vertical};
+        if (x+horizontal!=-1&&x+horizontal!=getxTiles()&&y+vertical!=-1&&y+vertical!=getyTiles()){//If it goes out of bounds, go to else below, false.
+        if (checkStopProperty(temp)){return false;}//Is there something that is stop?
+            for (int i = 0; i < levelStoragePush[properties[0]+properties[2]][properties[1]+properties[3]].length; i++) {
+            if(newmemoryEater.checkProperty(levelStoragePush[properties[0]+properties[2]][properties[1]+properties[3]][i][0],3)>0){
+                thereispush=true;
+                int[] temp2 = {x+horizontal,y+vertical,horizontal,vertical};
+                if(!checkPushProperty(temp2)){return false;}//If false, push false all the way up out the chain
+            }
+        }
+            //This cant be directly after ^^ because then when you push two stacked push objects, it would push one, and not the other
 
-        return true;
+            if (!thereispush){//This is actually two things. Are there any objects that are push? and is there an open space?
+                //^ reads "If there are no objects that are push". However, this is also not a reachable statement if the objects that are push cannot be pushed, as it would have returned false earlier on, at !checkpushproperty.
+                return true;
+            }else{
+                //This is essentially "If ALL !checkPushProperty are true.
+                //Now, we push everything that is push, as theyre all able to be pushed. We dont want to split a stack.
+
+                for (int r = 0; r < levelStoragePush[x+horizontal][y+vertical].length; r++) {//Im using r because im reusing code that used i
+                    if(newmemoryEater.checkProperty((levelStoragePush[x+horizontal][y+vertical][r][0]),3)>0){//^^If the thing is push, and only reachable if pushable.
+                        //MOVE!
+                        int temp3 = getOpenIndex(x + horizontal+horizontal, y + vertical+ vertical, levelStoragePush);//Im really creative when it comes to variable names
+                        System.out.println(temp3);
+                        while (temp3 == -1) {//this should never run more than once but its nice to have it freeze when something goes wrong
+                            levelStoragePush = expandZTile(x + horizontal+horizontal, y + vertical+ vertical, levelStoragePush);
+                            temp3 = getOpenIndex(x+ horizontal+horizontal, y + vertical+ vertical, levelStoragePush);
+                            System.out.println(temp3);
+                        }//above here is the code to find an open Z position. Working :)
+
+
+                        levelStoragePush[x+horizontal+horizontal][y+vertical+ vertical][temp3][0] = levelStoragePush[x+horizontal][y+vertical][r][0];//Copy ID
+                        levelStoragePush[x+horizontal+horizontal][y+vertical+ vertical][temp3][1] = levelStoragePush[x+horizontal][y+vertical][r][1];//rotation
+
+                        if (levelStoragePush[x+horizontal][y+vertical][r][2] != 0) {
+                            levelStoragePush[x + horizontal+horizontal][y + vertical+ vertical][temp3][2] = levelStoragePush[x+horizontal][y+vertical][r][2] + 1;
+                            if(levelStoragePush[x+horizontal+horizontal][y+vertical+ vertical][temp3][2]==5){levelStoragePush[x+horizontal][x+vertical][temp3][2]=1;}
+                        }//walkingcycle
+                        else {
+                            levelStoragePush[x + horizontal+horizontal][y + vertical+ vertical][temp3][2] = 0;
+                        }
+                        levelStoragePush[x + horizontal+horizontal][y + vertical+ vertical][temp3][3]++;//hasbeenmoved
+
+
+                        if (levelStoragePush[x + horizontal+horizontal][y + vertical+ vertical][temp3][2] > 4) {
+                            levelStoragePush[x + horizontal+horizontal][y + vertical+ vertical][temp3][2] = 1;
+                        }
+                        levelStoragePush[x+horizontal][y+vertical][r][0] = 0;
+                        levelStoragePush[x+horizontal][y+vertical][r][1] = 0;
+                        levelStoragePush[x+horizontal][y+vertical][r][2] = 0;
+                        levelStoragePush[x+horizontal][y+vertical][r][3] = 0;
+                        levelStoragePush[x+horizontal][y+vertical][r][4] = 0;
+
+                        //done moving
+
+
+                    }
+                }
+                return true;
+            }
+
+        }
+        else{//This is
+            return false;
+        }
     }
     public boolean checkStopProperty(int[] coordinates){//takes an x,y, finds if anything there is stop. If it is, returns true.
         for (int i = 0; i < levelStoragePush[coordinates[0]][coordinates[1]].length; i++) {
@@ -300,5 +370,6 @@ public class Engine {
 
         int[] temp = {properties[0]+properties[2],properties[1]+properties[3]};
         if (checkStopProperty(temp)){return false;}//If the tile you are moving into is stop, give up.
-        return true;}
+        if(checkPushProperty(properties)){return true;}//If the tile isnt stop...Is it push and pushable?
+         return false;}
 }
