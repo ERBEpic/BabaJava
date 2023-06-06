@@ -312,7 +312,6 @@ public class Engine {
     //Controller of update order
     public void updateOrder(){
         moveProperty();
-        System.out.println(newmemoryEater.getSize()+"sizetotal");
         newmemoryEater.allOut00();
     }
     //Active properties (run on game cycle, IE shift&move, defeat& win, theyre all in UpdateOrder)

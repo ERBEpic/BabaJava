@@ -74,6 +74,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         System.out.println(insets.left+"left");
         System.out.println(insets.right+"right");
 
+
     }
 
     public void addImage(int y, int x, Image image, int layer) {
@@ -111,8 +112,11 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             int y = i % numTilesX;
             int x = i / numTilesX;
             LinkedList<ImageLayer> layers = new LinkedList<>(tileMap[i]);
-            for (ImageLayer layer : layers) {
+            for (ImageLayer layer : layers) {//For every layer in layers
+                if(layer!=null){
                 offScreenGraphics.drawImage(layer.image, x * tileSize, y * tileSize, tileSize, tileSize, null);
+                }
+
             }
         }
 
@@ -235,7 +239,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                         if (temp[i][j][k][0] != 0 && display) {
                             if (temp[i][j][k][0]>4){
                                 try {
-                                    System.out.print("a");
                                     addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k]))), k);
                                 } catch (IOException e) {
                                     System.out.println("1: Cant read file "+FileFinder(temp[i][j][k]));
@@ -404,7 +407,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         walkingcycle--;
 
 
-        System.out.println(id+" "+second);
         return "Sprites/" + first + '_' + second + '_' + third + ".png";
     }
     public String FileFinder(int[] x, boolean[] around) {

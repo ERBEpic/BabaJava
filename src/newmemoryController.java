@@ -43,7 +43,6 @@ public class newmemoryController {
 
     public void reset(){
         memoryStack.clear();
-        System.out.println(memoryStack.size()+"size");
         memoryStack.push(deepCopy(firstState));
     }
 
