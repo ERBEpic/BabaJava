@@ -241,7 +241,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 for (int j = 0; j < temp[i].length; j++) {
                     for (int k = 0; k < temp[i][j].length; k++) {
                         if (temp[i][j][k][0] != 0 && display) {
-                            if (temp[i][j][k][0]>4){
+                            if (temp[i][j][k][0]>5){
                                 try {
                                     addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k]))), k);
                                 } catch (IOException e) {
@@ -326,7 +326,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 first = "tile";
                 break;
             case 10:
-                first = "grass";
+                first = "flag";
                 break;
             case 11:
                 first = "flower";
@@ -371,7 +371,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 first = "text_brick";
                 break;
             case 25:
-                first = "text_flag";
+                first = "text_grass";
                 break;
             case 26:
                 first = "text_rock";
@@ -386,7 +386,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 first = "text_tile";
                 break;
             case 30:
-                first = "text_grass";
+                first = "text_flag";
                 break;
             case 31:
                 first = "text_flower";
@@ -405,7 +405,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             second = walkingcycle;
         }
         if (walkingcycle==0){return "Sprites/" + first +  "_0_" + third + ".png";}
-        walkingcycle--;
 
 
         return "Sprites/" + first + '_' + second + '_' + third + ".png";

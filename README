@@ -18,14 +18,14 @@ Connecting types
 2:Lava
 3:Water
 4:Brick
-
+5:Grass
 Non-connecting types
 5:Flag
 6:Rock
 7:Baba
 8:Skull
 9:Tile
-10:Grass
+10:Flag
 11:Flower
 
 
@@ -45,12 +45,12 @@ Object Words (Nouns? I dunno english)
 22:Lava
 23:Water
 24:Brick
-25:Flag
+25:Grass
 26:Rock
 27:Baba
 28:Skull
 29:Tile
-30:Grass
+30:Flag
 31:Flower
 
 
