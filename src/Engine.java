@@ -78,7 +78,7 @@ public class Engine {
     private static int xTiles = 20;
     private static int yTiles = 20;
     private static int level = 0;
-    private static int currentlevel = 2;
+    private static int currentlevel = 0;
 
     public static int getxTiles(){
         return xTiles;
@@ -92,6 +92,7 @@ public class Engine {
     }
 
     public void moveUndoNew() {
+        System.out.println(newmemoryEater.getSize());
         if (newmemoryEater.getSize() > 1) {
             newmemoryEater.pop();
             this.levelStoragePush = newmemoryController.deepCopy(newmemoryEater.peek());
@@ -105,6 +106,7 @@ public class Engine {
 
 
     public void resetLevel(){
+        playGame();
         newmemoryEater.reset();
         int[][][][] x  = newmemoryEater.peek();
         newmemoryEater.allOut00();
@@ -114,7 +116,20 @@ public class Engine {
 
     }
 
+    public void moveToNextLevel(){
+        propertiesStorage = new int[100][100];
+        level=currentlevel+1;
+        newmemoryEater.newLevel(level);
+        int[][][][] x  = newmemoryEater.peek();
+        newmemoryEater.allOut00();
+        this.levelStoragePush= x;
+        babakey.clear();
+        currentlevel=level;
+        System.out.println(currentlevel);
+        newmemoryEater.pop();
+        newmemoryEater.pop();//Cleanup!
 
+    }
 
 
 
@@ -154,8 +169,7 @@ public class Engine {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
                     if (levelStoragePush[i][j][k][0]!=0) {
 
-
-                        if((this.checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){
+                        if((this.checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){//If the object is you, and the object has not been moved already
 
                             switch(d){//This converts rotation from its udlr to H/V movements.
                                 case 0:
@@ -179,6 +193,7 @@ public class Engine {
 
                             levelStoragePush[i][j][k][1] =(d%4);//rotation
                             if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {//If we are not going out of bounds,
+
                                 int [] tempe = {i,j,horizontal,vertical};
                                 if(ifTileIsMoveableTo(tempe)) {
 
@@ -198,6 +213,7 @@ public class Engine {
                                         if(checkProperty(levelStoragePush[i+horizontal][j+vertical][l][0],1)>0){
                                             won=true;
                                         }
+
                                     }
 
 
@@ -227,6 +243,7 @@ public class Engine {
                                     levelStoragePush[i][j][k][4] = 0;
                                     //babakey.removeImage(i,j,k); (This doesnt actually do anything)
                                     defeated=false;
+
                                     if(won){
                                         moveToNextLevel();
                                     }
@@ -234,20 +251,13 @@ public class Engine {
                             }
                         }}
                 }
+
             }
         }
         playGame();
     }
 
-    public void moveToNextLevel(){
-        level=currentlevel+1;
-        newmemoryEater.newLevel(level);
-        int[][][][] x  = newmemoryEater.peek();
-        newmemoryEater.allOut00();
-        this.levelStoragePush= x;
-        babakey.clear();
-        currentlevel=level;
-    }
+
     public void playGame(){
         updateOrder();
         propertiesStorage = new int[100][100];
@@ -257,6 +267,27 @@ public class Engine {
                     if (levelStoragePush[i][j][k][0]!=0||levelStoragePush[i][j][k]!=null){
                         levelStoragePush[i][j][k][3]=0;
                         levelStoragePush[i][j][k][4]=0;
+//CODE FOR SINK
+                        if(checkProperty(levelStoragePush[i][j][k][0],7)>0&&levelStoragePush[i][j].length>1){//If something is sink, and theres other things on the tile
+                            for (int l = 0; l < levelStoragePush[i][j].length; l++) {
+                                levelStoragePush[i][j][l][0] = 0;
+                                levelStoragePush[i][j][l][1] = 0;
+                                levelStoragePush[i][j][l][2] = 0;
+                                levelStoragePush[i][j][l][3] = 0;
+                                levelStoragePush[i][j][l][4] = 0;
+                            }
+                        }
+//CODE FOR HOT/MELT
+                        if(checkProperty(levelStoragePush[i][j][k][0],5)>0&&levelStoragePush[i][j].length>1){//If something is hot, look for other things that are melt (length>1 isnt needed, but saves processing time)
+                            for (int l = 0; l < levelStoragePush[i][j].length; l++) {
+                                if(checkProperty(levelStoragePush[i][j][k][0],6)>0){//If its melt, delete it
+                                levelStoragePush[i][j][l][0] = 0;
+                                levelStoragePush[i][j][l][1] = 0;
+                                levelStoragePush[i][j][l][2] = 0;
+                                levelStoragePush[i][j][l][3] = 0;
+                                levelStoragePush[i][j][l][4] = 0;
+                            }}
+                        }
 //below here is code for re checking the rules of the game.
                         //adding in here because its already a nested for loop the code to refresh the rules
                         if (levelStoragePush[i][j][k][0]==12){//Check around it for anything that makes a sentence, add that to properties storage, push yada yada
@@ -306,7 +337,7 @@ public class Engine {
         levelStoragePush= newmemoryController.deepCopy(newmemoryEater.peek());
         //and AFTER everything is done
 
-        newmemoryEater.pushreties(newmemoryController.deepCopy(propertiesStorage));//Does this come before or after the rules are checked? Please guess and check. Thank you.
+        newmemoryEater.pushreties(newmemoryController.deepCopy(propertiesStorage));
 
     }
     //Controller of update order

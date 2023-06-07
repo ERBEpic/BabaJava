@@ -310,9 +310,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         int second;
         int third;
         switch (id) {
-            case 4:
-                first = "brick";
-                break;
             case 5:
                 first = "flag";
                 break;
@@ -431,6 +428,9 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 break;
             case 4:
                 first = "brick";
+                break;
+            case 5:
+                first = "grass";
                 break;
         }
         third = counter;

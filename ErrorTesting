@@ -8,3 +8,7 @@ When doing (noun) is (noun), the walkingcycle and rotation properties are carrie
 Expected - When wall is baba, resulting babas are able to rotate and walk.
 Outcome - Babas do not rotate or walk, like walls.
 Solution - Move the code for walkingcycle and rotation allowed from levelcreator into BabaFrame.Filefinder
+
+Expected - When something is sink, it deletes all objects on a tile
+Outcome - only deletes one
+Solution - If its the last object in z position, check if the objects should be sunk, and delete them.

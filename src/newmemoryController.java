@@ -59,6 +59,7 @@ public class newmemoryController {
         firstState = (int[][][][])obj;
         }catch (IOException e){throw new RuntimeException(e);}catch (ClassNotFoundException e){throw new RuntimeException(e);}
         memoryStack.push(deepCopy(firstState));
+        memoryStack.push(deepCopy(firstState));
     }
     public void allOut00(){
         /*for (int[][][][] element : memoryStack) {
@@ -88,6 +89,7 @@ public class newmemoryController {
     public int[][] peekreties(){
         return propertiesStack.peek();
     }
+    public int propSize(){return propertiesStack.size();}
     public static int[][][][] deepCopy(int[][][][] array) {//This is why I dont like java.
         int[][][][] copy = new int[array.length][][][];
         for (int i = 0; i < array.length; i++) {
