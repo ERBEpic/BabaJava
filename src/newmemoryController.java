@@ -24,7 +24,7 @@ public class newmemoryController {
         //Engine.levelStoragePush=Engine.memoryEater.pullLatestState().clone();
         //above here
         memoryStack.push(deepCopy(firstState));
-        EngineReference.levelStoragePush=memoryStack.peek();
+        EngineReference.levelStoragePush=deepCopy(memoryStack.peek());
         propertiesStack.push(propertiesStorage);
     }
     public int getSize() {
@@ -43,7 +43,9 @@ public class newmemoryController {
 
     public void reset(){
         memoryStack.clear();
-        memoryStack.push(deepCopy(firstState));
+    }
+    public int[][][][] getFirstState(){
+        return deepCopy(firstState);
     }
 
     public void newLevel(int id){
@@ -58,6 +60,15 @@ public class newmemoryController {
         ois.close();
         firstState = (int[][][][])obj;
         }catch (IOException e){throw new RuntimeException(e);}catch (ClassNotFoundException e){throw new RuntimeException(e);}
+        for (int i = 0; i < firstState.length; i++) {//There really is no better place to do this
+            for (int j = 0; j < firstState[i].length; j++) {
+                for (int k = 0; k < firstState[i][j].length; k++) {
+                    if(firstState[i][j][k][0]==8){//Skulls face DOWN by default
+                        firstState[i][j][k][1]=3;
+                    }
+                }
+            }
+        }
         memoryStack.push(deepCopy(firstState));
         memoryStack.push(deepCopy(firstState));
     }

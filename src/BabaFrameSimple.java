@@ -236,7 +236,13 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     public void ParserDisplay() {
         clear();
         int[][][][] temp = EngineReference.newmemoryEater.peek();
-        if (temp != null && EngineReference != null) {
+        if(temp==null){
+            System.out.println("ha");
+            temp=EngineReference.newmemoryEater.getFirstState();
+            System.out.println(temp);
+        }
+        //if (temp==null){EngineReference.newmemoryEater.getFirstState();}
+        if (EngineReference != null) {
             for (int i = 0; i < temp.length; i++) {
                 for (int j = 0; j < temp[i].length; j++) {
                     for (int k = 0; k < temp[i][j].length; k++) {
@@ -398,13 +404,11 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         if(id!=7){
             walkingcycle=0;
         }
-
-        if(id==4||id==7||id==8){//If rotatable
-            second = ((rotation%4) * 8) + (walkingcycle-1);
+        if(id==7||id==8){//If rotatable
+            second = ((rotation%4) * 8) + (walkingcycle);
         }else{
             second = walkingcycle;
         }
-        if (walkingcycle==0){return "Sprites/" + first +  "_0_" + third + ".png";}
 
 
         return "Sprites/" + first + '_' + second + '_' + third + ".png";

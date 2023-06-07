@@ -11,6 +11,7 @@ public class Engine {
     //public static memoryController memoryEater = new memoryController();
     public newmemoryController newmemoryEater;
     public BabaFrameSimple babakey;
+    public int[][] propertiesStorageTemp;
 
     public Engine() throws IOException, ClassNotFoundException, InterruptedException {
         Thread.sleep(100);
@@ -66,6 +67,7 @@ public class Engine {
         for (int i = 0; i < 20; i++) {
             setProperty(12+i,3,1);
         }
+
     }
 
     //it should basically never crash but its easier to solve the try catch problems here
@@ -78,7 +80,7 @@ public class Engine {
     private static int xTiles = 20;
     private static int yTiles = 20;
     private static int level = 0;
-    private static int currentlevel = 0;
+    private static int currentlevel = 4;
 
     public static int getxTiles(){
         return xTiles;
@@ -92,12 +94,13 @@ public class Engine {
     }
 
     public void moveUndoNew() {
-        System.out.println(newmemoryEater.getSize());
         if (newmemoryEater.getSize() > 1) {
             newmemoryEater.pop();
             this.levelStoragePush = newmemoryController.deepCopy(newmemoryEater.peek());
             newmemoryEater.popreties();
             propertiesStorage=newmemoryController.deepCopy(newmemoryEater.peekreties());
+        }else{
+            resetLevel();
         }
 
     }
@@ -106,11 +109,10 @@ public class Engine {
 
 
     public void resetLevel(){
-        playGame();
         newmemoryEater.reset();
-        int[][][][] x  = newmemoryEater.peek();
+        //int[][][][] x  = newmemoryEater.peek();
         newmemoryEater.allOut00();
-        this.levelStoragePush= x;
+        this.levelStoragePush= newmemoryEater.getFirstState();
         babakey.clear();
 
 
@@ -228,8 +230,8 @@ public class Engine {
                                         levelStoragePush[i + horizontal][j + vertical][temp][3]++;//hasbeenmoved
 
 
-                                        if (levelStoragePush[i + horizontal][j + vertical][temp][2] > 4) {
-                                            levelStoragePush[i + horizontal][j + vertical][temp][2] = 1;
+                                        if (levelStoragePush[i + horizontal][j + vertical][temp][2] > 3) {//walkingcycle
+                                            levelStoragePush[i + horizontal][j + vertical][temp][2] = 0;
                                         }
                                     }else{//if you HAVE been defeated
                                         levelStoragePush[i+horizontal][j+vertical][temp][0] = 0;
@@ -260,7 +262,7 @@ public class Engine {
 
     public void playGame(){
         updateOrder();
-        propertiesStorage = new int[100][100];
+        propertiesStorageTemp = new int[100][100];
         for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
@@ -278,10 +280,11 @@ public class Engine {
                             }
                         }
 //CODE FOR HOT/MELT
-                        if(checkProperty(levelStoragePush[i][j][k][0],5)>0&&levelStoragePush[i][j].length>1){//If something is hot, look for other things that are melt (length>1 isnt needed, but saves processing time)
+                        if(checkProperty(levelStoragePush[i][j][k][0],5)>0){//If something is hot, look for other things that are melt (length>1 isnt needed, but saves processing time)
                             for (int l = 0; l < levelStoragePush[i][j].length; l++) {
-                                if(checkProperty(levelStoragePush[i][j][k][0],6)>0){//If its melt, delete it
-                                levelStoragePush[i][j][l][0] = 0;
+                                if(checkProperty(levelStoragePush[i][j][l][0],6)>0){//If its melt, delete it
+                                    System.out.println("Something is melt!");
+                                    levelStoragePush[i][j][l][0] = 0;
                                 levelStoragePush[i][j][l][1] = 0;
                                 levelStoragePush[i][j][l][2] = 0;
                                 levelStoragePush[i][j][l][3] = 0;
@@ -331,6 +334,7 @@ public class Engine {
         for (int i = 0; i < 20; i++) {
             setProperty(12+i,3,1);
         }
+        propertiesStorage=propertiesStorageTemp;
 
         newmemoryEater.push(newmemoryController.deepCopy(levelStoragePush));
         babakey.ParserDisplay();
@@ -517,7 +521,8 @@ public class Engine {
                         if (levelStoragePush[i][j][k][0]==id){levelStoragePush[i][j][k][0]=prop-7;}
                     }}}
         }else{
-        propertiesStorage[id][prop]=sign;//This feels like it should not be allowed
+            if(propertiesStorageTemp==null){propertiesStorage[id][prop]=sign;}
+            else{propertiesStorageTemp[id][prop]=sign;}//This feels like it should not be allowed
     }}
 //TODO Fix the fact that unrotatableness and walkingcycle transfer over when transforming a noun. Maybe make the system check the ID of the object and...not a janky way through the stats themselves?
 }//TODO also add in missing verbs (sink, melt, hot)

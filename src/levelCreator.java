@@ -10,6 +10,9 @@ public class levelCreator {
         level[y][x][z][2]=0;
         level[y][x][z][3]=0;
         level[y][x][z][4]=0;
+        if(id==8){//Skulls face DOWN by default
+            level[y][x][z][1]=3;
+        }
     }
     public static int expandZTile(int x, int y){
         int currentDepth = level[x][y].length;
@@ -27,8 +30,79 @@ public class levelCreator {
     }
     public static void main(String[] args) throws IOException {//TODO Change grass to be a connecting type
 
-        add(0,0,27);         add(0,1,12);         add(0,2,13);         add(1,0,21);         add(1,1,12);         add(1,2,17);         for (int i = 0; i < 4; i++) {             add(2,i,1);         }         add(0,3,1);         add(1,3,1);         for (int i = 0; i < 6; i++) {             add(8+i,2,9);         }         add(8,3,9);         add(9,3,7);         add(10,3,9);         add(11,3,9);         add(12,3,6);         add(13,3,9);          for (int i = 0; i < 6; i++) {             add(8+i,4,9);         }         for (int i = 0; i < 4; i++) {             add(8+i,5,9);         }         add(12,5,6);         add(13,5,9);         for (int i = 0; i < 6; i++) {             add(8+i,6,9);         }                  for (int i = 0; i < 7; i++) {             add(7,1+i,1);         }         for (int i = 0; i < 6; i++) {             add(8+i,1,1);         }         for (int i = 0; i < 7; i++) {             add(14,1+i,1);         }          for (int i = 0; i < 4; i++) {             add(4+i,7,1);         }         for (int i = 0; i < 8; i++) {             add(4,7+i,1);         }         for (int i = 0; i < 12; i++) {             add(5+i,14,1);         }         for (int i = 0; i < 3; i++) {             add(11+i,7,1);         }         for (int i = 0; i < 4; i++) {             add(11,7+i,1);         }         for (int i = 0; i < 3; i++) {             add(15+i,7,1);         }         for (int i = 0; i < 8; i++) {             add(17,7+i,1);         }         for (int i = 0; i < 2; i++) {             add(11,12+i,1);         }         add(9,11,1);         for (int i = 0; i < 3; i++) {             add(5+i,11,3);         }         for (int i = 0; i < 3; i++) {             add(5+i,12,3);         }         add(5,13,10);         for (int i = 0; i < 2; i++) {             add(6+i,13,3);         }          add(6,4,23);         add(6,5,12);         add(6,6,20);         add(13,9,26);         add(14,9,12);         add(15,9,16);         add(13,12,30);         add(14,12,12);         add(15,12,14);          for (int i = 0; i < 3; i++) {             add(8+i,7,3);         }
-        int levelnumber = 3;
+
+        add(0,0,21);
+        add(1,0,12);
+        add(2,0,17);
+
+        add(3,0,2);
+        for (int i = 0; i < 4; i++) {
+            add(i,1,2);
+        }
+
+        for (int i = 0; i < 8; i++) {
+            add(5,i,1);
+        }
+        add(6,4,1);
+        add(10,4,1);
+        add(7,3,27);
+        add(8,3,12);
+        add(9,3,13);
+        add(11,6,1);
+        add(11,5,6);
+        add(11,0,1);
+        add(11,2,1);
+        add(11,3,1);
+        add(11,4,1);
+
+        add(6,7,26);
+        add(7,7,1);
+        add(6,8,12);
+        add(6,9,16);
+
+
+        for (int i = 0; i < 4; i++) {
+            add(i,12,1);
+            add(i,16,1);
+            add(0,12+i,1);
+            add(2,12+i,1);
+        }
+        add(1,13,22);
+        add(1,14,12);
+        add(1,15,18);
+        add(3,13,27);
+        add(3,14,12);
+        add(3,15,19);
+
+        for (int i = 0; i < 4; i++) {
+            add(i+11,3,1);
+            add(15,i,1);
+        }
+        add(12,1,7);
+
+        for (int i = 0; i < 6; i++) {
+            add(5+i,6,1);
+        }
+
+        add(8,10,22);
+
+
+
+
+        add(17,19,30);
+        add(18,19,12);
+        add(19,19,14);
+
+        add(18,17,10);
+
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 2; j++) {
+                add(10+i,10+j,2);
+                add(10+j,10+i,2);
+            }
+        }
+
+        int levelnumber = 5;
 
 
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("levels/level"+levelnumber+".data"));

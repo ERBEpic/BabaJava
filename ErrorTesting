@@ -12,3 +12,7 @@ Solution - Move the code for walkingcycle and rotation allowed from levelcreator
 Expected - When something is sink, it deletes all objects on a tile
 Outcome - only deletes one
 Solution - If its the last object in z position, check if the objects should be sunk, and delete them.
+
+Expected - When running onto something that is hot as something that is melt, the thing that is melt gets deleted
+Outcome - Does not delete the melt thing.
+Solution - Properties were being changed mid game cycle, and so hot things after the sentence X is hot worked, but things before didnt. Solved by making a temporary variable for properties, then after a game cycle setting that to current.
