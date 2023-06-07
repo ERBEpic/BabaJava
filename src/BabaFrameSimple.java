@@ -54,9 +54,9 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         setFocusTraversalKeysEnabled(false);
         setIgnoreRepaint(true);
         setVisible(true);
-
         offScreenImage = createImage(getWidth(), getHeight());
         offScreenGraphics = offScreenImage.getGraphics();
+        counterUpdater counteryay = new counterUpdater();
 
 
 
@@ -428,6 +428,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 if (counter > 3) {
                     counter = 1;
                 }
+                System.out.println(counter);
                 ParserDisplay();
             }
         }
