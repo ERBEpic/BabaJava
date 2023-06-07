@@ -28,85 +28,100 @@ public class levelCreator {
         return currentDepth;
     }
     public static void main(String[] args) throws IOException {//TODO Change grass to be a connecting type
+        add(0,0,27);
+        add(0,1,12);
+        add(0,2,13);
+        add(1,0,21);
+        add(1,1,12);
+        add(1,2,17);
+        for (int i = 0; i < 4; i++) {
+            add(2,i,1);
+        }
+        add(0,3,1);
+        add(1,3,1);
+        for (int i = 0; i < 6; i++) {
+            add(8+i,2,9);
+        }
+        add(8,3,9);
+        add(9,3,7);
+        add(10,3,9);
+        add(11,3,9);
+        add(12,3,6);
+        add(13,3,9);
+
+        for (int i = 0; i < 6; i++) {
+            add(8+i,4,9);
+        }
+        for (int i = 0; i < 4; i++) {
+            add(8+i,5,9);
+        }
+        add(12,5,6);
+        add(13,5,9);
+        for (int i = 0; i < 6; i++) {
+            add(8+i,6,9);
+        }
+        
         for (int i = 0; i < 7; i++) {
-            add(8+i,3,5);
-        }
-        for (int i = 0; i < 7; i++) {
-            add(8+i,11,5);
-        }
-        for (int i = 0; i < 7; i++) {
-            add(8+i,17,5);
-        }
-        for (int i = 0; i < 15; i++) {
-            add(15,3+i,5);
-        }
-        for (int i = 0; i < 5; i++) {
-            add(8,3+i,5);
+            add(7,1+i,1);
         }
         for (int i = 0; i < 6; i++) {
-            add(8,11+i,5);
+            add(8+i,1,1);
         }
-        for (int i = 0; i < 4; i++) {
-            add(4+i,7,5);
+        for (int i = 0; i < 7; i++) {
+            add(14,1+i,1);
         }
+
         for (int i = 0; i < 4; i++) {
-            add(4+i,11,5);
+            add(4+i,7,1);
+        }
+        for (int i = 0; i < 8; i++) {
+            add(4,7+i,1);
+        }
+        for (int i = 0; i < 12; i++) {
+            add(5+i,14,1);
         }
         for (int i = 0; i < 3; i++) {
-            add(4,8+i,5);
+            add(11+i,7,1);
         }
         for (int i = 0; i < 4; i++) {
-            add(5+i,8,10);
+            add(11,7+i,1);
         }
-        for (int i = 0; i < 4; i++) {
-            add(5+i,10,10);
+        for (int i = 0; i < 3; i++) {
+            add(15+i,7,1);
         }
-        add(5,9,10);
-        add(6,9,27);
-        add(7,9,10);
-        add(8,9,10);
+        for (int i = 0; i < 8; i++) {
+            add(17,7+i,1);
+        }
+        for (int i = 0; i < 2; i++) {
+            add(11,12+i,1);
+        }
+        add(9,11,1);
+        for (int i = 0; i < 3; i++) {
+            add(5+i,11,3);
+        }
+        for (int i = 0; i < 3; i++) {
+            add(5+i,12,3);
+        }
+        add(5,13,5);
+        for (int i = 0; i < 2; i++) {
+            add(6+i,13,3);
+        }
 
+        add(6,4,23);
+        add(6,5,12);
+        add(6,6,20);
+        add(13,9,26);
+        add(14,9,12);
+        add(15,9,16);
+        add(13,12,25);
+        add(14,12,12);
+        add(15,12,14);
 
-        add(10,5,12);
-        add(13,7,14);
+        for (int i = 0; i < 3; i++) {
+            add(8+i,7,3);
+        }
 
-
-
-
-
-        add(5,13,21);
-        add(5,14,12);
-        add(5,15,13);
-        add(10,13,25);//right
-        add(10,14,12);
-        add(10,15,17);
-        add(13,14,1);
-
-
-
-
-        add(19,13,9);
-        add(11,1,9);
-        add(5,2,9);
-        add(4,1,9);
-
-        add(18,5,9);
-        add(19,5,9);
-
-
-        add(5,19,9);
-        add(5,18,9);
-        add(4,19,9);
-
-        add(1,13,9);
-
-
-
-
-
-
-
-        int levelnumber = 2;
+        int levelnumber = 3;
 
 
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("levels/level"+levelnumber+".data"));

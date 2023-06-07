@@ -111,13 +111,17 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         for (int i = 0; i < numTilesX * numTilesY; i++) {
             int y = i % numTilesX;
             int x = i / numTilesX;
-            LinkedList<ImageLayer> layers = new LinkedList<>(tileMap[i]);
+            LinkedList<ImageLayer> layers;
+            try {
+                layers = new LinkedList<>(tileMap[i]);
+            }catch(ArrayIndexOutOfBoundsException e){layers=null;}
+            if(layers!=null){
             for (ImageLayer layer : layers) {//For every layer in layers
                 if(layer!=null){
                 offScreenGraphics.drawImage(layer.image, x * tileSize, y * tileSize, tileSize, tileSize, null);
                 }
 
-            }
+            }}
         }
 
         g.drawImage(offScreenImage, 0, 0, null);

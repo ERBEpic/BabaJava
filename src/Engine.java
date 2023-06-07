@@ -78,7 +78,7 @@ public class Engine {
     private static int xTiles = 20;
     private static int yTiles = 20;
     private static int level = 0;
-    private static int currentlevel = 0;
+    private static int currentlevel = 2;
 
     public static int getxTiles(){
         return xTiles;
@@ -348,14 +348,13 @@ public class Engine {
 
 
                             if (i+horizontal!=-1&&i+horizontal!=getxTiles()&&j+vertical!=-1&&j+vertical!=getyTiles()) {
-
+                                //Checkifsink
 
                                 int temp =getOpenIndex(i+horizontal,j+vertical,levelStoragePush);
                                 while (temp==-1){//this should never run more than once but its nice to have it freeze when something goes wrong
                                     levelStoragePush=expandZTile(i+horizontal,j+vertical,levelStoragePush);
                                     temp = getOpenIndex(i+horizontal,j+vertical,levelStoragePush);
                                 }//above here is the code to find an open Z position. Working :)
-
 
 
                                 levelStoragePush[i+horizontal][j+vertical][temp][0] = levelStoragePush[i][j][k][0];
@@ -454,6 +453,7 @@ public class Engine {
             return false;
         }
     }
+    public void checkSinkProperty(int[] properties){}
     public boolean checkStopProperty(int[] coordinates){//takes an x,y, finds if anything there is stop. If it is, returns true.
         for (int i = 0; i < levelStoragePush[coordinates[0]][coordinates[1]].length; i++) {
             if (checkProperty(levelStoragePush[coordinates[0]][coordinates[1]][i][0],4)>0){

@@ -17,10 +17,8 @@ public class Main {
     }
 
     public static void main(String[] args) throws InterruptedException, IOException, ClassNotFoundException {
-        Thread.sleep(100);
         Main main = new Main(); //the fact that this is needed really annoys me but I guess thats Java.
         main.BabaEngine.babakey.setSize(20*24,20*24);
-        Thread.sleep(10);
 
         //main.BabaEngine.babakey.setDelay((int) (main.BabaEngine.newmemoryEater.firstState.toString().length()*(scaler+1)));
         //main.BabaEngine.babakey.setDelay(100);
