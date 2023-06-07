@@ -55,18 +55,11 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         setIgnoreRepaint(true);
         setVisible(true);
 
-        Insets insets = getInsets();
         offScreenImage = createImage(getWidth(), getHeight());
         offScreenGraphics = offScreenImage.getGraphics();
 
 
-        counterUpdater counteryay = new counterUpdater();
 
-        System.out.println(insets.bottom+"bottom");
-        System.out.println(insets.top+"top");//these are not needed, but debug
-        System.out.println(insets.left+"left");
-        System.out.println(insets.right+"right");
-        //offScreenGraphics.drawImage(image,100,100,null);
     }
 
     public void addImage(int y, int x, Image image, int layer) {
@@ -146,14 +139,11 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 break;
             case KeyEvent.VK_SPACE:
                 EngineReference.moveWait();
-                System.out.println("Space pressed");
                 break;
             case KeyEvent.VK_R:
-                System.out.println("R Pressed");
                 EngineReference.resetLevel();
                 break;
             case KeyEvent.VK_Z:
-                System.out.println("Z Pressed");
                 EngineReference.moveUndoNew();
                 break;
 
