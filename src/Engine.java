@@ -68,7 +68,7 @@ public class Engine {
         for (int i = 0; i < 20; i++) {
             setProperty(12+i,3,1);
         }
-
+        babakey.ParserDisplay();
     }
 
     //it should basically never crash but its easier to solve the try catch problems here

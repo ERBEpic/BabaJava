@@ -27,15 +27,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     private Graphics offScreenGraphics;
     private boolean seizure = false;
 
-    {
-        try {
-            walker();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     public void setEngine(Engine engine) {
         EngineReference = engine;
@@ -60,52 +52,40 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         setFocusable(true);
         setUndecorated(true);
         setFocusTraversalKeysEnabled(false);
-
+        setIgnoreRepaint(true);
         setVisible(true);
 
         Insets insets = getInsets();
-
         offScreenImage = createImage(getWidth(), getHeight());
-        offScreenGraphics = offScreenImage.getGraphics();//No idea why this doesnt have to be called constantly. Guess its also a reference?
+        offScreenGraphics = offScreenImage.getGraphics();
+
+
         counterUpdater counteryay = new counterUpdater();
 
         System.out.println(insets.bottom+"bottom");
         System.out.println(insets.top+"top");//these are not needed, but debug
         System.out.println(insets.left+"left");
         System.out.println(insets.right+"right");
-
-
+        //offScreenGraphics.drawImage(image,100,100,null);
     }
 
     public void addImage(int y, int x, Image image, int layer) {
         tileMap[x * numTilesX + y].add(new ImageLayer(image, layer));
-        repaint();
+        //repaint();//Why...Did i ever have this here? Its no wonder the frame used to flicker
     }
 
-    public void removeImage(int y, int x, int layer) {
-        LinkedList<ImageLayer> layers = tileMap[x * numTilesX + y];
-        for (int i = 0; i < layers.size(); i++) {
-            if (layers.get(i).layer == layer) {
-                layers.remove(i);
-                repaint();
-                return;
-            }
-        }
-    }
+
 
     public void clear() {
         for (int i = 0; i < tileMap.length; i++) {
             tileMap[i].clear();
         }
-        repaint();
+        ParserDisplay();
     }
-
     @Override
     public void paint(Graphics g) {
-        if (seizure){super.paint(g);}//Seizure mode (Its an intentional feature)
+        offScreenGraphics.fillRect(0, 0, getWidth(), getHeight());
 
-
-        offScreenGraphics.clearRect(0, 0, getWidth(), getHeight());
         this.walkingcycle++;
 
         for (int i = 0; i < numTilesX * numTilesY; i++) {
@@ -114,18 +94,25 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             LinkedList<ImageLayer> layers;
             try {
                 layers = new LinkedList<>(tileMap[i]);
-            }catch(ArrayIndexOutOfBoundsException e){layers=null;}
-            if(layers!=null){
-            for (ImageLayer layer : layers) {//For every layer in layers
-                if(layer!=null){
-                offScreenGraphics.drawImage(layer.image, x * tileSize, y * tileSize, tileSize, tileSize, null);
-                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                layers = null;
+            }
+            if (layers != null) {
+                for (ImageLayer layer : layers) {//For every layer in layers
+                    if (layer != null) {
+                        offScreenGraphics.drawImage(layer.image, x * tileSize, y * tileSize, tileSize, tileSize, null);
+                    }
 
-            }}
+                }
+            }
+        }
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
         g.drawImage(offScreenImage, 0, 0, null);
-
     }
 
     @Override
@@ -201,21 +188,18 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         return display;
     }
 
-    public void walker() throws InterruptedException, IOException {
-        Thread.sleep(175);
-        counter++;
-        if (counter > 3) {
-            counter = 1;
-        }
-    }
+
 
     public void ParserDisplay() {
-        clear();
         int[][][][] temp = EngineReference.newmemoryEater.peek();
         if(temp==null){
             System.out.println("ha");
             temp=EngineReference.newmemoryEater.getFirstState();
             System.out.println(temp);
+        }
+        this.tileMap = new LinkedList[numTilesX * numTilesY];
+        for (int i = 0; i < numTilesX * numTilesY; i++) {
+            tileMap[i] = new LinkedList<ImageLayer>();
         }
         //if (temp==null){EngineReference.newmemoryEater.getFirstState();}
         if (EngineReference != null) {
@@ -282,6 +266,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 }
             }
         }
+        repaint();
     }
 
     public String FileFinder(int[] x) {
@@ -443,7 +428,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         }
 
         private void scheduleTask() {
-            executor.scheduleAtFixedRate(new running(), 0, 1000, TimeUnit.MILLISECONDS);
+            executor.scheduleAtFixedRate(new running(), 0, 175, TimeUnit.MILLISECONDS);
         }
 
         private class running implements Runnable {
@@ -454,7 +439,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                     counter = 1;
                 }
                 ParserDisplay();
-                //repaint(); Unneeded?
             }
         }
 
