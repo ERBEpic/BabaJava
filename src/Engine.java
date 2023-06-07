@@ -1,3 +1,4 @@
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,7 +81,7 @@ public class Engine {
     private static int xTiles = 20;
     private static int yTiles = 20;
     private static int level = 0;
-    private static int currentlevel = 4;
+    private static int currentlevel = 0;
 
     public static int getxTiles(){
         return xTiles;
@@ -102,6 +103,7 @@ public class Engine {
         }else{
             resetLevel();
         }
+        babakey.ParserDisplay();
 
     }
 
@@ -111,26 +113,26 @@ public class Engine {
     public void resetLevel(){
         newmemoryEater.reset();
         //int[][][][] x  = newmemoryEater.peek();
-        newmemoryEater.allOut00();
         this.levelStoragePush= newmemoryEater.getFirstState();
         babakey.clear();
-
+        babakey.ParserDisplay();
 
     }
 
     public void moveToNextLevel(){
-        propertiesStorage = new int[100][100];
-        level=currentlevel+1;
-        newmemoryEater.newLevel(level);
-        int[][][][] x  = newmemoryEater.peek();
-        newmemoryEater.allOut00();
-        this.levelStoragePush= x;
-        babakey.clear();
-        currentlevel=level;
-        System.out.println(currentlevel);
-        newmemoryEater.pop();
-        newmemoryEater.pop();//Cleanup!
-
+        if(currentlevel==7) {
+            System.out.println("That is the end of the tutorial. If you want to play more, go buy the actual game, called Baba Is You.");
+            System.exit(0);
+        }
+            propertiesStorage = new int[100][100];
+            level = currentlevel + 1;
+            newmemoryEater.newLevel(level);
+            int[][][][] x = newmemoryEater.peek();
+            this.levelStoragePush = x;
+            babakey.clear();
+            currentlevel = level;
+            newmemoryEater.pop();
+            newmemoryEater.pop();//Cleanup!
     }
 
 
@@ -261,7 +263,7 @@ public class Engine {
 
 
     public void playGame(){
-        updateOrder();
+        //moveProperty(); Unused
         propertiesStorageTemp = new int[100][100];
         for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
@@ -283,7 +285,6 @@ public class Engine {
                         if(checkProperty(levelStoragePush[i][j][k][0],5)>0){//If something is hot, look for other things that are melt (length>1 isnt needed, but saves processing time)
                             for (int l = 0; l < levelStoragePush[i][j].length; l++) {
                                 if(checkProperty(levelStoragePush[i][j][l][0],6)>0){//If its melt, delete it
-                                    System.out.println("Something is melt!");
                                     levelStoragePush[i][j][l][0] = 0;
                                 levelStoragePush[i][j][l][1] = 0;
                                 levelStoragePush[i][j][l][2] = 0;
@@ -344,13 +345,9 @@ public class Engine {
         newmemoryEater.pushreties(newmemoryController.deepCopy(propertiesStorage));
 
     }
-    //Controller of update order
-    public void updateOrder(){
-        moveProperty();
-        newmemoryEater.allOut00();
-    }
-    //Active properties (run on game cycle, IE shift&move, defeat& win, theyre all in UpdateOrder)
-    public void moveProperty(){//Unused, probably, because there isnt any move in World one.
+
+
+    public void moveProperty(){//Unused, because there isnt any move in World one.
         int rotation = 0;
         int vertical=0;
         int horizontal=0;
@@ -414,7 +411,6 @@ public class Engine {
         }
     }
 
-    //Reactive properties (stop, float, push, they are not in UpdateOrder)
     public boolean checkPushProperty(int[] properties){
         //Takes an x,y, horizontal, and vertical movement. Tries to move from that place.
         // Returns true if and when the tile is moveable to.
@@ -488,7 +484,6 @@ public class Engine {
             return false;
         }
     }
-    public void checkSinkProperty(int[] properties){}
     public boolean checkStopProperty(int[] coordinates){//takes an x,y, finds if anything there is stop. If it is, returns true.
         for (int i = 0; i < levelStoragePush[coordinates[0]][coordinates[1]].length; i++) {
             if (checkProperty(levelStoragePush[coordinates[0]][coordinates[1]][i][0],4)>0){

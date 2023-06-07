@@ -16,7 +16,7 @@ Its responsible for displaying the output to the player through a JFrame.
 Engine tells it, through add/remove image,
  */
 public class BabaFrameSimple extends JFrame implements KeyListener {
-    private int delay = 10;
+    private int delay = 1;
     private Engine EngineReference;
     private int tileSize;
     private int walkingcycle = 0;
@@ -103,7 +103,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     @Override
     public void paint(Graphics g) {
         if (seizure){super.paint(g);}//Seizure mode (Its an intentional feature)
-        else{try {Thread.sleep(delay);} catch (InterruptedException e) {}}
+
 
         offScreenGraphics.clearRect(0, 0, getWidth(), getHeight());
         this.walkingcycle++;
@@ -139,21 +139,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             case KeyEvent.VK_ESCAPE:
                 System.exit(0);//this is what ExitOnClose calls, so it works great
                 break;
-            case KeyEvent.VK_Y://debug
-                EngineReference.setProperty(7,0,1);//Baba is you
-                EngineReference.setProperty(1,3,1);//Wall is push
-                EngineReference.setProperty(4,2,1);//Brick is defeat
-                EngineReference.setProperty(2,1,1);//Lava is win
-                break;
-            case KeyEvent.VK_O://debug
-                seizure=!seizure;
-                break;
-            case KeyEvent.VK_T://Debug
-                this.clear();
-                break;
-            case KeyEvent.VK_I://debug
-                this.sdisplay();//Toggles the display
-                break;
             case KeyEvent.VK_UP:
             case KeyEvent.VK_W:
                 EngineReference.youProperty(1);
@@ -184,15 +169,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 System.out.println("Z Pressed");
                 EngineReference.moveUndoNew();
                 break;
-            case KeyEvent.VK_N:
-                System.out.println("N Pressed");
-                if(delay!=0){delay-=10;}
-                break;
-            case KeyEvent.VK_M:
-                System.out.println("M Pressed");
-                delay+=10;
-                break;
-
 
         }
     }
@@ -467,7 +443,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         }
 
         private void scheduleTask() {
-            executor.scheduleAtFixedRate(new running(), 0, 175, TimeUnit.MILLISECONDS);
+            executor.scheduleAtFixedRate(new running(), 0, 1000, TimeUnit.MILLISECONDS);
         }
 
         private class running implements Runnable {

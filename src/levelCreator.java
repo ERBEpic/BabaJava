@@ -1,3 +1,4 @@
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.lang.*;
 //This is NOT code meant for the user to run. This is DEVELOPER code meant for level creation.
@@ -30,79 +31,30 @@ public class levelCreator {
     }
     public static void main(String[] args) throws IOException {//TODO Change grass to be a connecting type
 
+        add(0,0,26);         add(1,0,12);         add(2,0,17);                   add(0,2,28);         add(1,2,12);         add(2,2,15);                  add(0,4,30);         add(1,4,12);         add(2,4,14);         for (int i = 0; i < 6; i++) {             add(3,i,6);         }         add(0,5,6);         add(1,5,6);         add(2,5,6);             for (int i = 0; i < 4; i++) {             add(1,7+i,1);             add(1+i,7,1);             add(1+i,11,1);             add(5,7-i,1);             add(5,11+i,1);             add(6+i,14,1);             add(10,14-i,1);         }         add(7,12,21);         add(8,12,12);         add(9,12,17);           add(3,13,27);         add(3,14,12);         add(3,15,13);          add(3,9,7);         add(5,7,1);         add(5,8,1);         add(5,10,1);         add(5,11,1);          add(6,4,1);          for (int i = 0; i < 11; i++) {             add(7,i,8);         }         for (int i = 0; i < 13; i++) {             add(7+i,10,8);         }           for (int i = 0; i < 7; i++) {             add(8+i,4,1);         }          for (int i = 0; i < 4; i++) {             add(14,5+i,1);             add(10+i,8,1);         }         add(10,7,1);         add(10,5,1);         add(12,6,10);         for (int i = 0; i < 3; i++) {             add(11+i,5,9);             add(11+i,7,9);         }         add(11,6,9);         add(13,6,9);
+        add(8,9,1);add(9,9,1);add(10,9,1);
+        add(11,9,4);
+        add(12,9,4);
+        add(11,11,4);
+        add(12,11,4);
+        add(13,11,4);
 
-        add(0,0,21);
-        add(1,0,12);
-        add(2,0,17);
-
-        add(3,0,2);
-        for (int i = 0; i < 4; i++) {
-            add(i,1,2);
-        }
-
-        for (int i = 0; i < 8; i++) {
-            add(5,i,1);
-        }
-        add(6,4,1);
-        add(10,4,1);
-        add(7,3,27);
-        add(8,3,12);
-        add(9,3,13);
-        add(11,6,1);
-        add(11,5,6);
-        add(11,0,1);
-        add(11,2,1);
-        add(11,3,1);
-        add(11,4,1);
-
-        add(6,7,26);
-        add(7,7,1);
-        add(6,8,12);
-        add(6,9,16);
+        add(15,15,11);
+        add(18,14,11);
+        add(19,0,5);
+        add(18,0,5);
+        add(17,0,5);
+        add(19,1,5);
+        add(18,1,5);
+        add(19,2,5);
+        add(0,19,5);
+        add(1,19,5);
+        add(0,18,5);
+        add(0,17,5);
+        add(1,18,5);
 
 
-        for (int i = 0; i < 4; i++) {
-            add(i,12,1);
-            add(i,16,1);
-            add(0,12+i,1);
-            add(2,12+i,1);
-        }
-        add(1,13,22);
-        add(1,14,12);
-        add(1,15,18);
-        add(3,13,27);
-        add(3,14,12);
-        add(3,15,19);
-
-        for (int i = 0; i < 4; i++) {
-            add(i+11,3,1);
-            add(15,i,1);
-        }
-        add(12,1,7);
-
-        for (int i = 0; i < 6; i++) {
-            add(5+i,6,1);
-        }
-
-        add(8,10,22);
-
-
-
-
-        add(17,19,30);
-        add(18,19,12);
-        add(19,19,14);
-
-        add(18,17,10);
-
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 2; j++) {
-                add(10+i,10+j,2);
-                add(10+j,10+i,2);
-            }
-        }
-
-        int levelnumber = 5;
+        int levelnumber = 6;
 
 
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("levels/level"+levelnumber+".data"));
