@@ -63,6 +63,9 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     }
 
     public void addImage(int y, int x, Image image, int layer) {
+        if(tileMap[x * numTilesX + y]==null){//If its null (problem!)
+            tileMap[x * numTilesX + y] = new LinkedList<ImageLayer>();//Fix the problem!
+        }
         tileMap[x * numTilesX + y].add(new ImageLayer(image, layer));
         //repaint();//Why...Did i ever have this here? Its no wonder the frame used to flicker
     }
