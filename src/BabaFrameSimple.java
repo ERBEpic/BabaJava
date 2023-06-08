@@ -71,7 +71,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
 
     public void clear() {
         for (int i = 0; i < tileMap.length; i++) {
-            tileMap[i].clear();
+            tileMap[i] = tileMap[i] = new LinkedList<ImageLayer>();
         }
         ParserDisplay();
     }
@@ -88,6 +88,8 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
             try {
                 layers = new LinkedList<>(tileMap[i]);
             } catch (ArrayIndexOutOfBoundsException e) {
+                layers = null;
+            }catch (NullPointerException e){
                 layers = null;
             }
             if (layers != null) {
@@ -183,9 +185,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     public void ParserDisplay() {
         int[][][][] temp = EngineReference.newmemoryEater.peek();
         if(temp==null){
-            System.out.println("ha");
             temp=EngineReference.newmemoryEater.getFirstState();
-            System.out.println(temp);
         }
         this.tileMap = new LinkedList[numTilesX * numTilesY];
         for (int i = 0; i < numTilesX * numTilesY; i++) {
@@ -428,7 +428,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 if (counter > 3) {
                     counter = 1;
                 }
-                System.out.println(counter);
                 ParserDisplay();
             }
         }

@@ -49,7 +49,6 @@ public class newmemoryController {
     }
 
     public void newLevel(int id){
-        System.out.println(id);
         propertiesStack.clear();
         EngineReference.clearProperties();
         memoryStack.clear();
