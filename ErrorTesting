@@ -1,5 +1,6 @@
-BabaFrame - Not working stacking images ontop of eachother, instead just shows the top image.
-Solution - Completely rewrote the code for the frame, as it wasnt working at all, especially after moving from java 8->java 16
+BabaFrame - Stacking images ontop of eachother shows one ontop another
+Outcome - Only the top one is shown.
+Solution - Completely rewrote the code for the frame, as it wasnt working at all, especially after moving from java 8->java 16->20
 
 BabaFrame crashes when things are displayed at x=0, or y=0, and x/y=1 are at the corners
 Solution - shift everything by one x and one y positive, making it work.
@@ -10,9 +11,27 @@ Outcome - Babas do not rotate or walk, like walls.
 Solution - Move the code for walkingcycle and rotation allowed from levelcreator into BabaFrame.Filefinder
 
 Expected - When something is sink, it deletes all objects on a tile
-Outcome - only deletes one
+Outcome - only deletes the object that is sink
 Solution - If its the last object in z position, check if the objects should be sunk, and delete them.
 
 Expected - When running onto something that is hot as something that is melt, the thing that is melt gets deleted
 Outcome - Does not delete the melt thing.
 Solution - Properties were being changed mid game cycle, and so hot things after the sentence X is hot worked, but things before didnt. Solved by making a temporary variable for properties, then after a game cycle setting that to current.
+
+Expected - when moving to a new level, moves to the next level
+Outcome - Moves two levels instead of one (0->2->4)
+Solution - Clear properties after moving to next level, as it counts win as the time in the previous level, and when entering the new level. (twice)
+
+Expected - When noun (baba) is noun (wall), transforms all babas into walls
+Outcome - All babas turn into walls
+
+Expected - Undo after moving to a new level, nothing happens (if in previous level baba is wall, new level it doesnt happen)
+Outcome - No effect
+
+Expected - Mash keyboard, nothing happens besides WASD/Arrow keys/Z/R
+Outcome - Did not crash.
+
+
+
+
+

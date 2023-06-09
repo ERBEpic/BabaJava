@@ -9,9 +9,9 @@ It also stores the class I made for deepcopying, but thats more just a DRY(don't
 //Why is java so annoying when it comes to references and copying? Why cant I just copy one object, not copy a reference to an object?
 public class newmemoryController {
     private Engine EngineReference;
-    private int[][][][] firstState = new int[40][40][4][5];
-    private ArrayDeque<int[][][][]> memoryStack = new ArrayDeque<int[][][][]>();
-    private ArrayDeque<int[][]> propertiesStack = new ArrayDeque<int[][]>();
+    private int[][][][] firstState;
+    private ArrayDeque<int[][][][]> memoryStack = new ArrayDeque<>();
+    private ArrayDeque<int[][]> propertiesStack = new ArrayDeque<>();
 
     public newmemoryController(Engine engine) throws IOException, ClassNotFoundException {
         EngineReference = engine;
@@ -25,7 +25,10 @@ public class newmemoryController {
         //above here
         memoryStack.push(deepCopy(firstState));
         EngineReference.levelStoragePush=deepCopy(memoryStack.peek());
-        propertiesStack.push(propertiesStorage);
+
+        //[]=id,[][]=property
+        int[][] propertiesStorageBlank = new int[100][100];
+        propertiesStack.push(propertiesStorageBlank);
     }
     public int getSize() {
         return memoryStack.size();
@@ -52,13 +55,13 @@ public class newmemoryController {
         propertiesStack.clear();
         EngineReference.clearProperties();
         memoryStack.clear();
-        ObjectInputStream ois = null;
+        ObjectInputStream ois;
         try {
             ois = new ObjectInputStream(new FileInputStream("levels/level"+id+".data"));
         Object obj = ois.readObject();
         ois.close();
         firstState = (int[][][][])obj;
-        }catch (IOException e){throw new RuntimeException(e);}catch (ClassNotFoundException e){throw new RuntimeException(e);}
+        }catch (IOException | ClassNotFoundException e){throw new RuntimeException(e);}//Why is it | for exceptions but || for booleans?????
         for (int i = 0; i < firstState.length; i++) {//There really is no better place to do this
             for (int j = 0; j < firstState[i].length; j++) {
                 for (int k = 0; k < firstState[i][j].length; k++) {
@@ -71,25 +74,7 @@ public class newmemoryController {
         memoryStack.push(deepCopy(firstState));
         memoryStack.push(deepCopy(firstState));
     }
-    public void allOut00(){
-        /*for (int[][][][] element : memoryStack) {
-            int value = element[0][0][0][0];
-            System.out.print(value);
-        }
-        System.out.println(" ");
 
-         */
-    }
-    private int[][] propertiesStorage = new int[100][100];//[]=id,[][]=property
-    /*
-    public int checkProperty(int id, int property){
-        return propertiesStack.peek()[id][property];
-    }
-    public void setProperty(int id, int prop, int sign){
-        propertiesStack.peek()[id][prop]=sign;//This feels like it should not be allowed
-    }
-
-     */
     public int[][] popreties(){
         return propertiesStack.pop();
     }
@@ -99,7 +84,6 @@ public class newmemoryController {
     public int[][] peekreties(){
         return propertiesStack.peek();
     }
-    public int propSize(){return propertiesStack.size();}
     public static int[][][][] deepCopy(int[][][][] array) {//This is why I dont like java.
         int[][][][] copy = new int[array.length][][][];
         for (int i = 0; i < array.length; i++) {

@@ -1,13 +1,8 @@
-import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
-//All things between classes will now run through main. This is to control where classes talk to eachother, and stop everything from being static.
+//This doesnt *really* do much, because Engine handles most of the heavy lifting. Main doesnt really have a role except to be the thing which sets the code in motion.
 public class Main {
     public Engine BabaEngine;
-    private static double scaler = 0.5;
-
     public Main() {
         try {
             BabaEngine = new Engine();
@@ -16,13 +11,10 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException, IOException, ClassNotFoundException {
-        Main main = new Main(); //the fact that this is needed really annoys me but I guess thats Java.
-        main.BabaEngine.babakey.setSize(20*24,20*24);
+    public static void main(String[] args){
 
-        //main.BabaEngine.babakey.setDelay((int) (main.BabaEngine.newmemoryEater.firstState.toString().length()*(scaler+1)));
-        //main.BabaEngine.babakey.setDelay(100);
-        //System.out.println(main.BabaEngine.newmemoryEater.firstState.toString().length()*(scaler+1));
+        Main main = new Main(); //the fact that this is needed really annoys me but I guess thats Java.
+        main.BabaEngine.babakey.setSize(20*24,20*24);//20(x&y tiles) * 24(sprite size) = total width/height
     }
 }
 

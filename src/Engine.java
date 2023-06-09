@@ -1,7 +1,4 @@
-import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 /*
 This class is responsible for holding the previous state from memoryController, whether that be the starting state or previously calculated state is irrelevant.
 When it recieves an input, if it is a direct game input (IE up down left right wait), it moves (or doesnt) the player, and calculates one game cycle (if the player isnt dead) (Game cycle = playgame)
@@ -9,7 +6,6 @@ It then outputs that resulting new state back into memoryController, as a new st
 It also directly talks with Babaframe, in add and remove images.
 */
 public class Engine {
-    //public static memoryController memoryEater = new memoryController();
     public newmemoryController newmemoryEater;
     public BabaFrameSimple babakey;
     public int[][] propertiesStorageTemp;
@@ -44,7 +40,7 @@ public class Engine {
                                     l=102109;
                                 }
                             }
-                            try{setProperty(noun-20,verb-13,1);}catch (Exception e){}
+                            try{setProperty(noun-20,verb-13,1);}catch (ArrayIndexOutOfBoundsException e){}//This is MEANT to fail. If it fails, it does NOT set the property.
 
 
                             noun = 0; verb = 0;
@@ -74,19 +70,17 @@ public class Engine {
     //it should basically never crash but its easier to solve the try catch problems here
 
 
-
+//145 usages
     public int[][][][] levelStoragePush = new int[40][40][4][5];
-    //public static BabaObjects properties = new BabaObjects();
-
-    private static int xTiles = 20;
-    private static int yTiles = 20;
-    private static int level = 0;
+    private int xTiles = 20;
+    private int yTiles = 20;
+    private static int level = 0;//this IS static, as the level should be global. Even if for some reason another instance of Engine is made, it should be synced up with this one.
     private static int currentlevel = 0;
 
-    public static int getxTiles(){
+    public int getxTiles(){
         return xTiles;
     }
-    public static int getyTiles(){
+    public int getyTiles(){
         return yTiles;
     }
 
@@ -107,14 +101,9 @@ public class Engine {
 
     }
 
-
-
-
     public void resetLevel(){
         newmemoryEater.reset();
-        //int[][][][] x  = newmemoryEater.peek();
         this.levelStoragePush= newmemoryEater.getFirstState();
-        babakey.clear();
         babakey.ParserDisplay();
 
     }
@@ -122,14 +111,12 @@ public class Engine {
     public void moveToNextLevel(){
         if(currentlevel==7) {
             System.out.println("That is the end of the tutorial. If you want to play more, go buy the actual game, called Baba Is You.");
-            System.exit(0);
+            System.exit(2);//2 for game ended.
         }
             propertiesStorage = new int[100][100];
             level = currentlevel + 1;
             newmemoryEater.newLevel(level);
-            int[][][][] x = newmemoryEater.peek();
-            this.levelStoragePush = x;
-            babakey.clear();
+            this.levelStoragePush = newmemoryEater.peek();
             currentlevel = level;
             newmemoryEater.pop();
             newmemoryEater.pop();//Cleanup!
@@ -149,9 +136,7 @@ public class Engine {
         int currentDepth = maybe[x][y].length;
         int[][] newArray = new int[currentDepth + 1][5];
         for (int z = 0; z < currentDepth; z++) {
-            for (int i = 0; i < 5; i++) {
-                newArray[z][i] = maybe[x][y][z][i];
-            }
+            System.arraycopy(maybe[x][y][z], 0, newArray[z], 0, 5);
         }
         for (int i = 0; i < 5; i++) {
             newArray[currentDepth][i] = 0;
@@ -168,6 +153,7 @@ public class Engine {
         int horizontal=0;
         boolean defeated = false;
         boolean won = false;
+        boolean moved = false;
         for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
                 for (int k = 0; k < levelStoragePush[i][j].length ; k++) {
@@ -175,24 +161,12 @@ public class Engine {
 
                         if((this.checkProperty(levelStoragePush[i][j][k][0],0)>0)&&levelStoragePush[i][j][k][3]<1){//If the object is you, and the object has not been moved already
 
-                            switch(d){//This converts rotation from its udlr to H/V movements.
-                                case 0:
-                                case 4:
-                                    vertical=1;
-                                    break;
-                                case 1:
-                                case 5:
-                                    horizontal=-1;
-
-                                    break;
-                                case 3:
-                                case 7:
-                                    horizontal=1;
-                                    break;
-                                case 2:
-                                case 6:
-                                    vertical=-1;
-                                    break;
+                            //Also, "Enhanced"(Intellijs name not mine) switch statement. Cool!
+                            switch (d) {//This converts rotation from its udlr to H/V movements.
+                                case 0, 4 -> vertical = 1;
+                                case 1, 5 -> horizontal = -1;
+                                case 3, 7 -> horizontal = 1;
+                                case 2, 6 -> vertical = -1;
                             }
 
                             levelStoragePush[i][j][k][1] =(d%4);//rotation
@@ -200,10 +174,11 @@ public class Engine {
 
                                 int [] tempe = {i,j,horizontal,vertical};
                                 if(ifTileIsMoveableTo(tempe)) {
+                                    moved=true;
 
                                     int temp = getOpenIndex(i + horizontal, j + vertical, levelStoragePush);
                                     while (temp == -1) {//this should never run more than once but its nice to have it freeze when something goes wrong
-                                        levelStoragePush = expandZTile(i + horizontal, j + vertical, levelStoragePush);
+                                        expandZTile(i + horizontal, j + vertical, levelStoragePush);
                                         temp = getOpenIndex(i + horizontal, j + vertical, levelStoragePush);
                                     }//above here is the code to find an open Z position. Working :)
 
@@ -224,28 +199,24 @@ public class Engine {
                                     if (!defeated) {
                                         levelStoragePush[i + horizontal][j + vertical][temp][1] = levelStoragePush[i][j][k][1];//rotation
 
-                                            levelStoragePush[i + horizontal][j + vertical][temp][2] = levelStoragePush[i][j][k][2] + 1;
-                                            if (levelStoragePush[i + horizontal][j + vertical][temp][2] == 5) {
-                                                levelStoragePush[i + horizontal][j + vertical][temp][2] = 1;
-                                            }
-                                        //walkingcycle
+
+
+
                                         levelStoragePush[i + horizontal][j + vertical][temp][3]++;//hasbeenmoved
 
-
+                                        levelStoragePush[i + horizontal][j + vertical][temp][2] = levelStoragePush[i][j][k][2] + 1;
                                         if (levelStoragePush[i + horizontal][j + vertical][temp][2] > 3) {//walkingcycle
                                             levelStoragePush[i + horizontal][j + vertical][temp][2] = 0;
                                         }
+
                                     }else{//if you HAVE been defeated
                                         levelStoragePush[i+horizontal][j+vertical][temp][0] = 0;
-                                        //fix the ID, that was used to check defeat.
+                                        //fix the ID, that was used to check defeat. It should be set to 0.
                                         won=false;
                                     }
-                                    levelStoragePush[i][j][k][0] = 0;
-                                    levelStoragePush[i][j][k][1] = 0;
-                                    levelStoragePush[i][j][k][2] = 0;
-                                    levelStoragePush[i][j][k][3] = 0;
-                                    levelStoragePush[i][j][k][4] = 0;
-                                    //babakey.removeImage(i,j,k); (This doesnt actually do anything)
+                                    for (int l = 0; l < 5; l++) {//Delete old version of the object before it moves, as it just moved.
+                                        levelStoragePush[i][j][k][l]=0;
+                                    }
                                     defeated=false;
 
                                     if(won){
@@ -258,12 +229,14 @@ public class Engine {
 
             }
         }
-        playGame();
+        if(moved) {//If you die, only need to undo once
+            playGame();
+        }
     }
 
 
     public void playGame(){
-        //moveProperty(); Unused
+        //moveProperty(); Unused. Uncomment if updated+used
         propertiesStorageTemp = new int[100][100];
         for (int i = 0; i < levelStoragePush.length; i++) {
             for (int j = 0; j < levelStoragePush[i].length; j++) {
@@ -312,10 +285,10 @@ public class Engine {
                                 }
                             }}catch(Exception e){}
                             try{setProperty(noun-20,verb-13,1);}catch (Exception e){}
-                            
+
 
                             noun = 0; verb = 0;
-                            
+
                             try{for (int l = 0; l < levelStoragePush[i][j-1].length; l++) {
                                 if(levelStoragePush[i][j-1][l][0]>=21){
                                     noun=levelStoragePush[i][j-1][l][0];
@@ -348,7 +321,7 @@ public class Engine {
 
 
     public void moveProperty(){//Unused, because there isnt any move in World one.
-        int rotation = 0;
+        int rotation;
         int vertical=0;
         int horizontal=0;
         for (int i = 0; i < levelStoragePush.length; i++) {
@@ -359,23 +332,11 @@ public class Engine {
                         if((checkProperty(levelStoragePush[i][j][k][0],8)>0)&&levelStoragePush[i][j][k][4]<1){
                             rotation = levelStoragePush[i][j][k][1];
 
-                            switch(rotation){
-                                case 0:
-                                case 4:
-                                    vertical=1;
-                                    break;
-                                case 1:
-                                case 5:
-                                    horizontal=-1;
-                                    break;
-                                case 3:
-                                case 7:
-                                    horizontal=1;
-                                    break;
-                                case 2:
-                                case 6:
-                                    vertical=-1;
-                                    break;
+                            switch (rotation) {
+                                case 0, 4 -> vertical = 1;
+                                case 1, 5 -> horizontal = -1;
+                                case 3, 7 -> horizontal = 1;
+                                case 2, 6 -> vertical = -1;
                             }
 
 
@@ -384,7 +345,7 @@ public class Engine {
 
                                 int temp =getOpenIndex(i+horizontal,j+vertical,levelStoragePush);
                                 while (temp==-1){//this should never run more than once but its nice to have it freeze when something goes wrong
-                                    levelStoragePush=expandZTile(i+horizontal,j+vertical,levelStoragePush);
+                                    expandZTile(i + horizontal, j + vertical, levelStoragePush);
                                     temp = getOpenIndex(i+horizontal,j+vertical,levelStoragePush);
                                 }//above here is the code to find an open Z position. Working :)
 
@@ -403,7 +364,7 @@ public class Engine {
                                 levelStoragePush[i][j][k][2] = 0;
                                 levelStoragePush[i][j][k][3] = 0;
                                 levelStoragePush[i][j][k][4] = 0;
-                                //babakey.removeImage(i, j, k);(Not doing anything)
+
                             }
                         }}
                 }
@@ -444,7 +405,7 @@ public class Engine {
                         //MOVE!
                         int temp3 = getOpenIndex(x + horizontal+horizontal, y + vertical+ vertical, levelStoragePush);//Im really creative when it comes to variable names
                         while (temp3 == -1) {//this should never run more than once but its nice to have it freeze when something goes wrong
-                            levelStoragePush = expandZTile(x + horizontal+horizontal, y + vertical+ vertical, levelStoragePush);
+                            expandZTile(x + horizontal+horizontal, y + vertical+ vertical, levelStoragePush);
                             temp3 = getOpenIndex(x+ horizontal+horizontal, y + vertical+ vertical, levelStoragePush);
                         }//above here is the code to find an open Z position. Working :)
 
@@ -499,9 +460,10 @@ public class Engine {
 
         int[] temp = {properties[0]+properties[2],properties[1]+properties[3]};
         if (checkStopProperty(temp)){return false;}//If the tile you are moving into is stop, give up.
-        if(checkPushProperty(properties)){return true;}//If the tile isnt stop...Is it push and pushable?
-         return false;}
-    private int[][] propertiesStorage = new int[32][9];
+        //If the tile isnt stop...Is it push and pushable?
+        return checkPushProperty(properties);
+    }
+    private int[][] propertiesStorage = new int[32][9];//Why is this an int? Because when move was properly implemented, you could do (noun A) is move, (noun A) is move, and it would move twice. Also, if i decided to go down the path of using a relative storage for rules, where each cycle checks the differences from the previous, it would be much easier to do it this way, as if you were to make two (noun) is (verb)s, and removed one, if it were a boolean, you would have to check every single tile all over again. Thinking about it now, its probably best that I went with integers, as if I went with booleans, i would have to check through the whole game board every time I break a sentence anyways.
     public void clearProperties(){
         propertiesStorage = new int[32][9];
     }
@@ -519,5 +481,4 @@ public class Engine {
             if(propertiesStorageTemp==null){propertiesStorage[id][prop]=sign;}
             else{propertiesStorageTemp[id][prop]=sign;}//This feels like it should not be allowed
     }}
-//TODO Fix the fact that unrotatableness and walkingcycle transfer over when transforming a noun. Maybe make the system check the ID of the object and...not a janky way through the stats themselves?
-}//TODO also add in missing verbs (sink, melt, hot)
+}

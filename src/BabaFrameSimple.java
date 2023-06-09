@@ -16,91 +16,86 @@ Its responsible for displaying the output to the player through a JFrame.
 Engine tells it, through add/remove image,
  */
 public class BabaFrameSimple extends JFrame implements KeyListener {
-    private int delay = 1;
     private Engine EngineReference;
     private int tileSize;
-    private int walkingcycle = 0;
     private int numTilesX;
     private int numTilesY;
-    private LinkedList<ImageLayer>[] tileMap;
+    boolean start = false;
+    private LinkedList[] tileMap;//No idea why this is allowed? This feels SUPER wrong. LinkedList is usually declared like "LinkedList<String> linkedList = new LinkedList<>();"
+    //Also linkedlist is faster than arraylist for this usage. You can replace LinkedList with ArrayList and the code works the same, but slower.
     private Image offScreenImage;
     private Graphics offScreenGraphics;
-    private boolean seizure = false;
-
-
-
     public void setEngine(Engine engine) {
         EngineReference = engine;
     }
-
     public BabaFrameSimple(int numTilesX, int numTilesY) throws IOException {
         super("Baba is Me!");
         Image image = ImageIO.read(new File("Sprites/baba_0_1.png"));
         setIconImage(image);
-        this.tileSize = 24;
+
+        this.tileSize = 24;//How large each sprite is
         this.numTilesX = numTilesX;
         this.numTilesY = numTilesY;
-        this.tileMap = new LinkedList[numTilesX * numTilesY];
+        this.tileMap = new LinkedList[numTilesX * numTilesY];//I chose to do a [] with x&y compressed into one because doing a 2D array of Lists is really complicated and part of the reason why my original (first or second) revision of code didnt work. The slight complexity of working like this just means you have to instead of a nested fori where x=i,y=j, x=i/numXTiles,y=i%numYTiles. Other than that, it surprisingly acts much more normal than a 2d array of lists.
+
         for (int i = 0; i < numTilesX * numTilesY; i++) {
-            tileMap[i] = new LinkedList<ImageLayer>();
+            tileMap[i] = new LinkedList<>();
         }
         setSize(numTilesX * tileSize, numTilesY * tileSize);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBackground(Color.BLACK);
-        addKeyListener(this);
-        setFocusable(true);
-        setUndecorated(true);
-        setFocusTraversalKeysEnabled(false);
-        setIgnoreRepaint(true);
-        setVisible(true);
-        offScreenImage = createImage(getWidth(), getHeight());
-        offScreenGraphics = offScreenImage.getGraphics();
-        counterUpdater counteryay = new counterUpdater();
+        setBackground(Color.BLACK);//Self Explanatory
+        addKeyListener(this);//Listen for when keys are pressed
+        setFocusable(true);//Let you be able to click to bring to front
+        setUndecorated(true);//Remove titlebar and name and stuff (new java versions change how JFrame is implemented with weird insets and makes it not work decorated)
+        setIgnoreRepaint(true);//JFrame has a behavior to automatically repaint whenever updated. This, however, is unneeded for me because It only has to update A. every 175ms, for the shaking animation, and B. Whenever the player inputs something. otherwise, the game doesnt need to be repainted.
+        setVisible(true);//Self explanatory
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("<html>To play the game, press the arrow keys or wasd to move.<P> Z to undo, R to reset, escape to exit. You control whatever is you.<P> The goal is to reach whatever is win.<P> Press any key to start!<html>");
+        //According to StackOverflow, using HTML is the easiest way to put line breaks into a JLabel
+        panel.add(label);
 
-
-
+        this.add(panel);
+        try {
+            while(!start){
+                System.out.printf("");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        this.remove(panel);
+        offScreenImage = createImage(getWidth(), getHeight());//""Offscreen. Its not really off screen, more like in the void of the memory somewhere, but visualizing it off screen is how its usually imagined
+        offScreenGraphics = offScreenImage.getGraphics();//Only need to do this once interestingly, as offScreenImage.getGraphics() returns an object, and in java, it actually returns a reference, not a whole object.
+        new counterUpdater();//You can just do this? Weird. I guess the reference to that new counterUpdater just gets sent into the void or something
     }
 
     public void addImage(int y, int x, Image image, int layer) {
         if(tileMap[x * numTilesX + y]==null){//If its null (problem!)
-            tileMap[x * numTilesX + y] = new LinkedList<ImageLayer>();//Fix the problem!
+            tileMap[x * numTilesX + y] = new LinkedList<>();//Then fix the problem!
         }
         tileMap[x * numTilesX + y].add(new ImageLayer(image, layer));
-        //repaint();//Why...Did i ever have this here? Its no wonder the frame used to flicker
-    }
+        //repaint(); //Why...Did i ever have this here? Its no wonder the frame used to flicker. Left it in so you can see what the old flickering issue is. Justuncomment repaint();.
+    }//Also^, it wasnt just as simple as remove repaint();, as i had to move repaint elsewhere and a few other things for some reason, but repaint(); here was the center of the problem.
 
 
-
-    public void clear() {
-        for (int i = 0; i < tileMap.length; i++) {
-            tileMap[i] = tileMap[i] = new LinkedList<ImageLayer>();
-        }
-        ParserDisplay();
-    }
     @Override
     public void paint(Graphics g) {
         offScreenGraphics.fillRect(0, 0, getWidth(), getHeight());
 
-        this.walkingcycle++;
-
         for (int i = 0; i < numTilesX * numTilesY; i++) {
-            int y = i % numTilesX;
+            int y = i % numTilesY;
             int x = i / numTilesX;
             LinkedList<ImageLayer> layers;
             try {
                 layers = new LinkedList<>(tileMap[i]);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                layers = null;
-            }catch (NullPointerException e){
-                layers = null;
+            } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+                tileMap[i] = new LinkedList<>();
+                layers = new LinkedList<>(tileMap[i]);
             }
             if (layers != null) {
                 for (ImageLayer layer : layers) {//For every layer in layers
                     if (layer != null) {
-                        offScreenGraphics.drawImage(layer.image, x * tileSize, y * tileSize, tileSize, tileSize, null);
+                        offScreenGraphics.drawImage(layer.image, x * tileSize, y * tileSize, tileSize, tileSize, null);//Draw it out
                     }
-
                 }
             }
         }
@@ -118,48 +113,29 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
+        if(start){
+
         int keyCode = e.getKeyCode();
 
         switch (keyCode) {
-            case KeyEvent.VK_ESCAPE:
-                System.exit(0);//this is what ExitOnClose calls, so it works great
-                break;
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_W:
-                EngineReference.youProperty(1);
-                break;
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_S:
-                EngineReference.youProperty(3);
-                break;
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_A:
-                //EngineReference.moveYouLeft();
-                EngineReference.youProperty(2);
-                break;
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_D:
-                //EngineReference.moveYouRight();
-                EngineReference.youProperty(0);
-                break;
-            case KeyEvent.VK_SPACE:
-                EngineReference.moveWait();
-                break;
-            case KeyEvent.VK_R:
-                EngineReference.resetLevel();
-                break;
-            case KeyEvent.VK_Z:
-                EngineReference.moveUndoNew();
-                break;
-
+            case KeyEvent.VK_ESCAPE -> System.exit(1);//this is what ExitOnClose calls, so it works great. 1 for user decided to close
+            case KeyEvent.VK_UP, KeyEvent.VK_W -> EngineReference.youProperty(1);
+            case KeyEvent.VK_DOWN, KeyEvent.VK_S -> EngineReference.youProperty(3);
+            case KeyEvent.VK_LEFT, KeyEvent.VK_A -> EngineReference.youProperty(2);
+            case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> EngineReference.youProperty(0);
+            case KeyEvent.VK_SPACE -> EngineReference.moveWait();//This works, but it doesnt actually do anything because move doesnt work. No point in commenting it out though because it works fine.
+            case KeyEvent.VK_R -> EngineReference.resetLevel();
+            case KeyEvent.VK_Z -> EngineReference.moveUndoNew();
+        }
+        }else{
+            start = true;
         }
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-    }
+    public void keyReleased(KeyEvent e) {}//Required to implement KeyListener.
 
-    private class ImageLayer {
+    private static class ImageLayer {//Same across every instance of BabaFrameSimple. Just a wrapper class of image and layer.
         public Image image;
         public int layer;
 
@@ -169,37 +145,19 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         }
     }
 
-
-
-    public void sdisplay() {
-        display = !display;
-    }
-
-    public int getCounter() {
-        return counter;
-    }
-
-    public boolean display() {
-        return display;
-    }
-
-
-
     public void ParserDisplay() {
         int[][][][] temp = EngineReference.newmemoryEater.peek();
         if(temp==null){
             temp=EngineReference.newmemoryEater.getFirstState();
         }
         this.tileMap = new LinkedList[numTilesX * numTilesY];
-        for (int i = 0; i < numTilesX * numTilesY; i++) {
-            tileMap[i] = new LinkedList<ImageLayer>();
-        }
+
         //if (temp==null){EngineReference.newmemoryEater.getFirstState();}
         if (EngineReference != null) {
             for (int i = 0; i < temp.length; i++) {
                 for (int j = 0; j < temp[i].length; j++) {
                     for (int k = 0; k < temp[i][j].length; k++) {
-                        if (temp[i][j][k][0] != 0 && display) {
+                        if (temp[i][j][k][0] != 0) {
                             if (temp[i][j][k][0]>5){
                                 try {
                                     addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k]))), k);
@@ -218,30 +176,32 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                                 try{
                                     for (int l = 0; l < temp[i][j+1].length; l++) {
                                         if(temp[i][j+1][l][0]==temp[i][j][k][0]){//Connects to the right
-                                            around[0]=true;//break;
+                                            around[0]=true;
+                                            break;
                                         }
                                     }
-                                }catch(Exception e){}
-
-
+                                }catch(Exception e){}//Failing is intentional. Failing means the tile its checking is out of bounds
                                 try{
                                     for (int l = 0; l < temp[i-1][j].length; l++) {
                                         if(temp[i-1][j][l][0]==temp[i][j][k][0]){//Connects to up
-                                            around[1]=true;//break;
+                                            around[1]=true;
+                                            break;
                                         }
                                     }
                                 }catch(Exception e){}
                                 try{
                                     for (int l = 0; l < temp[i][j-1].length; l++) {
                                         if(temp[i][j-1][l][0]==temp[i][j][k][0]){//Connects to the left
-                                            around[2]=true;//break;
+                                            around[2]=true;
+                                            break;
                                         }
                                     }
                                 }catch(Exception e){}
                                 try{
                                     for (int l = 0; l < temp[i+1][j].length; l++) {
-                                        if(temp[i+1][j][l][0]==temp[i][j][k][0]){//Connects to down
-                                            around[3]=true;//break;
+                                        if (temp[i + 1][j][l][0] == temp[i][j][k][0]) {//Connects to down
+                                            around[3] = true;
+                                            break;
                                         }
                                     }
                                 }catch(Exception e){}
@@ -270,88 +230,34 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         int second;
         int third;
         switch (id) {
-            case 5:
-                first = "flag";
-                break;
-            case 6:
-                first = "rock";
-                break;
-            case 7:
-                first = "baba";
-                break;
-            case 8:
-                first = "skull";
-                break;
-            case 9:
-                first = "tile";
-                break;
-            case 10:
-                first = "flag";
-                break;
-            case 11:
-                first = "flower";
-                break;
-            case 12:
-                first = "text_is";
-                break;
-            case 13:
-                first = "text_you";
-                break;
-            case 14:
-                first = "text_win";
-                break;
-            case 15:
-                first = "text_defeat";
-                break;
-            case 16:
-                first = "text_push";
-                break;
-            case 17:
-                first = "text_stop";
-                break;
-            case 18:
-                first = "text_hot";
-                break;
-            case 19:
-                first = "text_melt";
-                break;
-            case 20:
-                first = "text_sink";
-                break;
-            case 21:
-                first = "text_wall";
-                break;
-            case 22:
-                first = "text_lava";
-                break;
-            case 23:
-                first = "text_water";
-                break;
-            case 24:
-                first = "text_brick";
-                break;
-            case 25:
-                first = "text_grass";
-                break;
-            case 26:
-                first = "text_rock";
-                break;
-            case 27:
-                first = "text_baba";
-                break;
-            case 28:
-                first = "text_skull";
-                break;
-            case 29:
-                first = "text_tile";
-                break;
-            case 30:
-                first = "text_flag";
-                break;
-            case 31:
-                first = "text_flower";
-                break;
-                //I really do regret not asking GPT to type this all up for me
+            case 6 -> first = "rock";
+            case 7 -> first = "baba";
+            case 8 -> first = "skull";
+            case 9 -> first = "tile";
+            case 10 -> first = "flag";
+            case 11 -> first = "flower";
+            case 12 -> first = "text_is";
+            case 13 -> first = "text_you";
+            case 14 -> first = "text_win";
+            case 15 -> first = "text_defeat";
+            case 16 -> first = "text_push";
+            case 17 -> first = "text_stop";
+            case 18 -> first = "text_hot";
+            case 19 -> first = "text_melt";
+            case 20 -> first = "text_sink";
+            case 21 -> first = "text_wall";
+            case 22 -> first = "text_lava";
+            case 23 -> first = "text_water";
+            case 24 -> first = "text_brick";
+            case 25 -> first = "text_grass";
+            case 26 -> first = "text_rock";
+            case 27 -> first = "text_baba";
+            case 28 -> first = "text_skull";
+            case 29 -> first = "text_tile";
+            case 30 -> first = "text_flag";
+            case 31 -> first = "text_flower";
+
+            //I really do regret not asking GPT to type this all up for me
         }
         third = counter;
 
@@ -373,22 +279,11 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         int second = 0;
         int third;
         switch (id) {
-
-            case 1:
-                first = "wall";
-                break;
-            case 2:
-                first = "cloud";//Lava is recolored water. If i recolor, fix.
-                break;
-            case 3:
-                first = "water";
-                break;
-            case 4:
-                first = "brick";
-                break;
-            case 5:
-                first = "grass";
-                break;
+            case 1 -> first = "wall";
+            case 2 -> first = "cloud";
+            case 3 -> first = "water";
+            case 4 -> first = "brick";
+            case 5 -> first = "grass";
         }
         third = counter;
         //this is genius
@@ -405,12 +300,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     }
 
     public int counter =1;
-    public boolean display = true;
-
-
-
-
-
 
     public class counterUpdater {
         private ScheduledExecutorService executor;

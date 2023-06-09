@@ -6,9 +6,9 @@ Below is documentation about my implementation of code.
 Memorycontroller stores stuff like this
 [0]=id
 [1]=rotation - 0 = Right, 1=up, 2=left, 3=down, 4=Unrotatable right, 5=unrotatable up, 6=unrotatable left, 7=unrotatable down
-[2]=walkingcycle -
-[3]=hasbeenmovedbyyou(leave 0)
-[4]=hasbeenmoved(leave 0)
+[2]=walkingcycle, 0-1-2-3
+[3]=hasbeenmovedbyyou (Not to be changed manually)
+[4]=hasbeenmoved(not to be changed manually, also unused as move is unused)
 
 
 IDs of objects are
