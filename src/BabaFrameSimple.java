@@ -55,18 +55,18 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         panel.add(label);
 
         this.add(panel);
-        try {
-            while(!start){
-                System.out.printf("");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        while(!start){
+            System.out.printf("");
         }
         this.remove(panel);
         offScreenImage = createImage(getWidth(), getHeight());//""Offscreen. Its not really off screen, more like in the void of the memory somewhere, but visualizing it off screen is how its usually imagined
         offScreenGraphics = offScreenImage.getGraphics();//Only need to do this once interestingly, as offScreenImage.getGraphics() returns an object, and in java, it actually returns a reference, not a whole object.
-        new counterUpdater();//You can just do this? Weird. I guess the reference to that new counterUpdater just gets sent into the void or something
+        //new counterUpdater();//You can just do this? Weird. I guess the reference to that new counterUpdater just gets sent into the void or something
+        //^^i ended up using an actual referenced counter but either way
+
+        counterCycler = new counterUpdater();
     }
+    private counterUpdater counterCycler;
 
     public void addImage(int y, int x, Image image, int layer) {
         if(tileMap[x * numTilesX + y]==null){//If its null (problem!)
@@ -75,7 +75,6 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
         tileMap[x * numTilesX + y].add(new ImageLayer(image, layer));
         //repaint(); //Why...Did i ever have this here? Its no wonder the frame used to flicker. Left it in so you can see what the old flickering issue is. Justuncomment repaint();.
     }//Also^, it wasnt just as simple as remove repaint();, as i had to move repaint elsewhere and a few other things for some reason, but repaint(); here was the center of the problem.
-
 
     @Override
     public void paint(Graphics g) {
@@ -322,7 +321,30 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
                 }
                 ParserDisplay();
             }
+        }public void end(){
+            counterCycler = null;
+
         }
 
+    }public void end(){
+        this.counterCycler.end();
+        super.paint(this.getGraphics());
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("<html>That is the end of the tutorial.<P>  If you want to play more, go buy the actual game, called Baba Is You.<html>");
+        //According to StackOverflow, using HTML is the easiest way to put line breaks into a JLabel
+        panel.add(label);
+        add(panel);
+
+        try {
+            this.getGraphics().drawImage(ImageIO.read(new File("Sprites/EndingMessage.png")),0,0,null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

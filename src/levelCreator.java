@@ -29,12 +29,31 @@ public class levelCreator {
         return currentDepth;
     }
     public static void main(String[] args) throws IOException {
-        //if someone else is using this code for some reason?,
-
-
-
+        BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("What level are you making? (Int)");
+        boolean done;
         int levelnumber = 0;
-
+        while(true){
+            done=true;
+            try{
+                levelnumber = Integer.valueOf(br.readLine());
+            }
+            catch (Exception e){done = false;
+                System.out.println("Invalid input");}
+            if(done){break;}
+        }
+        System.out.println("Type the level out in, x, space, y, space, ID for each tile");//Keep in mind this *is not* meant to be run by the user, and is only for developers. Code Safety (not crash)>Input Efficiency>User convenience
+        System.out.printf("Type anything which doesnt fit x, y, ID to end.");
+        while(true){
+            String[] split = br.readLine().split(" ");
+            if(split.length!=3){
+                break;
+            }
+            try{add(Integer.valueOf(split[0]),Integer.valueOf(split[1]),Integer.valueOf(split[2]));}
+            catch(Exception e){break;}
+            System.out.println("Accepted value");
+        }
+        System.out.println("Writing to file.");
 
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("levels/level"+levelnumber+".data"));
         oos.writeObject(level);

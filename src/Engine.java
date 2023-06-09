@@ -110,6 +110,7 @@ public class Engine {
 
     public void moveToNextLevel(){
         if(currentlevel==7) {
+            babakey.end();
             System.out.println("That is the end of the tutorial. If you want to play more, go buy the actual game, called Baba Is You.");
             System.exit(2);//2 for game ended.
         }
