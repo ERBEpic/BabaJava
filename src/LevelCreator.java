@@ -1,7 +1,7 @@
 import java.io.*;
 import java.lang.*;
 //This is NOT code meant for the user to run. This is DEVELOPER code meant for level creation.
-public class levelCreator {
+public class LevelCreator {
     static int[][][][] level = new int[20][20][0][5];
     public static void add(int x, int y, int id){
         int z = expandZTile(y,x);
@@ -59,5 +59,6 @@ public class levelCreator {
         oos.writeObject(level);
         oos.flush();
         oos.close();
+        System.out.println("Completed successfully");
     }
 }

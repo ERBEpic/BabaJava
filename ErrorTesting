@@ -31,7 +31,8 @@ Outcome - No effect
 Expected - Mash keyboard, nothing happens besides WASD/Arrow keys/Z/R
 Outcome - Did not crash.
 
-
+Expected - Run through the game, no errors
+Outcome - No errors.
 
 
 

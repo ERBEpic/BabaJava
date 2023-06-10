@@ -15,7 +15,7 @@ Its responsible for taking the inputs, and passing them through methods to Engin
 Its responsible for displaying the output to the player through a JFrame.
 Engine tells it, through add/remove image,
  */
-public class BabaFrameSimple extends JFrame implements KeyListener {
+public class BabaFrame extends JFrame implements KeyListener {
     private Engine EngineReference;
     private int tileSize;
     private int numTilesX;
@@ -28,7 +28,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     public void setEngine(Engine engine) {
         EngineReference = engine;
     }
-    public BabaFrameSimple(int numTilesX, int numTilesY) throws IOException {
+    public BabaFrame(int numTilesX, int numTilesY) throws IOException {
         super("Baba is Me!");
         Image image = ImageIO.read(new File("Sprites/baba_0_1.png"));
         setIconImage(image);
@@ -134,7 +134,7 @@ public class BabaFrameSimple extends JFrame implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {}//Required to implement KeyListener.
 
-    private static class ImageLayer {//Same across every instance of BabaFrameSimple. Just a wrapper class of image and layer.
+    private static class ImageLayer {//Same across every instance of BabaFrame. Just a wrapper class of image and layer.
         public Image image;
         public int layer;
 

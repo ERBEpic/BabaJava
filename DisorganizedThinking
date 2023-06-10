@@ -58,9 +58,8 @@ When im actually done, replace nested for loops with a hashmap for every babaobj
 
 end of efficiency
 
-The best way to stop your code from breaking is take away the ability to break it
+The best way to stop your code from breaking is take away the ability to break it (dont let the user input anything, if they EVER do, make sure its only what you want, not specifically what you dont want.
 
-//also im not just copying from chatgpt for the sake of copying from chatgpt i need it to work at least a bit to test the rest
 
 
 To create an object
