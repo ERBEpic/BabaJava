@@ -112,19 +112,7 @@ public class BabaFrame extends JFrame implements KeyListener {
 
     public void keyPressed(KeyEvent e) {
         if(start){
-
-        int keyCode = e.getKeyCode();
-
-        switch (keyCode) {
-            case KeyEvent.VK_ESCAPE -> System.exit(1);//this is what ExitOnClose calls, so it works great. 1 for user decided to close
-            case KeyEvent.VK_UP, KeyEvent.VK_W -> EngineReference.youProperty(1);
-            case KeyEvent.VK_DOWN, KeyEvent.VK_S -> EngineReference.youProperty(3);
-            case KeyEvent.VK_LEFT, KeyEvent.VK_A -> EngineReference.youProperty(2);
-            case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> EngineReference.youProperty(0);
-            case KeyEvent.VK_SPACE -> EngineReference.moveWait();//This works, but it doesnt actually do anything because move doesnt work. No point in commenting it out though because it works fine.
-            case KeyEvent.VK_R -> EngineReference.resetLevel();
-            case KeyEvent.VK_Z -> EngineReference.moveUndoNew();
-        }
+            networkclass.keyToServer(e);
         }else{
             start = true;
         }
@@ -144,14 +132,14 @@ public class BabaFrame extends JFrame implements KeyListener {
     }
 
     public void ParserDisplay() {
-        int[][][][] temp = EngineReference.newmemoryEater.peek();
+        int[][][][] temp = networkclass.peek();
         if(temp==null){
-            temp=EngineReference.newmemoryEater.getFirstState();
+            //lmao
         }
         this.tileMap = new LinkedList[numTilesX * numTilesY];
 
         //if (temp==null){EngineReference.newmemoryEater.getFirstState();}
-        if (EngineReference != null) {
+        if (temp != null) {
             for (int i = 0; i < temp.length; i++) {
                 for (int j = 0; j < temp[i].length; j++) {
                     for (int k = 0; k < temp[i][j].length; k++) {
