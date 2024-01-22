@@ -1,3 +1,4 @@
+import java.nio.file.*;
 import java.io.IOException;
 /*
 This class is responsible for holding the previous state from memoryController, whether that be the starting state or previously calculated state is irrelevant.
@@ -6,14 +7,14 @@ It then outputs that resulting new state back into memoryController, as a new st
 It also directly talks with Babaframe, in add and remove images.
 */
 public class Engine {
-    public newmemoryController newmemoryEater;
-    public BabaFrameSimple babakey;
+    public MemoryController newmemoryEater;
+    public BabaFrame babakey;
     public int[][] propertiesStorageTemp;
 
     public Engine() throws IOException, ClassNotFoundException, InterruptedException {
         Thread.sleep(100);
-        newmemoryEater = new newmemoryController(this);//every engine NEEDS a memorycontroller
-        babakey = new BabaFrameSimple(20,20);
+        newmemoryEater = new MemoryController(this);//every engine NEEDS a memorycontroller
+        babakey = new BabaFrame(20,20);
         babakey.setEngine(this);//I kinda guessed you could just pass along (this) but Im glad that it works
         //^^ also not every frame needs an engine so its changeable (this isnt just inconsistent coding)
         for (int i = 0; i < levelStoragePush.length; i++) {
@@ -91,31 +92,29 @@ public class Engine {
     public void moveUndoNew() {
         if (newmemoryEater.getSize() > 1) {
             newmemoryEater.pop();
-            this.levelStoragePush = newmemoryController.deepCopy(newmemoryEater.peek());
+            this.levelStoragePush = MemoryController.deepCopy(newmemoryEater.peek());
             newmemoryEater.popreties();
-            propertiesStorage=newmemoryController.deepCopy(newmemoryEater.peekreties());
+            propertiesStorage= MemoryController.deepCopy(newmemoryEater.peekreties());
         }else{
             resetLevel();
         }
         babakey.ParserDisplay();
-
     }
 
     public void resetLevel(){
         newmemoryEater.reset();
         this.levelStoragePush= newmemoryEater.getFirstState();
         babakey.ParserDisplay();
-
     }
 
     public void moveToNextLevel(){
-        if(currentlevel==7) {
+        level = currentlevel + 1;
+        if(!Files.exists(Path.of("levels/level" + level + ".data"))) {//This is basically a try catch block but better
             babakey.end();
             System.out.println("That is the end of the tutorial. If you want to play more, go buy the actual game, called Baba Is You.");
             System.exit(2);//2 for game ended.
         }
-            propertiesStorage = new int[100][100];
-            level = currentlevel + 1;
+            propertiesStorage = new int[100][100];//Start it fresh
             newmemoryEater.newLevel(level);
             this.levelStoragePush = newmemoryEater.peek();
             currentlevel = level;
@@ -133,7 +132,7 @@ public class Engine {
         }
         return -1; // No open index found
     }
-    public static int[][][][] expandZTile(int x, int y, int[][][][] maybe){//I stole this from levelCreator
+    public static int[][][][] expandZTile(int x, int y, int[][][][] maybe){//I stole this code from LevelCreator so it should be identical to there
         int currentDepth = maybe[x][y].length;
         int[][] newArray = new int[currentDepth + 1][5];
         for (int z = 0; z < currentDepth; z++) {
@@ -311,12 +310,12 @@ public class Engine {
         }
         propertiesStorage=propertiesStorageTemp;
 
-        newmemoryEater.push(newmemoryController.deepCopy(levelStoragePush));
+        newmemoryEater.push(MemoryController.deepCopy(levelStoragePush));
         babakey.ParserDisplay();
-        levelStoragePush= newmemoryController.deepCopy(newmemoryEater.peek());
+        levelStoragePush= MemoryController.deepCopy(newmemoryEater.peek());
         //and AFTER everything is done
 
-        newmemoryEater.pushreties(newmemoryController.deepCopy(propertiesStorage));
+        newmemoryEater.pushreties(MemoryController.deepCopy(propertiesStorage));
 
     }
 

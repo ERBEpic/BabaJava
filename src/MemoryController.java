@@ -7,13 +7,13 @@ It also stores the class I made for deepcopying, but thats more just a DRY(don't
 */
 
 //Why is java so annoying when it comes to references and copying? Why cant I just copy one object, not copy a reference to an object?
-public class newmemoryController {
+public class MemoryController {
     private Engine EngineReference;
     private int[][][][] firstState;
     private ArrayDeque<int[][][][]> memoryStack = new ArrayDeque<>();
     private ArrayDeque<int[][]> propertiesStack = new ArrayDeque<>();
 
-    public newmemoryController(Engine engine) throws IOException, ClassNotFoundException {
+    public MemoryController(Engine engine) throws IOException, ClassNotFoundException {
         EngineReference = engine;
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream("levels/level0.data"));
         Object obj = ois.readObject();
@@ -61,16 +61,10 @@ public class newmemoryController {
         Object obj = ois.readObject();
         ois.close();
         firstState = (int[][][][])obj;
-        }catch (IOException | ClassNotFoundException e){throw new RuntimeException(e);}//Why is it | for exceptions but || for booleans?????
-        for (int i = 0; i < firstState.length; i++) {//There really is no better place to do this
-            for (int j = 0; j < firstState[i].length; j++) {
-                for (int k = 0; k < firstState[i][j].length; k++) {
-                    if(firstState[i][j][k][0]==8){//Skulls face DOWN by default
-                        firstState[i][j][k][1]=3;
-                    }
-                }
-            }
-        }
+        }catch (IOException | ClassNotFoundException e){//Why is it | for exceptions but || for booleans?????
+            System.out.println("Please obtain the required level files before attempting to run this code.");
+            throw new RuntimeException(e);}//Also this is MEANT to crash if it doesnt read a file. If you dont have the first level, then the game wont work. You cant just move on like nothing happened, as its a required file, and you cant ask for a second input, as it will be identical to the previous.
+
         memoryStack.push(deepCopy(firstState));
         memoryStack.push(deepCopy(firstState));
     }
@@ -85,6 +79,7 @@ public class newmemoryController {
         return propertiesStack.peek();
     }
     public static int[][][][] deepCopy(int[][][][] array) {//This is why I dont like java.
+        //Also, static because deepCopy is the same for all instances of memoryController.
         int[][][][] copy = new int[array.length][][][];
         for (int i = 0; i < array.length; i++) {
             copy[i] = new int[array[i].length][][];
