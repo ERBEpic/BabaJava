@@ -16,20 +16,19 @@ Its responsible for displaying the output to the player through a JFrame.
 Engine tells it, through add/remove image,
  */
 public class BabaFrame extends JFrame implements KeyListener {
-    private Engine EngineReference;
     private int tileSize;
     private int numTilesX;
     private int numTilesY;
+
+    private NetworkClient networkclass;
     boolean start = false;
     private LinkedList[] tileMap;//No idea why this is allowed? This feels SUPER wrong. LinkedList is usually declared like "LinkedList<String> linkedList = new LinkedList<>();"
     //Also linkedlist is faster than arraylist for this usage. You can replace LinkedList with ArrayList and the code works the same, but slower.
     private Image offScreenImage;
     private Graphics offScreenGraphics;
-    public void setEngine(Engine engine) {
-        EngineReference = engine;
-    }
-    public BabaFrame(int numTilesX, int numTilesY) throws IOException {
+    public BabaFrame(int numTilesX, int numTilesY, NetworkClient network) throws IOException {
         super("Baba is Me!");
+        networkclass = network;
         Image image = ImageIO.read(new File("Sprites/baba_0_1.png"));
         setIconImage(image);
 
