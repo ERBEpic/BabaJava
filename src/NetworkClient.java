@@ -5,11 +5,11 @@ import java.net.Socket;
 public class NetworkClient {
     private static final String SERVER_IP = "localhost";
     private static final int PORT = 12345;
-
-    public int userId;
-    public BabaFrame babakey;
-    public int[][][][] currentState;
-
+    public static int userId;
+    public static BabaFrame babakey;
+    public static int[][][][] currentState;
+    public static Socket socket;
+    public static ObjectOutputStream outputStream;
     public NetworkClient() throws IOException {
         babakey = new BabaFrame(20,20,this);
         //id = server.requestid();
@@ -19,13 +19,15 @@ public class NetworkClient {
         ois.close();*/
 
         try {
-            Socket socket = new Socket(SERVER_IP, PORT);
+            Socket thissocket = new Socket(SERVER_IP, PORT);
+            this.socket=thissocket;
 
             // ObjectOutputStream for sending objects to the server
-            ObjectOutputStream clientOutput = new ObjectOutputStream(socket.getOutputStream());
+            ObjectOutputStream clientOutput = new ObjectOutputStream(thissocket.getOutputStream());
+            this.outputStream = clientOutput;
 
-            // ObjectInputStream for receiving objects from the server
-            ObjectInputStream clientInput = new ObjectInputStream(socket.getInputStream());
+                    // ObjectInputStream for receiving objects from the server
+            ObjectInputStream clientInput = new ObjectInputStream(thissocket.getInputStream());
 /*
             // Example: Send an object to the server
             Message messageObject = new Message(1, 4);
@@ -40,7 +42,7 @@ public class NetworkClient {
                 // Deserialize the object received from the server
                 Protocol.Message receivedMessage = (Protocol.Message) clientInput.readObject();
 
-                Protocol.messageRecievingProtocol(receivedMessage, this);
+                Protocol.messageRecievingProtocol(receivedMessage);
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -50,7 +52,7 @@ public class NetworkClient {
     public void keyToServer(KeyEvent e){
         //server.write(e,id);
     }
-    public void updateLevel(int[][][][] mem){
+    public static void updateLevel(int[][][][] mem){
         currentState = mem;
     }
     public int[][][][] peek(){

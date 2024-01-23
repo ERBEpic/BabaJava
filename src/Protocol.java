@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.io.Serializable;
 
 public class Protocol implements Serializable {
@@ -6,12 +7,11 @@ public class Protocol implements Serializable {
     public static class Message {
         int id;
         Object data;
-        int userId = 0;
         public Message(int messageId, Object payload){
             id = messageId;
             data = payload;
         }
-        public Message(int messageId, Object payload, int userId){
+        public Message(int messageId, Object payload, int Userid){
             id = messageId;
             data = payload;
         }
@@ -25,7 +25,7 @@ public class Protocol implements Serializable {
     }
 
 
-    public static void messageRecievingProtocol(Message a, NetworkClient b){
+    public static void messageRecievingProtocol(Message a){
         // Process the received object based on its ID and payload
         int messageId = a.getMessageId();
         Object payload = a.getPayload();
@@ -34,44 +34,50 @@ public class Protocol implements Serializable {
                 System.exit(672);
             }
             case 1 -> {//Update memory
-                b.updateLevel((int[][][][]) payload);
+                NetworkClient.updateLevel((int[][][][]) payload);
             }
             case 2 -> {//Submit ID
-                b.userId = a.userId;
+                NetworkClient.userId = (int) payload;
             }
             case 3 -> {//User Messages (to everyone)
-
+                String umessage = (String) payload;
             }
             case 4 ->{//Bad Input (Make sure it does NOT go to everyone)
-
+                boolean binput = (boolean) payload;
             }
             case 5 ->{//New KeyEvent
 
             }
         }
     }
-    public static void messageSendingProtocol(int id, Object data, int userId){
+    public static void messageSendingProtocol(int id, Object data) throws IOException {
         // Process the received object based on its ID and payload
-
+        Message message = null;
         switch(id){
-            case -1 ->{//Stop execution
-
+            case -1 ->{// I am stopping execution
+                message = new Message(-1,null,NetworkClient.userId);
             }
-            case 1 -> {//Update memory
-                b.updateLevel((int[][][][]) payload);
+            case 1 -> {//I need a new memory state
+                message = new Message(1,null,NetworkClient.userId);
             }
             case 2 -> {//Submit ID
-                b.userId = a.userId;
+                //N/A
             }
-            case 3 -> {//User Messages (to everyone)
-
+            case 3 -> {//User Messages (to everyone ELSE)
+                message = new Message(3,data,NetworkClient.userId);
             }
             case 4 ->{//Bad Input (Make sure it does NOT go to everyone)
-
+                //N/A
             }
             case 5 ->{//New KeyEvent
-
+                message = new Message(5,data,NetworkClient.userId);
             }
         }
+        if(message!=null) {//This should never not be null
+            NetworkClient.outputStream.writeObject(message);
+        }else{
+            System.out.println("NULL MESSAGE - FIX CODE");
+        }
+
     }
 }
