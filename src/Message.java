@@ -1,7 +1,7 @@
 public class Message {
     int id;
     Object data;
-
+    int userId;
     public Message(int messageId, Object payload) {
         id = messageId;
         data = payload;
@@ -19,4 +19,5 @@ public class Message {
     public Object getPayload() {
         return data;
     }
+    public int getUserId(){return userId;}
 }

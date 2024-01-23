@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NetworkServer {
+    public static Engine BabaEngine;
     private static final int PORT = 12345;
-
     private static int clientIdCounter = 1;
-    private static Map<Integer, ObjectOutputStream> clientsMap = new HashMap<>();
+    protected static Map<Integer, ObjectOutputStream> clientsMap = new HashMap<>();
 
     public static void main(String[] args) {
         try {
@@ -26,6 +26,7 @@ public class NetworkServer {
 
                 ObjectOutputStream clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
                 clientsMap.put(clientId, clientOutput);
+                Protocol.messageSendingProtocolServer(2,clientId,clientId);
 
                 // Create a new thread to handle the client
                 Thread clientHandlerThread = new Thread(() -> handleClient(clientId, clientSocket));

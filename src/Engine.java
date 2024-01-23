@@ -147,7 +147,7 @@ public class Engine {
 
 
     //Special
-    public void youProperty(int d){
+    public void youProperty(int d, int userid){
         int vertical=0;
         int horizontal=0;
         boolean defeated = false;

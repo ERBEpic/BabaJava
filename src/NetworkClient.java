@@ -14,7 +14,6 @@ public class NetworkClient {
     public static ObjectOutputStream outputStream;
     public NetworkClient() throws IOException {
         //id = server.requestid();
-        userId = 0;
         /*ObjectInputStream ois = new ObjectInputStream(new FileInputStream("levels/level0.data"));
         Object obj = ois.readObject();
         ois.close();*/
@@ -43,7 +42,7 @@ public class NetworkClient {
                 // Deserialize the object received from the server
                 Message receivedMessage = (Message) clientInput.readObject();
 
-                Protocol.messageRecievingProtocol(receivedMessage);
+                Protocol.messageRecievingProtocolClient(receivedMessage);
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
