@@ -26,6 +26,18 @@ public class Protocol implements Serializable {
             }
             case 5 ->{//New KeyEvent
                 KeyEvent e = (KeyEvent) data;
+                int keyCode = e.getKeyCode();
+
+                switch (keyCode) {
+                    case KeyEvent.VK_ESCAPE -> System.exit(1);//this is what ExitOnClose calls, so it works great. 1 for user decided to close
+                    case KeyEvent.VK_UP, KeyEvent.VK_W -> EngineReference.youProperty(1);
+                    case KeyEvent.VK_DOWN, KeyEvent.VK_S -> EngineReference.youProperty(3);
+                    case KeyEvent.VK_LEFT, KeyEvent.VK_A -> EngineReference.youProperty(2);
+                    case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> EngineReference.youProperty(0);
+                    case KeyEvent.VK_SPACE -> EngineReference.moveWait();//This works, but it doesnt actually do anything because move doesnt work. No point in commenting it out though because it works fine.
+                    case KeyEvent.VK_R -> EngineReference.resetLevel();
+                    case KeyEvent.VK_Z -> EngineReference.moveUndoNew();
+                }
             }
         }
     }
