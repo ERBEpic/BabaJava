@@ -1,5 +1,7 @@
 import java.awt.event.KeyEvent;
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class NetworkClient {
@@ -39,7 +41,7 @@ public class NetworkClient {
             //Make a new thread here if the world ends
             while (true) {
                 // Deserialize the object received from the server
-                Protocol.Message receivedMessage = (Protocol.Message) clientInput.readObject();
+                Message receivedMessage = (Message) clientInput.readObject();
 
                 Protocol.messageRecievingProtocol(receivedMessage);
             }

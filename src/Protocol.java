@@ -1,52 +1,31 @@
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.Serializable;
 
 public class Protocol implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    public static class Message {
-        int id;
-        Object data;
-        public Message(int messageId, Object payload){
-            id = messageId;
-            data = payload;
-        }
-        public Message(int messageId, Object payload, int Userid){
-            id = messageId;
-            data = payload;
-        }
-        public int getMessageId() {
-            return id;
-        }
-
-        public Object getPayload() {
-            return data;
-        }
-    }
-
-
     public static void messageRecievingProtocol(Message a){
         // Process the received object based on its ID and payload
         int messageId = a.getMessageId();
-        Object payload = a.getPayload();
+        Object data = a.getPayload();
         switch(messageId){
             case -1 ->{//Stop execution
                 System.exit(672);
             }
             case 1 -> {//Update memory
-                NetworkClient.updateLevel((int[][][][]) payload);
+                NetworkClient.updateLevel((int[][][][]) data);
             }
             case 2 -> {//Submit ID
-                NetworkClient.userId = (int) payload;
+                NetworkClient.userId = (int) data;
             }
             case 3 -> {//User Messages (to everyone)
-                String umessage = (String) payload;
+                String umessage = (String) data;
             }
             case 4 ->{//Bad Input (Make sure it does NOT go to everyone)
-                boolean binput = (boolean) payload;
+                boolean binput = (boolean) data;
             }
             case 5 ->{//New KeyEvent
-
+                KeyEvent e = (KeyEvent) data;
             }
         }
     }
