@@ -11,7 +11,6 @@ public class NetworkClient {
     public static Socket socket;
     public static ObjectOutputStream outputStream;
     public NetworkClient() throws IOException {
-        babakey = new BabaFrame(20,20,this);
         //id = server.requestid();
         userId = 0;
         /*ObjectInputStream ois = new ObjectInputStream(new FileInputStream("levels/level0.data"));
@@ -49,13 +48,13 @@ public class NetworkClient {
         }
     }
 
-    public void keyToServer(KeyEvent e){
+    public static void keyToServer(KeyEvent e){
         //server.write(e,id);
     }
     public static void updateLevel(int[][][][] mem){
         currentState = mem;
     }
-    public int[][][][] peek(){
+    public static int[][][][] peek(){
         return currentState;
     }
 }

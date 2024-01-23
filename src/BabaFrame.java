@@ -20,15 +20,13 @@ public class BabaFrame extends JFrame implements KeyListener {
     private int numTilesX;
     private int numTilesY;
 
-    private NetworkClient networkclass;
     boolean start = false;
     private LinkedList[] tileMap;//No idea why this is allowed? This feels SUPER wrong. LinkedList is usually declared like "LinkedList<String> linkedList = new LinkedList<>();"
     //Also linkedlist is faster than arraylist for this usage. You can replace LinkedList with ArrayList and the code works the same, but slower.
     private Image offScreenImage;
     private Graphics offScreenGraphics;
-    public BabaFrame(int numTilesX, int numTilesY, NetworkClient network) throws IOException {
+    public BabaFrame(int numTilesX, int numTilesY) throws IOException {
         super("Baba is Me!");
-        networkclass = network;
         Image image = ImageIO.read(new File("Sprites/baba_0_1.png"));
         setIconImage(image);
 
@@ -112,7 +110,7 @@ public class BabaFrame extends JFrame implements KeyListener {
 
     public void keyPressed(KeyEvent e) {
         if(start){
-            networkclass.keyToServer(e);
+            NetworkClient.keyToServer(e);
         }else{
             start = true;
         }
@@ -132,7 +130,7 @@ public class BabaFrame extends JFrame implements KeyListener {
     }
 
     public void ParserDisplay() {
-        int[][][][] temp = networkclass.peek();
+        int[][][][] temp = NetworkClient.peek();
         if(temp==null){
             //lmao
         }
