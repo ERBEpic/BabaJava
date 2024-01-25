@@ -26,7 +26,6 @@ public class BabaFrame extends JFrame implements KeyListener {
     //Also linkedlist is faster than arraylist for this usage. You can replace LinkedList with ArrayList and the code works the same, but slower.
     private Image offScreenImage;
     private Graphics offScreenGraphics;
-    private int tx, ty;
 
     public BabaFrame(int numTilesX, int numTilesY) throws IOException {
         super("Baba is Me!");
@@ -47,6 +46,8 @@ public class BabaFrame extends JFrame implements KeyListener {
         addKeyListener(this);//Listen for when keys are pressed
         setFocusable(true);//Let you be able to click to bring to front
         //setUndecorated(true);//Remove titlebar and name and stuff (new java versions change how JFrame is implemented with weird insets and makes it not work decorated)
+        revalidate();
+        repaint();
         setIgnoreRepaint(true);//JFrame has a behavior to automatically repaint whenever updated. This, however, is unneeded for me because It only has to update A. every 175ms, for the shaking animation, and B. Whenever the player inputs something. otherwise, the game doesnt need to be repainted.
         setVisible(true);//Self explanatory
         JPanel panel = new JPanel();

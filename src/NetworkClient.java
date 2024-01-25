@@ -8,10 +8,10 @@ public class NetworkClient {
     private static final String SERVER_IP = "localhost";
     private static final int PORT = 12345;
     public static int userId;
-    public static BabaFrame babakey;
     public static int[][][][] currentState;
     public static Socket socket;
-    public static ObjectOutputStream outputStream;
+    protected static ObjectOutputStream outputStream;
+    private static ObjectInputStream inputStream;
     public NetworkClient() throws IOException {
         //id = server.requestid();
         /*ObjectInputStream ois = new ObjectInputStream(new FileInputStream("levels/level0.data"));
@@ -27,7 +27,7 @@ public class NetworkClient {
             this.outputStream = clientOutput;
 
                     // ObjectInputStream for receiving objects from the server
-            ObjectInputStream clientInput = new ObjectInputStream(thissocket.getInputStream());
+            inputStream = new ObjectInputStream(thissocket.getInputStream());
 /*
             // Example: Send an object to the server
             Message messageObject = new Message(1, 4);
@@ -40,7 +40,7 @@ public class NetworkClient {
             //Make a new thread here if the world ends
             while (true) {
                 // Deserialize the object received from the server
-                Message receivedMessage = (Message) clientInput.readObject();
+                Message receivedMessage = (Message) inputStream.readObject();
 
                 Protocol.messageRecievingProtocolClient(receivedMessage);
             }
@@ -58,4 +58,5 @@ public class NetworkClient {
     public static int[][][][] peek(){
         return currentState;
     }
+
 }

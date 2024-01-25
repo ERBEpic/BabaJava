@@ -1,7 +1,8 @@
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
+import java.util.Map;
 public class Protocol implements Serializable {
     private static final long serialVersionUID = 1L;
     public static void messageRecievingProtocolClient(Message a) throws IOException {
@@ -10,7 +11,12 @@ public class Protocol implements Serializable {
         Object data = a.getPayload();
         switch(messageId){
             case -1 ->{//Stop execution
-                System.exit(672);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.exit(-1);
             }
             case 1 -> {//Update memory
                 NetworkClient.updateLevel((int[][][][]) data);
@@ -37,7 +43,7 @@ public class Protocol implements Serializable {
         // Process the received object based on its ID and payload
         Message message = null;
         switch(id){
-            case -1 ->{// I am stopping execution
+            case -1 ->{// I am stopping execution (in key)
 
             }
             case 1 -> {//I need a new memory state
@@ -57,8 +63,11 @@ public class Protocol implements Serializable {
                 int keyCode = e.getKeyCode();
                 System.out.println("Bi");
                 switch(keyCode){
-                case KeyEvent.VK_ESCAPE -> message = new Message(5,-1,userId);//this is what ExitOnClose calls, so it works great. 1 for user decided to close
-                case KeyEvent.VK_UP, KeyEvent.VK_W -> message = new Message(5,0,userId);
+                    case KeyEvent.VK_ESCAPE -> {
+                        message = new Message(5,-1,userId);//this is what ExitOnClose calls, so it works great. 1 for user decided to close
+                        System.exit(-1);
+                    }
+                    case KeyEvent.VK_UP, KeyEvent.VK_W -> message = new Message(5,0,userId);
                 case KeyEvent.VK_DOWN, KeyEvent.VK_S -> message = new Message(5,1,userId);
                 case KeyEvent.VK_LEFT, KeyEvent.VK_A -> message = new Message(5,2,userId);
                 case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> message = new Message(5,3,userId);
@@ -83,7 +92,6 @@ public class Protocol implements Serializable {
         Message message = null;
         switch(messageId){
             case -1 -> {//Stop exection (Blank)
-                System.exit(-1);
             }
             case 1 -> {//Memory (Blank)
 
@@ -92,10 +100,10 @@ public class Protocol implements Serializable {
 
             }
             case 3 -> {//User Messages (to everyone)
-                for (int i = 1; i < NetworkServer.clientsMap.size(); i++) {//< or <=
-                    if(i!=a.getUserId()) {
+                for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
+                    if(entry.getKey()!=a.getUserId()) {
                         message = new Message(3,data);
-                        NetworkServer.clientsMap.get(i).writeObject(message);
+                        NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
                     }
                 }
             }
@@ -122,15 +130,25 @@ public class Protocol implements Serializable {
         Message message;
         switch(id){
             case -1 ->{// I am stopping execution
-                message = new Message(-1,NetworkClient.userId);
+
+                message = new Message(-1,userId);
                 NetworkServer.clientsMap.get(userId).writeObject(message);
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                NetworkServer.clientRunMap.put(userId, false);
+                NetworkServer.clientsMap.get(userId).close();
+                NetworkServer.clientsMap.remove(userId);
+
+
                 //Code to send stop message to the user.
             }
             case 1 -> {//New memory states
                 message = new Message(1,NetworkServer.BabaEngine.newmemoryEater.peek());//No need for any userID. Send to all
-                for (int i = 1; i <= NetworkServer.clientsMap.size(); i++) {
-                    System.out.println(i);
-                    NetworkServer.clientsMap.get(i).writeObject(message);
+                for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
+                    NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
                 }
             }
             case 2 -> {//Submit Identification Tag
@@ -139,10 +157,8 @@ public class Protocol implements Serializable {
             }
             case 3 -> {//User Messages (to everyone ELSE)
                 message = new Message(3,data);
-                for (int i = 1; i <= NetworkServer.clientsMap.size(); i++) {//< or <=?
-                    if(i!=userId){
-                        NetworkServer.clientsMap.get(i).writeObject(message);
-                    }
+                for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
+                        NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
                 }
             }
             case 4 ->{//Bad Input (Make sure it does NOT go to everyone)

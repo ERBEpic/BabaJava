@@ -101,6 +101,11 @@ public class Engine {
     public void resetLevel(){
         newmemoryEater.reset();
         this.levelStoragePush= newmemoryEater.getFirstState();
+        try {
+            Protocol.messageSendingProtocolServer(1,levelStoragePush,0);
+        } catch (IOException e) {
+
+        }
     }
 
     public void moveToNextLevel(){
@@ -321,7 +326,7 @@ public class Engine {
         try {
             Protocol.messageSendingProtocolServer(1,levelStoragePush,0);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
         }
     }
 

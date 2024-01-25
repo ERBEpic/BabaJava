@@ -3,15 +3,17 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class NetworkServer {
     public static Engine BabaEngine;
     private static final int PORT = 12345;
-    private static int clientIdCounter = 1;
-    protected static Map<Integer, ObjectOutputStream> clientsMap = new HashMap<>();
-
+    private static int clientIdCounter = 0;
+    protected static Map<Integer, ObjectOutputStream> clientsMap = new TreeMap<>();
+    protected static Map<Integer, Boolean> clientRunMap = new HashMap<>();
     public NetworkServer(){
         try {
             Thread engineThread = new Thread(() -> {
@@ -34,15 +36,17 @@ public class NetworkServer {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Client connected. Assigning ID...");
 
-                int clientId = clientIdCounter++;
+                int clientId = clientSocket.getPort();//Will this work? Test later
                 System.out.println("Assigned ID to client: " + clientId);
 
                 ObjectOutputStream clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
                 clientsMap.put(clientId, clientOutput);
 
                 // Create a new thread to handle the client
+                Boolean Run = new Boolean(true);
                 Thread clientHandlerThread = new Thread(() -> handleClient(clientId, clientSocket));
                 clientHandlerThread.start();
+                clientRunMap.put(clientId, true);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,9 +57,9 @@ public class NetworkServer {
         try {
             ObjectInputStream clientInput = new ObjectInputStream(clientSocket.getInputStream());
 
-            Protocol.messageSendingProtocolServer(2,clientId,clientId);
+            Protocol.messageSendingProtocolServer(2, clientId, clientId);
 
-            while (true) {
+            while (NetworkServer.clientRunMap.get(clientId)) {
                 // Deserialize the object received from the client
                 Message receivedMessage = (Message) clientInput.readObject();
 
@@ -68,8 +72,20 @@ public class NetworkServer {
 
                 Protocol.messageRecievingProtocolServer(receivedMessage);
             }
+        } catch (SocketException e) {
+            // Handle client disconnection
+            System.out.println("Client " + clientId + " disconnected.");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                // Close resources in a finally block
+                clientSocket.close();
+                clientRunMap.remove(clientId);
+                clientsMap.remove(clientId);
+            } catch (IOException e) {
+                e.printStackTrace();  // Handle the exception appropriately
+            }
         }
     }
 }
