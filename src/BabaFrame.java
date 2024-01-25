@@ -1,7 +1,5 @@
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -66,6 +64,16 @@ public class BabaFrame extends JFrame implements KeyListener {
         //^^i ended up using an actual referenced counter but either way
 
         counterCycler = new counterUpdater();
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    Protocol.messageSendingProtocolClient(-1,null,NetworkClient.userId);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     private counterUpdater counterCycler;

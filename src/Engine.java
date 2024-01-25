@@ -96,6 +96,9 @@ public class Engine {
         }else{
             resetLevel();
         }
+        try {
+            Protocol.messageSendingProtocolServer(1,levelStoragePush,0);
+        } catch (IOException e) {}
     }
 
     public void resetLevel(){
@@ -103,9 +106,7 @@ public class Engine {
         this.levelStoragePush= newmemoryEater.getFirstState();
         try {
             Protocol.messageSendingProtocolServer(1,levelStoragePush,0);
-        } catch (IOException e) {
-
-        }
+        } catch (IOException e) {}
     }
 
     public void moveToNextLevel(){
@@ -128,6 +129,9 @@ public class Engine {
             currentlevel = level;
             newmemoryEater.pop();
             newmemoryEater.pop();//Cleanup!
+        try {
+            Protocol.messageSendingProtocolServer(1,levelStoragePush,0);
+        } catch (IOException e) {}
     }
 
 
@@ -325,9 +329,7 @@ public class Engine {
         newmemoryEater.pushreties(MemoryController.deepCopy(propertiesStorage));
         try {
             Protocol.messageSendingProtocolServer(1,levelStoragePush,0);
-        } catch (IOException e) {
-
-        }
+        } catch (IOException e) {}
     }
 
 

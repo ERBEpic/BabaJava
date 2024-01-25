@@ -47,6 +47,9 @@ public class NetworkServer {
                 Thread clientHandlerThread = new Thread(() -> handleClient(clientId, clientSocket));
                 clientHandlerThread.start();
                 clientRunMap.put(clientId, true);
+                try {
+                    Protocol.messageSendingProtocolServer(1,null,clientId);
+                } catch (IOException e) {}
             }
         } catch (IOException e) {
             e.printStackTrace();
