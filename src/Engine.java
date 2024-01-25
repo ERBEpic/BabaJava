@@ -64,7 +64,6 @@ public class Engine {
         for (int i = 0; i < 20; i++) {
             setProperty(12+i,3,1);
         }
-        babakey.ParserDisplay();
     }
 
     //it should basically never crash but its easier to solve the try catch problems here
@@ -97,13 +96,11 @@ public class Engine {
         }else{
             resetLevel();
         }
-        babakey.ParserDisplay();
     }
 
     public void resetLevel(){
         newmemoryEater.reset();
         this.levelStoragePush= newmemoryEater.getFirstState();
-        babakey.ParserDisplay();
     }
 
     public void moveToNextLevel(){
@@ -111,6 +108,13 @@ public class Engine {
         if(!Files.exists(Path.of("levels/level" + level + ".data"))) {//This is basically a try catch block but better
             babakey.end();
             System.out.println("That is the end of the tutorial. If you want to play more, go buy the actual game, called Baba Is You.");
+            for (int i = 0; i < NetworkServer.clientsMap.size(); i++) {
+                try {
+                    Protocol.messageSendingProtocolServer(-1,null,0);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             System.exit(2);//2 for game ended.
         }
             propertiesStorage = new int[100][100];//Start it fresh
@@ -147,7 +151,7 @@ public class Engine {
 
 
     //Special
-    public void youProperty(int d, int userid){
+    public void youProperty(int d){
         int vertical=0;
         int horizontal=0;
         boolean defeated = false;
@@ -310,12 +314,15 @@ public class Engine {
         propertiesStorage=propertiesStorageTemp;
 
         newmemoryEater.push(MemoryController.deepCopy(levelStoragePush));
-        babakey.ParserDisplay();
         levelStoragePush= MemoryController.deepCopy(newmemoryEater.peek());
         //and AFTER everything is done
 
         newmemoryEater.pushreties(MemoryController.deepCopy(propertiesStorage));
-
+        try {
+            Protocol.messageSendingProtocolServer(1,levelStoragePush,0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

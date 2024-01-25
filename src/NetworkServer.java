@@ -12,8 +12,21 @@ public class NetworkServer {
     private static int clientIdCounter = 1;
     protected static Map<Integer, ObjectOutputStream> clientsMap = new HashMap<>();
 
-    public static void main(String[] args) {
+    public NetworkServer(){
         try {
+            Thread engineThread = new Thread(() -> {
+                try {
+                    BabaEngine = new Engine();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            engineThread.start();
+
             ServerSocket serverSocket = new ServerSocket(PORT);
             System.out.println("Server waiting for clients...");
 
@@ -26,7 +39,6 @@ public class NetworkServer {
 
                 ObjectOutputStream clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
                 clientsMap.put(clientId, clientOutput);
-                Protocol.messageSendingProtocolServer(2,clientId,clientId);
 
                 // Create a new thread to handle the client
                 Thread clientHandlerThread = new Thread(() -> handleClient(clientId, clientSocket));
@@ -41,9 +53,7 @@ public class NetworkServer {
         try {
             ObjectInputStream clientInput = new ObjectInputStream(clientSocket.getInputStream());
 
-            // Example: Send a welcome message to the client
-            Message welcomeMessage = new Message(0, "Hai");
-            clientsMap.get(clientId).writeObject(welcomeMessage);
+            Protocol.messageSendingProtocolServer(2,clientId,clientId);
 
             while (true) {
                 // Deserialize the object received from the client
@@ -56,9 +66,7 @@ public class NetworkServer {
                 System.out.println("Received Message ID from client " + clientId + ": " + messageId);
                 System.out.println("Received Payload: " + payload);
 
-                // Example: Send a response to the client
-                Message responseObject = new Message(2, 5);
-                clientsMap.get(clientId).writeObject(responseObject);
+                Protocol.messageRecievingProtocolServer(receivedMessage);
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

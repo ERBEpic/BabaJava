@@ -1,8 +1,10 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -19,12 +21,13 @@ public class BabaFrame extends JFrame implements KeyListener {
     private int tileSize;
     private int numTilesX;
     private int numTilesY;
-
     boolean start = false;
     private LinkedList[] tileMap;//No idea why this is allowed? This feels SUPER wrong. LinkedList is usually declared like "LinkedList<String> linkedList = new LinkedList<>();"
     //Also linkedlist is faster than arraylist for this usage. You can replace LinkedList with ArrayList and the code works the same, but slower.
     private Image offScreenImage;
     private Graphics offScreenGraphics;
+    private int tx, ty;
+
     public BabaFrame(int numTilesX, int numTilesY) throws IOException {
         super("Baba is Me!");
         Image image = ImageIO.read(new File("Sprites/baba_0_1.png"));
@@ -43,7 +46,7 @@ public class BabaFrame extends JFrame implements KeyListener {
         setBackground(Color.BLACK);//Self Explanatory
         addKeyListener(this);//Listen for when keys are pressed
         setFocusable(true);//Let you be able to click to bring to front
-        setUndecorated(true);//Remove titlebar and name and stuff (new java versions change how JFrame is implemented with weird insets and makes it not work decorated)
+        //setUndecorated(true);//Remove titlebar and name and stuff (new java versions change how JFrame is implemented with weird insets and makes it not work decorated)
         setIgnoreRepaint(true);//JFrame has a behavior to automatically repaint whenever updated. This, however, is unneeded for me because It only has to update A. every 175ms, for the shaking animation, and B. Whenever the player inputs something. otherwise, the game doesnt need to be repainted.
         setVisible(true);//Self explanatory
         JPanel panel = new JPanel();
@@ -52,7 +55,7 @@ public class BabaFrame extends JFrame implements KeyListener {
         panel.add(label);
 
         this.add(panel);
-        while(!start){
+        while (!start) {
             System.out.printf("");
         }
         this.remove(panel);
@@ -63,10 +66,11 @@ public class BabaFrame extends JFrame implements KeyListener {
 
         counterCycler = new counterUpdater();
     }
+
     private counterUpdater counterCycler;
 
     public void addImage(int y, int x, Image image, int layer) {
-        if(tileMap[x * numTilesX + y]==null){//If its null (problem!)
+        if (tileMap[x * numTilesX + y] == null) {//If its null (problem!)
             tileMap[x * numTilesX + y] = new LinkedList<>();//Then fix the problem!
         }
         tileMap[x * numTilesX + y].add(new ImageLayer(image, layer));
@@ -109,15 +113,20 @@ public class BabaFrame extends JFrame implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
-        if(start){
-            NetworkClient.keyToServer(e);
-        }else{
+        if (start) {
+            try {
+                NetworkClient.keyToServer(e);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else {
             start = true;
         }
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}//Required to implement KeyListener.
+    public void keyReleased(KeyEvent e) {
+    }//Required to implement KeyListener.
 
     private static class ImageLayer {//Same across every instance of BabaFrame. Just a wrapper class of image and layer.
         public Image image;
@@ -131,7 +140,7 @@ public class BabaFrame extends JFrame implements KeyListener {
 
     public void ParserDisplay() {
         int[][][][] temp = NetworkClient.peek();
-        if(temp==null){
+        if (temp == null) {
             //lmao
         }
         this.tileMap = new LinkedList[numTilesX * numTilesY];
@@ -142,11 +151,11 @@ public class BabaFrame extends JFrame implements KeyListener {
                 for (int j = 0; j < temp[i].length; j++) {
                     for (int k = 0; k < temp[i][j].length; k++) {
                         if (temp[i][j][k][0] != 0) {
-                            if (temp[i][j][k][0]>5){
+                            if (temp[i][j][k][0] > 5) {
                                 try {
                                     addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k]))), k);
                                 } catch (IOException e) {
-                                    System.out.println("1: Cant read file "+FileFinder(temp[i][j][k]));
+                                    System.out.println("1: Cant read file " + FileFinder(temp[i][j][k]));
                                     throw new RuntimeException(e);
                                 }
                             }
@@ -155,46 +164,50 @@ public class BabaFrame extends JFrame implements KeyListener {
                             //+2 = connected up
                             //+4 = connected left
                             //+8 = connected down
-                            else{
-                                boolean[] around = {false,false,false,false};
-                                try{
-                                    for (int l = 0; l < temp[i][j+1].length; l++) {
-                                        if(temp[i][j+1][l][0]==temp[i][j][k][0]){//Connects to the right
-                                            around[0]=true;
+                            else {
+                                boolean[] around = {false, false, false, false};
+                                try {
+                                    for (int l = 0; l < temp[i][j + 1].length; l++) {
+                                        if (temp[i][j + 1][l][0] == temp[i][j][k][0]) {//Connects to the right
+                                            around[0] = true;
                                             break;
                                         }
                                     }
-                                }catch(Exception e){}//Failing is intentional. Failing means the tile its checking is out of bounds
-                                try{
-                                    for (int l = 0; l < temp[i-1][j].length; l++) {
-                                        if(temp[i-1][j][l][0]==temp[i][j][k][0]){//Connects to up
-                                            around[1]=true;
+                                } catch (Exception e) {
+                                }//Failing is intentional. Failing means the tile its checking is out of bounds
+                                try {
+                                    for (int l = 0; l < temp[i - 1][j].length; l++) {
+                                        if (temp[i - 1][j][l][0] == temp[i][j][k][0]) {//Connects to up
+                                            around[1] = true;
                                             break;
                                         }
                                     }
-                                }catch(Exception e){}
-                                try{
-                                    for (int l = 0; l < temp[i][j-1].length; l++) {
-                                        if(temp[i][j-1][l][0]==temp[i][j][k][0]){//Connects to the left
-                                            around[2]=true;
+                                } catch (Exception e) {
+                                }
+                                try {
+                                    for (int l = 0; l < temp[i][j - 1].length; l++) {
+                                        if (temp[i][j - 1][l][0] == temp[i][j][k][0]) {//Connects to the left
+                                            around[2] = true;
                                             break;
                                         }
                                     }
-                                }catch(Exception e){}
-                                try{
-                                    for (int l = 0; l < temp[i+1][j].length; l++) {
+                                } catch (Exception e) {
+                                }
+                                try {
+                                    for (int l = 0; l < temp[i + 1][j].length; l++) {
                                         if (temp[i + 1][j][l][0] == temp[i][j][k][0]) {//Connects to down
                                             around[3] = true;
                                             break;
                                         }
                                     }
-                                }catch(Exception e){}
+                                } catch (Exception e) {
+                                }
 
 
                                 try {
-                                    addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k],around))), k);
+                                    addImage(i, j, ImageIO.read(new File(FileFinder(temp[i][j][k], around))), k);
                                 } catch (IOException e) {
-                                    System.out.println("2: Cant read file "+FileFinder(temp[i][j][k], around));
+                                    System.out.println("2: Cant read file " + FileFinder(temp[i][j][k], around));
                                     throw new RuntimeException(e);
                                 }
                             }
@@ -208,11 +221,14 @@ public class BabaFrame extends JFrame implements KeyListener {
 
     public String FileFinder(int[] x) {
         int id = x[0];
-        int rotation = x[1]%4;
+        int rotation = x[1] % 4;
         int walkingcycle = x[2];
         String first = null;
         int second;
         int third;
+        if (id > 99) {
+            id = id - 100;
+        }
         switch (id) {
             case 6 -> first = "rock";
             case 7 -> first = "baba";
@@ -245,18 +261,19 @@ public class BabaFrame extends JFrame implements KeyListener {
         }
         third = counter;
 
-        if(id!=7){
-            walkingcycle=0;
+        if (id != 7) {
+            walkingcycle = 0;
         }
-        if(id==7||id==8){//If rotatable
-            second = ((rotation%4) * 8) + (walkingcycle);
-        }else{
+        if (id == 7 || id == 8) {//If rotatable
+            second = ((rotation % 4) * 8) + (walkingcycle);
+        } else {
             second = walkingcycle;
         }
 
 
         return "Sprites/" + first + '_' + second + '_' + third + ".png";
     }
+
     public String FileFinder(int[] x, boolean[] around) {
         int id = x[0];
         String first = null;
@@ -275,17 +292,25 @@ public class BabaFrame extends JFrame implements KeyListener {
         //+2 = connected up
         //+4 = connected left
         //+8 = connected down
-        if (around[0]){second++;}
-        if (around[1]){second+=2;}
-        if (around[2]){second+=4;}
-        if (around[3]){second+=8;}
+        if (around[0]) {
+            second++;
+        }
+        if (around[1]) {
+            second += 2;
+        }
+        if (around[2]) {
+            second += 4;
+        }
+        if (around[3]) {
+            second += 8;
+        }
 
         return "Sprites/" + first + '_' + second + '_' + third + ".png";
     }
 
-    public int counter =1;
+    public int counter = 1;
 
-    public class counterUpdater {
+    public class counterUpdater implements Serializable {
         private ScheduledExecutorService executor;
 
         public counterUpdater() {
@@ -306,12 +331,16 @@ public class BabaFrame extends JFrame implements KeyListener {
                 }
                 ParserDisplay();
             }
-        }public void end(){
+        }
+
+        public void end() {
             counterCycler = null;
 
         }
 
-    }public void end(){
+    }
+
+    public void end() {
         this.counterCycler.end();
         super.paint(this.getGraphics());
         JPanel panel = new JPanel();
@@ -321,7 +350,7 @@ public class BabaFrame extends JFrame implements KeyListener {
         add(panel);
 
         try {
-            this.getGraphics().drawImage(ImageIO.read(new File("Sprites/EndingMessage.png")),0,0,null);
+            this.getGraphics().drawImage(ImageIO.read(new File("Sprites/EndingMessage.png")), 0, 0, null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -331,5 +360,4 @@ public class BabaFrame extends JFrame implements KeyListener {
             throw new RuntimeException(e);
         }
     }
-
 }

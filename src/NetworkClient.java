@@ -49,8 +49,8 @@ public class NetworkClient {
         }
     }
 
-    public static void keyToServer(KeyEvent e){
-        //server.write(e,id);
+    public static void keyToServer(KeyEvent e) throws IOException {
+        Protocol.messageSendingProtocolClient(5,e,userId);
     }
     public static void updateLevel(int[][][][] mem){
         currentState = mem;
