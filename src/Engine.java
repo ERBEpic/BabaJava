@@ -106,7 +106,16 @@ public class Engine {
         this.levelStoragePush= newmemoryEater.getFirstState();
         try {
             Protocol.messageSendingProtocolServer(1,levelStoragePush,0);
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            Protocol.messageSendingProtocolServer(1,levelStoragePush,0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Problem?");
+
     }
 
     public void moveToNextLevel(){

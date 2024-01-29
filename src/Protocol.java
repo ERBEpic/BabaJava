@@ -4,11 +4,12 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map;
 public class Protocol implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 102L;
     public static void messageRecievingProtocolClient(Message a) throws IOException {
         // Process the received object based on its ID and payload
         int messageId = a.getMessageId();
         Object data = a.getPayload();
+        System.out.println("receive");
         switch(messageId){
             case -1 ->{//Stop execution
                 try {
@@ -23,7 +24,7 @@ public class Protocol implements Serializable {
                 System.out.println("Update");
             }
             case 2 -> {//Submit ID
-                NetworkClient.userId = (int) data;
+                NetworkClient.userId = a.getUserId();
             }
             case 3 -> {//User Messages (to everyone)
                 String umessage = (String) data;
@@ -47,13 +48,13 @@ public class Protocol implements Serializable {
 
             }
             case 1 -> {//I need a new memory state
-                message = new Message(1);
+                message = new Message(1,null,userId);
             }
             case 2 -> {//Submit ID
                 //N/A
             }
             case 3 -> {//User Messages (to everyone ELSE)
-                message = new Message(3,(Object) data,NetworkClient.userId);
+                message = new Message(3,data,NetworkClient.userId);
             }
             case 4 ->{//Bad Input (Make sure it does NOT go to everyone)
                 //N/A
@@ -61,7 +62,7 @@ public class Protocol implements Serializable {
             case 5 ->{//Key Input
                 KeyEvent e = (KeyEvent) data;
                 int keyCode = e.getKeyCode();
-                System.out.println("Bi");
+                System.out.println("Send");
                 switch(keyCode){
                     case KeyEvent.VK_ESCAPE -> {
                         message = new Message(5,-1,userId);//this is what ExitOnClose calls, so it works great. 1 for user decided to close
@@ -102,7 +103,7 @@ public class Protocol implements Serializable {
             case 3 -> {//User Messages (to everyone)
                 for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
                     if(entry.getKey()!=a.getUserId()) {
-                        message = new Message(3,data);
+                        message = new Message(3,data,0);
                         NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
                     }
                 }
@@ -146,23 +147,23 @@ public class Protocol implements Serializable {
                 //Code to send stop message to the user.
             }
             case 1 -> {//New memory states
-                message = new Message(1,NetworkServer.BabaEngine.newmemoryEater.peek());//No need for any userID. Send to all
+                message = new Message(1,NetworkServer.BabaEngine.newmemoryEater.peek(),0);//No need for any userID. Send to all
                 for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
                     NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
                 }
             }
             case 2 -> {//Submit Identification Tag
-                message = new Message(2,userId,userId);
+                message = new Message(2,null,userId);
                 NetworkServer.clientsMap.get(userId).writeObject(message);
             }
             case 3 -> {//User Messages (to everyone ELSE)
-                message = new Message(3,data);
+                message = new Message(3,data,0);
                 for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
                         NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
                 }
             }
             case 4 ->{//Bad Input (Make sure it does NOT go to everyone)
-                message = new Message (4);
+                message = new Message (4,null,userId);
                 NetworkServer.clientsMap.get(userId).writeObject(message);
             }
             case 5 ->{//New KeyEvent N/A

@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -8,7 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class NetworkServer {
+public class NetworkServer implements Serializable {
+    private static final long serialVersionUID = 102L; // Same value on both client and server
+
     public static Engine BabaEngine;
     private static final int PORT = 12345;
     private static int clientIdCounter = 0;
@@ -50,6 +53,13 @@ public class NetworkServer {
                 try {
                     Protocol.messageSendingProtocolServer(1,null,clientId);
                 } catch (IOException e) {}
+                Protocol.messageRecievingProtocolServer(new Message(5,5,0));
+                Protocol.messageRecievingProtocolServer(new Message(5,0,0));
+                Protocol.messageRecievingProtocolServer(new Message(5,1,0));
+                Protocol.messageRecievingProtocolServer(new Message(5,5,0));
+
+
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,8 +69,7 @@ public class NetworkServer {
     private static void handleClient(int clientId, Socket clientSocket) {
         try {
             ObjectInputStream clientInput = new ObjectInputStream(clientSocket.getInputStream());
-
-            Protocol.messageSendingProtocolServer(2, clientId, clientId);
+            Protocol.messageSendingProtocolServer(2, null, clientId);
 
             while (NetworkServer.clientRunMap.get(clientId)) {
                 // Deserialize the object received from the client
