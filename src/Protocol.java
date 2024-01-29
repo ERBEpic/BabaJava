@@ -73,7 +73,10 @@ public class Protocol implements Serializable {
                 case KeyEvent.VK_LEFT, KeyEvent.VK_A -> message = new Message(5,2,userId);
                 case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> message = new Message(5,3,userId);
                 case KeyEvent.VK_SPACE -> message = new Message(5,4,userId);
-                case KeyEvent.VK_R -> message = new Message(5,5,userId);
+                case KeyEvent.VK_R -> {
+                    NetworkClient.outputStream.writeObject(new Message(5,5,userId));
+                    message = new Message(5,4,userId);}
+
                 case KeyEvent.VK_Z -> message = new Message(5,6,userId);
                 }
             }
@@ -95,7 +98,7 @@ public class Protocol implements Serializable {
             case -1 -> {//Stop exection (Blank)
             }
             case 1 -> {//Memory (Blank)
-
+                messageSendingProtocolServer(1,null,0);
             }
             case 2 -> {//ID (Blank)
 
