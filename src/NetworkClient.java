@@ -26,7 +26,7 @@ public class NetworkClient {
             ObjectOutputStream clientOutput = new ObjectOutputStream(thissocket.getOutputStream());
             this.outputStream = clientOutput;
 
-                    // ObjectInputStream for receiving objects from the server
+            // ObjectInputStream for receiving objects from the server
             inputStream = new ObjectInputStream(thissocket.getInputStream());
 /*
             // Example: Send an object to the server
