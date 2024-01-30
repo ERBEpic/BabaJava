@@ -67,6 +67,7 @@ public class Engine {
         for (int i = 0; i < 20; i++) {
             setProperty(12+i,3,1);
         }
+
     }
 
     //it should basically never crash but its easier to solve the try catch problems here
@@ -107,6 +108,7 @@ public class Engine {
     public void resetLevel(){
         newmemoryEater.reset();
         this.levelStoragePush= newmemoryEater.getFirstState();
+
         try {
             Protocol.messageSendingProtocolServer(1,levelStoragePush,0);
         } catch (IOException e) {}
