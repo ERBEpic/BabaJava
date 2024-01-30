@@ -66,7 +66,7 @@ public class NetworkServer implements Serializable {
     private static void handleClient(int clientId, Socket clientSocket) {
         try {
             ObjectInputStream clientInput = new ObjectInputStream(clientSocket.getInputStream());
-            Protocol.messageSendingProtocolServer(2, null, clientId);
+            //Protocol.messageSendingProtocolServer(2, null, clientId);
 
             while (NetworkServer.clientRunMap.get(clientId)) {
                 // Deserialize the object received from the client
