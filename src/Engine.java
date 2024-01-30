@@ -1,6 +1,9 @@
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
+
 /*
 This class is responsible for holding the previous state from memoryController, whether that be the starting state or previously calculated state is irrelevant.
 When it recieves an input, if it is a direct game input (IE up down left right wait), it moves (or doesnt) the player, and calculates one game cycle (if the player isnt dead) (Game cycle = playgame)
@@ -74,7 +77,7 @@ public class Engine {
     private int xTiles = 20;
     private int yTiles = 20;
     private static int level = 0;//this IS static, as the level should be global. Even if for some reason another instance of Engine is made, it should be synced up with this one.
-    private static int currentlevel = 0;
+    private static int currentlevel = 6;
 
     public int getxTiles(){
         return xTiles;
@@ -116,13 +119,16 @@ public class Engine {
         if(!Files.exists(Path.of("levels/level" + level + ".data"))) {//This is basically a try catch block but better
             babakey.end();
             System.out.println("That is the end of the tutorial. If you want to play more, go buy the actual game, called Baba Is You.");
-            for (int i = 0; i < NetworkServer.clientsMap.size(); i++) {
+            for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
+                    Message message = new Message(-1,null,entry.getKey());
                 try {
-                    Protocol.messageSendingProtocolServer(-1,null,0);
+                    NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+
             }
+
             System.exit(2);//2 for game ended.
         }
             propertiesStorage = new int[100][100];//Start it fresh
