@@ -132,6 +132,8 @@ public class Protocol implements Serializable {
     public static void messageSendingProtocolServer(int id, Object data,int userId) throws IOException {
         // Process the received object based on its ID and payload
         Message message;
+        System.out.println("Sending Message ID: "+id+" to Client "+userId);
+        System.out.println("Sending Payload: "+data);
         switch(id){
             case -1 ->{// I am stopping execution
 
@@ -151,8 +153,11 @@ public class Protocol implements Serializable {
             }
             case 1 -> {//New memory states
                 message = new Message(1,NetworkServer.BabaEngine.newmemoryEater.peek(),0);//No need for any userID. Send to all
+                try{
                 for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
                     NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
+                }}catch(Exception e){
+                    e.printStackTrace();
                 }
             }
             case 2 -> {//Submit Identification Tag
@@ -161,9 +166,11 @@ public class Protocol implements Serializable {
             }
             case 3 -> {//User Messages (to everyone ELSE)
                 message = new Message(3,data,0);
-                for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
+                try{for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
                         NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
-                }
+                }}catch(Exception e){
+                e.printStackTrace();
+            }
             }
             case 4 ->{//Bad Input (Make sure it does NOT go to everyone)
                 message = new Message (4,null,userId);

@@ -73,7 +73,6 @@ public class Engine {
     //it should basically never crash but its easier to solve the try catch problems here
 
 
-//145 usages
     public int[][][][] levelStoragePush = new int[40][40][4][5];
     private int xTiles = 20;
     private int yTiles = 20;
@@ -119,7 +118,6 @@ public class Engine {
     public void moveToNextLevel(){
         level = currentlevel + 1;
         if(!Files.exists(Path.of("levels/level" + level + ".data"))) {//This is basically a try catch block but better
-            babakey.end();
             System.out.println("That is the end of the tutorial. If you want to play more, go buy the actual game, called Baba Is You.");
             for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
                     Message message = new Message(-1,null,entry.getKey());
@@ -130,7 +128,6 @@ public class Engine {
                 }
 
             }
-
             System.exit(2);//2 for game ended.
         }
             propertiesStorage = new int[100][100];//Start it fresh
