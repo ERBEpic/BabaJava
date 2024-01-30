@@ -53,11 +53,13 @@ public class NetworkServer implements Serializable {
                 try {
                     Protocol.messageSendingProtocolServer(1,null,clientId);
                 } catch (IOException e) {}
+
+                /* (If the wind is blowing in the other direction, uncomment this)
                 Protocol.messageRecievingProtocolServer(new Message(5,5,0));
                 Protocol.messageRecievingProtocolServer(new Message(5,0,0));
                 Protocol.messageRecievingProtocolServer(new Message(5,1,0));
                 Protocol.messageRecievingProtocolServer(new Message(5,5,0));
-
+                 */
 
 
             }
