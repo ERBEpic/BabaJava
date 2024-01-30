@@ -35,7 +35,7 @@ public class NetworkClient implements Serializable {
             Message messageObject = new Message(1, 4);
             clientOutput.writeObject(messageObject);
 */
-            clientOutput.writeObject(new Message(5,4,userId));
+            //clientOutput.writeObject(new Message(5,4,userId));
             // Example: Receive objects from the server
 
 

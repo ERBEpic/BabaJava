@@ -47,7 +47,6 @@ public class NetworkServer implements Serializable {
                 clientsMap.put(clientId, clientOutput);
 
                 // Create a new thread to handle the client
-                Boolean Run = new Boolean(true);
                 Thread clientHandlerThread = new Thread(() -> handleClient(clientId, clientSocket));
                 clientHandlerThread.start();
                 clientRunMap.put(clientId, true);
