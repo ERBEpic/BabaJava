@@ -36,3 +36,9 @@ Outcome - No errors.
 
 
 
+
+NETWORKNG VERSION
+Expected outcome ; Server messages would be only sent to other uses
+Outcome - Server messages are sent to all
+Reason - User ids were being sent on the wrong message id, and so the server was sending messages to all users, instead of just the one that was supposed to receive it.
+

@@ -1,8 +1,5 @@
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
 
 public class NetworkClient implements Serializable {
@@ -15,6 +12,7 @@ public class NetworkClient implements Serializable {
     protected static ObjectOutputStream outputStream;
     private static ObjectInputStream inputStream;
     public NetworkClient() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         //id = server.requestid();
         /*ObjectInputStream ois = new ObjectInputStream(new FileInputStream("levels/level0.data"));
         Object obj = ois.readObject();
@@ -37,8 +35,25 @@ public class NetworkClient implements Serializable {
 */
             //clientOutput.writeObject(new Message(5,4,userId));
             // Example: Receive objects from the server
+            Thread messageSending = new Thread(()-> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                while (true) {
+                        try {
+                            if (br.ready()) {//br.ready() is awesome
+                                Protocol.messageSendingProtocolClient(3, br.readLine(), userId);
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
 
+            });
 
+            messageSending.start();
             //Make a new thread here if the world ends
             while (true) {
                 // Deserialize the object received from the server
@@ -61,6 +76,10 @@ public class NetworkClient implements Serializable {
 
                 Protocol.messageRecievingProtocolClient(receivedMessage);
                 System.out.println(receivedMessage.getMessageId());}
+
+                //Code above is networking recieving messages.
+                //Code below is for messaging sending
+
             }
         } catch (IOException e) {
             e.printStackTrace();

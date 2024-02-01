@@ -10,6 +10,7 @@ public class Protocol implements Serializable {
         int messageId = a.getMessageId();
         Object data = a.getPayload();
         System.out.println("receive");
+        System.out.println(messageId);
         switch(messageId){
             case -1 ->{//Stop execution
                 try {
@@ -21,13 +22,13 @@ public class Protocol implements Serializable {
             }
             case 1 -> {//Update memory
                 NetworkClient.updateLevel((int[][][][]) data);
-                System.out.println("Update");
             }
             case 2 -> {//Submit ID
                 NetworkClient.userId = a.getUserId();
             }
             case 3 -> {//User Messages (to everyone)
                 String umessage = (String) data;
+                System.out.println(umessage+" from "+a.getUserId());
             }
             case 4 ->{//Bad Input (Make sure it does NOT go to everyone)
                 boolean binput = (boolean) data;
@@ -106,7 +107,7 @@ public class Protocol implements Serializable {
             case 3 -> {//User Messages (to everyone)
                 for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
                     if(entry.getKey()!=a.getUserId()) {
-                        message = new Message(3,data,0);
+                        message = new Message(3,data, a.userId);
                         NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
                     }
                 }
@@ -165,9 +166,12 @@ public class Protocol implements Serializable {
                 NetworkServer.clientsMap.get(userId).writeObject(message);
             }
             case 3 -> {//User Messages (to everyone ELSE)
-                message = new Message(3,data,0);
-                try{for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
-                        NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
+                message = new Message(3,data,userId);
+                try{
+                    for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
+                        if (entry.getKey()!=userId){
+                            NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
+                    }
                 }}catch(Exception e){
                 e.printStackTrace();
             }
