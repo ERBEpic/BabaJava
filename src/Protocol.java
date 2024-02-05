@@ -154,11 +154,8 @@ public class Protocol implements Serializable {
             }
             case 1 -> {//New memory states
                 message = new Message(1,NetworkServer.BabaEngine.newmemoryEater.peek(),0);//No need for any userID. Send to all
-                try{
                 for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
-                    NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
-                }}catch(Exception e){
-                    e.printStackTrace();
+                    safeServerSend(entry.getKey(),message);
                 }
             }
             case 2 -> {//Submit Identification Tag
@@ -167,23 +164,33 @@ public class Protocol implements Serializable {
             }
             case 3 -> {//User Messages (to everyone ELSE)
                 message = new Message(3,data,userId);
-                try{
                     for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
                         if (entry.getKey()!=userId){
-                            NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
+                            safeServerSend(userId,message);
                     }
-                }}catch(Exception e){
-                e.printStackTrace();
-            }
+                }
             }
             case 4 ->{//Bad Input (Make sure it does NOT go to everyone)
                 message = new Message (4,null,userId);
-                NetworkServer.clientsMap.get(userId).writeObject(message);
+                safeServerSend(userId,message);
             }
             case 5 ->{//New KeyEvent N/A
             }
         }
 
 
+    }
+    public static void safeServerSend(Integer id, Message a){
+        try {
+            NetworkServer.clientsMap.get(id).writeObject(a);
+        } catch (Exception e) {
+            try {
+                NetworkServer.clientsMap.get(id).close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            NetworkServer.clientRunMap.remove(id);
+            NetworkServer.clientsMap.remove(id);;
+        }
     }
 }

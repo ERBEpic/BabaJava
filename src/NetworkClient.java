@@ -4,7 +4,7 @@ import java.net.Socket;
 
 public class NetworkClient implements Serializable {
     private static final long serialVersionUID = 102L; // Same value on both client and server
-    private static final String SERVER_IP = "localhost";
+    private static final String SERVER_IP = "172.16.5.223";
     private static final int PORT = 12345;
     public static int userId;
     public static int[][][][] currentState;
