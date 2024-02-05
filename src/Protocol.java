@@ -9,8 +9,8 @@ public class Protocol implements Serializable {
         // Process the received object based on its ID and payload
         int messageId = a.getMessageId();
         Object data = a.getPayload();
-        System.out.println("receive");
-        System.out.println(messageId);
+       // System.out.println("receive");
+       // System.out.println(messageId);
         switch(messageId){
             case -1 ->{//Stop execution
                 try {
@@ -25,8 +25,9 @@ public class Protocol implements Serializable {
             }
             case 2 -> {//Submit ID
                 NetworkClient.userId = a.getUserId();
+                System.out.println("You are ID "+NetworkClient.userId+".");
             }
-            case 3 -> {//User Messages (to everyone)
+            case 3 -> {//User Messages (from everyone)
                 String umessage = (String) data;
                 System.out.println(umessage+" from "+a.getUserId());
             }
@@ -63,7 +64,7 @@ public class Protocol implements Serializable {
             case 5 ->{//Key Input
                 KeyEvent e = (KeyEvent) data;
                 int keyCode = e.getKeyCode();
-                System.out.println("Send");
+              //  System.out.println("Send");
                 switch(keyCode){
                     case KeyEvent.VK_ESCAPE -> {
                         message = new Message(5,-1,userId);//this is what ExitOnClose calls, so it works great. 1 for user decided to close
@@ -86,7 +87,7 @@ public class Protocol implements Serializable {
         if(message!=null) {//This should never not be null
             NetworkClient.outputStream.writeObject(message);
         }else{
-            System.out.println("NULL MESSAGE - FIX CODE");
+            System.out.println("Bad Input - This key has no registered action.");
         }
 
     }
@@ -108,7 +109,7 @@ public class Protocol implements Serializable {
                 for (Map.Entry<Integer, ObjectOutputStream> entry : NetworkServer.clientsMap.entrySet()) {
                     if(entry.getKey()!=a.getUserId()) {
                         message = new Message(3,data, a.userId);
-                        NetworkServer.clientsMap.get(entry.getKey()).writeObject(message);
+                        safeServerSend(entry.getKey(),message);
                     }
                 }
             }
@@ -184,13 +185,14 @@ public class Protocol implements Serializable {
         try {
             NetworkServer.clientsMap.get(id).writeObject(a);
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 NetworkServer.clientsMap.get(id).close();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
             NetworkServer.clientRunMap.remove(id);
-            NetworkServer.clientsMap.remove(id);;
+            NetworkServer.clientsMap.remove(id);
         }
     }
 }

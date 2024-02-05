@@ -52,6 +52,7 @@ public class NetworkServer implements Serializable {
                 clientRunMap.put(clientId, true);
                 try {
                     Protocol.messageSendingProtocolServer(2,null,clientId);
+                    Protocol.messageSendingProtocolServer(1, null, clientId);
                 } catch (IOException e) {}
 
 

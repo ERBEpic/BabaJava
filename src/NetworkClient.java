@@ -4,7 +4,7 @@ import java.net.Socket;
 
 public class NetworkClient implements Serializable {
     private static final long serialVersionUID = 102L; // Same value on both client and server
-    private static final String SERVER_IP = "172.16.5.223";
+    private static final String SERVER_IP = "localhost";
     private static final int PORT = 12345;
     public static int userId;
     public static int[][][][] currentState;
@@ -71,11 +71,12 @@ public class NetworkClient implements Serializable {
                     // ObjectInputStream for receiving objects from the server
                     inputStream = new ObjectInputStream(thissocket.getInputStream());}
                 if(a!=null){
-                System.out.println(a);
+              //  System.out.println(a);
                 Message receivedMessage = (Message) a;
 
                 Protocol.messageRecievingProtocolClient(receivedMessage);
-                System.out.println(receivedMessage.getMessageId());}
+              //  System.out.println(receivedMessage.getMessageId());
+                }
 
                 //Code above is networking recieving messages.
                 //Code below is for messaging sending
