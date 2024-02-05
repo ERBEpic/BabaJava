@@ -43,7 +43,7 @@ public class BabaFrame extends JFrame implements KeyListener {
         setBackground(Color.BLACK);//Self Explanatory
         addKeyListener(this);//Listen for when keys are pressed
         setFocusable(true);//Let you be able to click to bring to front
-        //setUndecorated(true);//Remove titlebar and name and stuff (new java versions change how JFrame is implemented with weird insets and makes it not work decorated)
+        setUndecorated(true);//Remove titlebar and name and stuff (new java versions change how JFrame is implemented with weird insets and makes it not work decorated)
         revalidate();
         repaint();
         setIgnoreRepaint(true);//JFrame has a behavior to automatically repaint whenever updated. This, however, is unneeded for me because It only has to update A. every 175ms, for the shaking animation, and B. Whenever the player inputs something. otherwise, the game doesnt need to be repainted.

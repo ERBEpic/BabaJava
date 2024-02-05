@@ -77,7 +77,7 @@ public class Engine {
     private int xTiles = 20;
     private int yTiles = 20;
     private static int level = 0;//this IS static, as the level should be global. Even if for some reason another instance of Engine is made, it should be synced up with this one.
-    private static int currentlevel = 6;
+    private static int currentlevel = 0;
 
     public int getxTiles(){
         return xTiles;
