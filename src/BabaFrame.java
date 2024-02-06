@@ -40,6 +40,7 @@ public class BabaFrame extends JFrame implements KeyListener {
         }
         setSize(numTilesX * tileSize, numTilesY * tileSize);
 
+
         setBackground(Color.BLACK);//Self Explanatory
         addKeyListener(this);//Listen for when keys are pressed
         setFocusable(true);//Let you be able to click to bring to front
@@ -54,17 +55,24 @@ public class BabaFrame extends JFrame implements KeyListener {
         panel.add(label);
 
         this.add(panel);
+        MoveMouseListener mml = new MoveMouseListener(panel);
+        panel.addMouseListener(mml);
+        panel.addMouseMotionListener(mml);
+
         while (!start) {
             System.out.printf("");
         }
-        this.remove(panel);
+        //this.remove(panel);
+        label.setBackground(new Color(255, 255, 255, 0)); // Set background color with alpha value (128 for 50% transparency)
+
         offScreenImage = createImage(getWidth(), getHeight());//""Offscreen. Its not really off screen, more like in the void of the memory somewhere, but visualizing it off screen is how its usually imagined
         offScreenGraphics = offScreenImage.getGraphics();//Only need to do this once interestingly, as offScreenImage.getGraphics() returns an object, and in java, it actually returns a reference, not a whole object.
         //new counterUpdater();//You can just do this? Weird. I guess the reference to that new counterUpdater just gets sent into the void or something
         //^^i ended up using an actual referenced counter but either way
-
         counterCycler = new counterUpdater();
+
         addWindowListener(new WindowAdapter() {
+
             @Override
             public void windowClosing(WindowEvent e) {
                 try {
@@ -369,4 +377,59 @@ public class BabaFrame extends JFrame implements KeyListener {
             throw new RuntimeException(e);
         }
     }
+
+    class MoveMouseListener implements MouseListener, MouseMotionListener {
+        JComponent target;
+        Point start_drag;
+        Point start_loc;
+
+        public MoveMouseListener(JComponent target) {
+            this.target = target;
+        }
+
+        public static JFrame getFrame(Container target) {
+            if (target instanceof JFrame) {
+                return (JFrame) target;
+            }
+            return getFrame(target.getParent());
+        }
+
+        Point getScreenLocation(MouseEvent e) {
+            Point cursor = e.getPoint();
+            Point target_location = this.target.getLocationOnScreen();
+            return new Point((int) (target_location.getX() + cursor.getX()),
+                    (int) (target_location.getY() + cursor.getY()));
+        }
+
+        public void mouseClicked(MouseEvent e) {
+        }
+
+        public void mouseEntered(MouseEvent e) {
+        }
+
+        public void mouseExited(MouseEvent e) {
+        }
+
+        public void mousePressed(MouseEvent e) {
+            this.start_drag = this.getScreenLocation(e);
+            this.start_loc = this.getFrame(this.target).getLocation();
+        }
+
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        public void mouseDragged(MouseEvent e) {
+            Point current = this.getScreenLocation(e);
+            Point offset = new Point((int) current.getX() - (int) start_drag.getX(),
+                    (int) current.getY() - (int) start_drag.getY());
+            JFrame frame = this.getFrame(target);
+            Point new_location = new Point(
+                    (int) (this.start_loc.getX() + offset.getX()), (int) (this.start_loc
+                    .getY() + offset.getY()));
+            frame.setLocation(new_location);
+        }
+
+        public void mouseMoved(MouseEvent e) {
+        }}
+
 }
