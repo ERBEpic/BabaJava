@@ -185,7 +185,10 @@ public class Protocol implements Serializable {
         try {
             NetworkServer.clientsMap.get(id).writeObject(a);
         } catch (Exception e) {
-            e.printStackTrace();
+            try{
+                Message k = new Message(-1,null,-1);
+                NetworkServer.clientsMap.get(id).writeObject(k);
+            }catch(Exception g){}
             try {
                 NetworkServer.clientsMap.get(id).close();
             } catch (IOException ex) {
