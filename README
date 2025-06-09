@@ -5,6 +5,19 @@ This repository has three branches, main, multiClient and multiplayer. Main is t
 Below is documentation which I wrote to explain the code, it is very rough and mostly for self reference.
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 Documentation
 This is a java recreation of a game Baba Is You. I am only recreating the first world.
 Below is documentation about my implementation of code.
