@@ -1,3 +1,10 @@
+THIS WAS MADE FOR A SCHOOL PROJECT. I do not claim to own any of the sprites used in this project, and I do not wish to infringe on any copyright of the original owner. If this repository needs to be taken down, or the sprites need to be taken off, let me know.
+
+This repository has three branches, main, multiClient and multiplayer. Main is the original project, multiclient and multiplayer are a client and host respectively of the main project re-implemented for a second school project, where each multiclient can control the host. Its very gimmecky.
+
+Below is documentation which I wrote to explain the code, it is very rough and mostly for self reference.
+
+
 Documentation
 This is a java recreation of a game Baba Is You. I am only recreating the first world.
 Below is documentation about my implementation of code.
